@@ -10,6 +10,13 @@
 #detail-close{position:absolute;top:8px;right:8px;border:none;background:none;font-size:16px;cursor:pointer;}
 #detail-type-badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;background:#eee;margin-bottom:6px;}
 #detail-maps-link{display:inline-block;margin-top:8px;font-size:13px;}
+#side-panel{position:absolute;left:12px;bottom:12px;top:auto;z-index:15;width:280px;max-height:60vh;overflow-y:auto;padding:12px;background:#fff;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,0.15);}
+#side-panel.hidden{display:none;}
+#reset-zoom{display:block;margin-bottom:8px;border:none;background:#eee;border-radius:6px;padding:6px 10px;cursor:pointer;font-size:12px;}
+.side-panel-item{padding:6px 4px;border-bottom:1px solid #eee;cursor:pointer;font-size:13px;}
+.side-panel-item:hover{background:#f5f5f5;}
+.pin.emphasized{r:6;}
+.pin.dimmed{opacity:0.25;}
 </style>
 <div id="filter-panel">
   <div id="anime-filter"></div>
@@ -30,6 +37,11 @@
   <p id="detail-prefecture"></p>
   <p id="detail-description"></p>
   <a id="detail-maps-link" href="#" target="_blank" rel="noopener">Googleマップで開く</a>
+</div>
+<div id="side-panel" class="hidden">
+  <button id="reset-zoom">← 全国表示に戻る</button>
+  <h3 id="side-panel-title"></h3>
+  <div id="side-panel-list"></div>
 </div>
 <script>
 const PROJECTION = {"minLng":122.93349314581921,"maxLat":45.557331085205114,"cosAvg":0.8387652732649896,"scale":35.80722713453166,"width":933,"height":900};
@@ -232,4 +244,68 @@ document.getElementById('map-svg').addEventListener('click', (e) => {
   if (e.target.matches('.pin')) showDetailCard(e.target.dataset.spotId);
 });
 document.getElementById('detail-close').addEventListener('click', hideDetailCard);
+
+// SVGのviewBox属性はCSS transitionでは確実にアニメーションしないため、
+// requestAnimationFrameで数値を補間してアニメーション遷移させる。
+function animateViewBox(svg, toBox, duration = 400) {
+  const current = svg.getAttribute('viewBox').split(' ').map(Number);
+  const from = { x: current[0], y: current[1], w: current[2], h: current[3] };
+  const start = performance.now();
+
+  function step(now) {
+    const t = Math.min(1, (now - start) / duration);
+    const eased = 1 - Math.pow(1 - t, 3); // ease-out cubic
+    const x = from.x + (toBox.x - from.x) * eased;
+    const y = from.y + (toBox.y - from.y) * eased;
+    const w = from.w + (toBox.w - from.w) * eased;
+    const h = from.h + (toBox.h - from.h) * eased;
+    svg.setAttribute('viewBox', `${x.toFixed(1)} ${y.toFixed(1)} ${w.toFixed(1)} ${h.toFixed(1)}`);
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+function zoomToPrefecture(prefName) {
+  const pref = PREFECTURES.find(p => p.name === prefName);
+  if (!pref) return;
+  const svg = document.getElementById('map-svg');
+  const padding = (pref.bbox.maxX - pref.bbox.minX) * 0.15 + 10;
+  animateViewBox(svg, {
+    x: pref.bbox.minX - padding,
+    y: pref.bbox.minY - padding,
+    w: (pref.bbox.maxX - pref.bbox.minX) + padding * 2,
+    h: (pref.bbox.maxY - pref.bbox.minY) + padding * 2
+  });
+
+  document.querySelectorAll('.pin').forEach(pin => {
+    const inPref = pin.dataset.prefName === prefName;
+    pin.classList.toggle('emphasized', inPref);
+    pin.classList.toggle('dimmed', !inPref);
+  });
+
+  const sidePanel = document.getElementById('side-panel');
+  document.getElementById('side-panel-title').textContent = prefName + 'のスポット';
+  const list = SPOTS.filter(s => s.prefecture === prefName);
+  document.getElementById('side-panel-list').innerHTML = list.map(s => `
+    <div class="side-panel-item" data-spot-id="${s.id}">${s.name}（${s.anime}）</div>
+  `).join('');
+  sidePanel.classList.remove('hidden');
+}
+
+function resetZoom() {
+  const svg = document.getElementById('map-svg');
+  animateViewBox(svg, { x: 0, y: 0, w: PROJECTION.width, h: PROJECTION.height });
+  document.querySelectorAll('.pin').forEach(pin => {
+    pin.classList.remove('emphasized', 'dimmed');
+  });
+  document.getElementById('side-panel').classList.add('hidden');
+}
+
+document.getElementById('map-svg').addEventListener('click', (e) => {
+  if (e.target.matches('.prefecture')) zoomToPrefecture(e.target.dataset.prefName);
+});
+document.getElementById('reset-zoom').addEventListener('click', resetZoom);
+document.getElementById('side-panel-list').addEventListener('click', (e) => {
+  if (e.target.matches('.side-panel-item')) showDetailCard(e.target.dataset.spotId);
+});
 </script>
