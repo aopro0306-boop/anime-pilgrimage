@@ -87,4 +87,49 @@ const SPOTS = [
 { "id":"barakamon-house-model", "name":"主人公の家 古民家のモデル地", "anime":"ばらかもん", "prefecture":"長崎県", "lat":32.5800, "lng":128.7500, "type":"scene", "description":"半田が暮らすことになる古民家のモデルとされる富江町の家。", "mapsQuery":"五島市富江町" },
 { "id":"barakamon-narushima", "name":"奈留島", "anime":"ばらかもん", "prefecture":"長崎県", "lat":32.6970, "lng":129.0000, "type":"scene", "description":"五島列島の島の一つで、作中の舞台の一部とされる。", "mapsQuery":"奈留島" }
 ];
+
+function project(lat, lng) {
+  return {
+    x: (lng - PROJECTION.minLng) * PROJECTION.cosAvg * PROJECTION.scale,
+    y: (PROJECTION.maxLat - lat) * PROJECTION.scale
+  };
+}
+
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
+function renderMap() {
+  const svg = document.getElementById('map-svg');
+  svg.innerHTML = '';
+
+  const prefLayer = document.createElementNS(SVG_NS, 'g');
+  prefLayer.setAttribute('id', 'prefecture-layer');
+  for (const pref of PREFECTURES) {
+    const path = document.createElementNS(SVG_NS, 'path');
+    path.setAttribute('class', 'prefecture');
+    path.setAttribute('data-pref-id', pref.id);
+    path.setAttribute('data-pref-name', pref.name);
+    path.setAttribute('d', pref.path);
+    prefLayer.appendChild(path);
+  }
+  svg.appendChild(prefLayer);
+
+  const pinLayer = document.createElementNS(SVG_NS, 'g');
+  pinLayer.setAttribute('id', 'pin-layer');
+  for (const spot of SPOTS) {
+    const { x, y } = project(spot.lat, spot.lng);
+    const circle = document.createElementNS(SVG_NS, 'circle');
+    circle.setAttribute('class', 'pin');
+    circle.setAttribute('data-spot-id', spot.id);
+    circle.setAttribute('data-type', spot.type);
+    circle.setAttribute('data-anime', spot.anime);
+    circle.setAttribute('data-pref-name', spot.prefecture);
+    circle.setAttribute('cx', x.toFixed(1));
+    circle.setAttribute('cy', y.toFixed(1));
+    circle.setAttribute('r', '4');
+    pinLayer.appendChild(circle);
+  }
+  svg.appendChild(pinLayer);
+}
+
+renderMap();
 </script>
