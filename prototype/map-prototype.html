@@ -1,6 +1,19 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
+#filter-panel{position:absolute;top:0;left:0;z-index:10;padding:12px;max-width:280px;background:rgba(255,255,255,0.92);border-radius:8px;margin:12px;max-height:80vh;overflow-y:auto;}
+#anime-filter label{display:block;font-size:13px;margin:2px 0;}
+.type-chip{display:inline-block;margin:4px 4px 0 0;padding:4px 10px;border-radius:999px;border:1px solid #ccc;background:#fff;cursor:pointer;font-size:12px;}
+.type-chip.active{background:#333;color:#fff;}
+.pin.hidden{display:none;}
 </style>
+<div id="filter-panel">
+  <div id="anime-filter"></div>
+  <div id="type-filter">
+    <button class="type-chip" data-type="scene">実際の舞台</button>
+    <button class="type-chip" data-type="monument">像・モニュメント</button>
+    <button class="type-chip" data-type="inspiration">着想元</button>
+  </div>
+</div>
 <div id="map-root">
   <svg id="map-svg" viewBox="0 0 933 900" width="100%" height="100%"></svg>
 </div>
@@ -132,4 +145,53 @@ function renderMap() {
 }
 
 renderMap();
+
+const filterState = {
+  animes: new Set(SPOTS.map(s => s.anime)),
+  types: new Set(['scene', 'monument', 'inspiration'])
+};
+
+function buildAnimeFilter() {
+  const container = document.getElementById('anime-filter');
+  const animeList = [...new Set(SPOTS.map(s => s.anime))].sort();
+  container.innerHTML = animeList.map(anime => `
+    <label><input type="checkbox" value="${anime}" checked> ${anime}</label>
+  `).join('');
+  container.addEventListener('change', (e) => {
+    if (e.target.matches('input[type=checkbox]')) {
+      if (e.target.checked) filterState.animes.add(e.target.value);
+      else filterState.animes.delete(e.target.value);
+      applyFilters();
+    }
+  });
+}
+
+function buildTypeFilter() {
+  document.querySelectorAll('.type-chip').forEach(chip => {
+    chip.classList.add('active');
+    chip.addEventListener('click', () => {
+      const type = chip.dataset.type;
+      if (filterState.types.has(type)) {
+        filterState.types.delete(type);
+        chip.classList.remove('active');
+      } else {
+        filterState.types.add(type);
+        chip.classList.add('active');
+      }
+      applyFilters();
+    });
+  });
+}
+
+function applyFilters() {
+  document.querySelectorAll('.pin').forEach(pin => {
+    const anime = pin.dataset.anime;
+    const type = pin.dataset.type;
+    const visible = filterState.animes.has(anime) && filterState.types.has(type);
+    pin.classList.toggle('hidden', !visible);
+  });
+}
+
+buildAnimeFilter();
+buildTypeFilter();
 </script>
