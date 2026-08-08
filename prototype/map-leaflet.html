@@ -47,6 +47,37 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 18,
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
+
+const TYPE_COLORS = { scene: '#2a78d6', monument: '#eb6834', inspiration: '#1baf7a' };
+
+function createPinIcon(type) {
+  const color = TYPE_COLORS[type];
+  let shape;
+  if (type === 'scene') {
+    shape = `<circle cx="12" cy="12" r="7" fill="${color}" stroke="#ffffff" stroke-width="2"/>`;
+  } else if (type === 'monument') {
+    shape = `<rect x="5.5" y="5.5" width="13" height="13" fill="${color}" stroke="#ffffff" stroke-width="2"/>`;
+  } else {
+    shape = `<polygon points="12,4 20,19 4,19" fill="${color}" stroke="#ffffff" stroke-width="2"/>`;
+  }
+  return L.divIcon({
+    className: 'pin-icon',
+    html: `<svg width="24" height="24" viewBox="0 0 24 24">${shape}</svg>`,
+    iconSize: [24, 24],
+    iconAnchor: [12, 12]
+  });
+}
+
+const clusterGroup = L.markerClusterGroup();
+const markersById = {};
+
+for (const spot of SPOTS) {
+  const marker = L.marker([spot.lat, spot.lng], { icon: createPinIcon(spot.type) });
+  markersById[spot.id] = marker;
+  clusterGroup.addLayer(marker);
+}
+
+map.addLayer(clusterGroup);
 </script>
 </body>
 </html>
