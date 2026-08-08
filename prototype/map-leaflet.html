@@ -164,6 +164,62 @@ const I18N = {
 
 let currentLang = 'ja';
 
+// English localized titles for the 28 anime works referenced in SPOTS.
+// Only English is covered for now (scoped down from all 6 UI languages —
+// zh-TW/ko/th/fr anime-title translation is a separate research task).
+// Falls back to the Japanese title for any other language.
+const ANIME_TITLES_EN = {
+  'ONE PIECE': 'One Piece',
+  'SLAM DUNK': 'Slam Dunk',
+  'WORKING!!': 'Working!!',
+  'あの花': 'Anohana: The Flower We Saw That Day',
+  'けいおん!': 'K-On!',
+  'こちら葛飾区亀有公園前派出所': 'This is the Police Station in Front of Kameari Park in Katsushika Ward',
+  'すずめの戸締まり': 'Suzume',
+  'ばらかもん': 'Barakamon',
+  'ゆるキャン△': 'Laid-Back Camp',
+  'らき☆すた': 'Lucky Star',
+  'ガールズ&パンツァー': 'Girls und Panzer',
+  'ゲゲゲの鬼太郎': 'GeGeGe no Kitaro',
+  'サマーウォーズ': 'Summer Wars',
+  'ドラえもん': 'Doraemon',
+  'ポケットモンスター': 'Pokémon',
+  '僕のヒーローアカデミア': 'My Hero Academia',
+  '千と千尋の神隠し': 'Spirited Away',
+  '名探偵コナン': 'Detective Conan',
+  '君の名は。': 'Your Name',
+  '夏目友人帳': "Natsume's Book of Friends",
+  '弱虫ペダル': 'Yowamushi Pedal',
+  '手塚治虫作品群': 'Works of Osamu Tezuka',
+  '氷菓': 'Hyouka',
+  '涼宮ハルヒの憂鬱': 'The Melancholy of Haruhi Suzumiya',
+  '進撃の巨人': 'Attack on Titan',
+  '鉄腕アトム': 'Astro Boy',
+  '頭文字D': 'Initial D',
+  '鬼滅の刃': 'Demon Slayer: Kimetsu no Yaiba'
+};
+
+// English names for the 21 prefectures referenced in SPOTS/PREFECTURE_NAV.
+// Same scope note as ANIME_TITLES_EN above.
+const PREFECTURE_NAMES_EN = {
+  '京都府': 'Kyoto', '兵庫県': 'Hyogo', '北海道': 'Hokkaido', '千葉県': 'Chiba',
+  '埼玉県': 'Saitama', '大分県': 'Oita', '山梨県': 'Yamanashi', '岐阜県': 'Gifu',
+  '愛媛県': 'Ehime', '愛知県': 'Aichi', '東京都': 'Tokyo', '滋賀県': 'Shiga',
+  '熊本県': 'Kumamoto', '神奈川県': 'Kanagawa', '福岡県': 'Fukuoka', '群馬県': 'Gunma',
+  '茨城県': 'Ibaraki', '長崎県': 'Nagasaki', '長野県': 'Nagano', '静岡県': 'Shizuoka',
+  '鳥取県': 'Tottori'
+};
+
+function translateAnime(title) {
+  if (currentLang === 'en' && ANIME_TITLES_EN[title]) return ANIME_TITLES_EN[title];
+  return title;
+}
+
+function translatePrefecture(pref) {
+  if (currentLang === 'en' && PREFECTURE_NAMES_EN[pref]) return PREFECTURE_NAMES_EN[pref];
+  return pref;
+}
+
 function createPinIcon(type) {
   const color = TYPE_COLORS[type];
   let mark;
@@ -207,7 +263,7 @@ function buildPopupHtml(spot) {
     <div class="spot-popup">
       <span class="badge type-${spot.type}">${I18N[currentLang].types[spot.type]}</span>
       <h3>${spot.name}</h3>
-      <p>${spot.anime}｜${spot.prefecture}</p>
+      <p>${translateAnime(spot.anime)}${currentLang === 'en' ? ' | ' : '｜'}${translatePrefecture(spot.prefecture)}</p>
       ${photoHtml}
       <p class="desc">${spot.description}</p>
       <a class="gmaps-btn" href="${mapsUrl}" target="_blank" rel="noopener">${I18N[currentLang].openInGoogleMaps}</a>
@@ -231,12 +287,22 @@ const filterState = {
   types: new Set(['scene', 'monument', 'inspiration'])
 };
 
+// Re-run whenever the language changes (see applyLanguage()) so anime
+// titles switch to their English localization. Checked state is restored
+// from filterState.animes (unaffected by the rebuild), and the change
+// listener is wired separately (wireAnimeFilter) so it isn't re-attached
+// on every rebuild.
 function buildAnimeFilter() {
   const container = document.getElementById('anime-filter');
   const animeList = [...new Set(SPOTS.map(s => s.anime))].sort();
-  container.innerHTML = animeList.map(anime => `
-    <label><input type="checkbox" value="${anime}"> ${anime}</label>
-  `).join('');
+  container.innerHTML = animeList.map(anime => {
+    const checked = filterState.animes.has(anime);
+    return `<label class="${checked ? 'checked' : ''}"><input type="checkbox" value="${anime}"${checked ? ' checked' : ''}> ${translateAnime(anime)}</label>`;
+  }).join('');
+}
+
+function wireAnimeFilter() {
+  const container = document.getElementById('anime-filter');
   container.addEventListener('change', (e) => {
     if (e.target.matches('input[type=checkbox]')) {
       e.target.closest('label').classList.toggle('checked', e.target.checked);
@@ -276,6 +342,7 @@ function applyFilters() {
 }
 
 buildAnimeFilter();
+wireAnimeFilter();
 buildTypeFilter();
 
 function zoomToAnime(animeName) {
@@ -303,8 +370,8 @@ function buildAnimeSearch() {
       return;
     }
     const q = query.toLowerCase();
-    const matches = animeList.filter(a => a.toLowerCase().includes(q));
-    results.innerHTML = matches.map(a => `<div class="anime-search-result" data-anime="${a}">${a}</div>`).join('');
+    const matches = animeList.filter(a => a.toLowerCase().includes(q) || translateAnime(a).toLowerCase().includes(q));
+    results.innerHTML = matches.map(a => `<div class="anime-search-result" data-anime="${a}">${translateAnime(a)}</div>`).join('');
     results.classList.toggle('hidden', matches.length === 0);
   }
 
@@ -322,11 +389,18 @@ function buildAnimeSearch() {
 
 buildAnimeSearch();
 
+// Re-run whenever the language changes (see applyLanguage()) so prefecture
+// names switch to their English localization. Click handling is wired
+// separately (wirePrefNav) so it isn't re-attached on every rebuild.
 function buildPrefNav() {
   const container = document.getElementById('pref-nav-list');
   container.innerHTML = PREFECTURE_NAV.map(p => `
-    <div class="pref-nav-item" data-name="${p.name}">${p.name}（${p.count}）</div>
+    <div class="pref-nav-item" data-name="${p.name}">${translatePrefecture(p.name)}${currentLang === 'en' ? ` (${p.count})` : `（${p.count}）`}</div>
   `).join('');
+}
+
+function wirePrefNav() {
+  const container = document.getElementById('pref-nav-list');
   container.addEventListener('click', (e) => {
     const item = e.target.closest('.pref-nav-item');
     if (!item) return;
@@ -336,6 +410,7 @@ function buildPrefNav() {
 }
 
 buildPrefNav();
+wirePrefNav();
 
 // Updates the static filter-panel/pref-nav chrome. Already-open or
 // future popups pick up the new language on their own since buildPopupHtml
@@ -349,6 +424,8 @@ function applyLanguage(lang) {
     chip.textContent = I18N[lang].types[chip.dataset.type];
   });
   document.querySelector('#pref-nav h4').textContent = I18N[lang].prefNavHeader;
+  buildAnimeFilter();
+  buildPrefNav();
 }
 
 document.getElementById('lang-select').addEventListener('change', (e) => {
