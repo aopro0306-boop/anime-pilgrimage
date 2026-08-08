@@ -151,7 +151,9 @@ for (const spot of SPOTS) {
 map.addLayer(clusterGroup);
 
 const filterState = {
-  animes: new Set(SPOTS.map(s => s.anime)),
+  // Empty = no restriction (show every anime). Checking a box narrows the
+  // map down to only the checked anime(s).
+  animes: new Set(),
   types: new Set(['scene', 'monument', 'inspiration'])
 };
 
@@ -159,7 +161,7 @@ function buildAnimeFilter() {
   const container = document.getElementById('anime-filter');
   const animeList = [...new Set(SPOTS.map(s => s.anime))].sort();
   container.innerHTML = animeList.map(anime => `
-    <label><input type="checkbox" value="${anime}" checked> ${anime}</label>
+    <label><input type="checkbox" value="${anime}"> ${anime}</label>
   `).join('');
   container.addEventListener('change', (e) => {
     if (e.target.matches('input[type=checkbox]')) {
@@ -190,7 +192,8 @@ function buildTypeFilter() {
 function applyFilters() {
   for (const spot of SPOTS) {
     const marker = markersById[spot.id];
-    const visible = filterState.animes.has(spot.anime) && filterState.types.has(spot.type);
+    const animeOk = filterState.animes.size === 0 || filterState.animes.has(spot.anime);
+    const visible = animeOk && filterState.types.has(spot.type);
     const inCluster = clusterGroup.hasLayer(marker);
     if (visible && !inCluster) clusterGroup.addLayer(marker);
     if (!visible && inCluster) clusterGroup.removeLayer(marker);
