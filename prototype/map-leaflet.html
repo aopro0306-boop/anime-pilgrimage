@@ -20,6 +20,9 @@
   .spot-popup p{margin:2px 0;font-size:13px;color:#555;}
   .spot-popup .desc{margin-top:6px;font-size:13px;color:#333;}
   .spot-popup a{display:inline-block;margin-top:8px;font-size:13px;}
+  .spot-popup .photo{width:100%;max-width:240px;height:auto;border-radius:6px;display:block;margin-top:4px;}
+  .spot-popup .photo-credit{margin-top:2px;font-size:10px;color:#999;}
+  .spot-popup .photo-credit a{margin-top:0;font-size:10px;}
   #pref-nav{position:absolute;top:12px;right:12px;z-index:690;padding:12px;width:200px;max-height:70vh;overflow-y:auto;background:rgba(255,255,255,0.95);border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.2);}
   #pref-nav h4{margin:0 0 8px 0;font-size:13px;}
   .pref-nav-item{padding:4px 2px;font-size:13px;cursor:pointer;border-bottom:1px solid #eee;}
@@ -72,6 +75,8 @@ const PREFECTURE_NAV = [
   {"name":"鳥取県","count":4,"bounds":[[35.4902,133.223],[35.5446,133.7619]]}
 ];
 
+const PHOTOS = {"kamakura-slamdunk-crossing":{"url":"https://commons.wikimedia.org/wiki/Special:FilePath/Kamakura_High_School_Front_Level_Crossing_(53149277547).jpg?width=400","author":"Dick Thomas Johnson","license":"CC BY 2.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Kamakura_High_School_Front_Level_Crossing_(53149277547).jpg"},"washinomiya-jinja":{"url":"https://upload.wikimedia.org/wikipedia/commons/3/38/Washinomiya-Shrine-Washimiya-Saitama-Japan.jpg","author":"LERK","license":"CC BY-SA 3.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Washinomiya-Shrine-Washimiya-Saitama-Japan.jpg"},"dogo-onsen-honkan":{"url":"https://upload.wikimedia.org/wikipedia/commons/8/83/D%C5%8Dgo_Onsen.jpg","author":"Arnaud Malon","license":"CC BY 2.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:D%C5%8Dgo_Onsen.jpg"},"girlspanzer-oarai-isosaki":{"url":"https://upload.wikimedia.org/wikipedia/commons/5/5b/%E5%A4%A7%E6%B4%97%E7%A3%AF%E5%89%8D%E7%A5%9E%E7%A4%BE_%E6%AD%A3%E9%9D%A2%E9%B3%A5%E5%B1%85.JPG","author":"Saigen Jiro","license":"Public Domain","sourceUrl":"https://commons.wikimedia.org/wiki/File:%E5%A4%A7%E6%B4%97%E7%A3%AF%E5%89%8D%E7%A5%9E%E7%A4%BE_%E6%AD%A3%E9%9D%A2%E9%B3%A5%E5%B1%85.JPG"},"mizuki-shigeru-road":{"url":"https://upload.wikimedia.org/wikipedia/commons/a/a1/Mizuki_shigeru_road_%2C_%E6%B0%B4%E6%9C%A8%E3%81%97%E3%81%92%E3%82%8B%E3%83%AD%E3%83%BC%E3%83%89_-_panoramio.jpg","author":"z tanuki","license":"CC BY 3.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Mizuki_shigeru_road_,_%E6%B0%B4%E6%9C%A8%E3%81%97%E3%81%92%E3%82%8B%E3%83%AD%E3%83%BC%E3%83%89_-_panoramio.jpg"},"kiminonaha-hidafurukawa-station":{"url":"https://upload.wikimedia.org/wikipedia/commons/c/c5/View_of_Hida-Furukawa_Station.JPG","author":"そらみみ","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:View_of_Hida-Furukawa_Station.JPG"},"ueda-castle-summerwars":{"url":"https://commons.wikimedia.org/wiki/Special:FilePath/Ueda_Castle.JPG?width=400","author":"Tomorobi","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Ueda_Castle.JPG"}};
+
 const map = L.map('map', { zoomControl: false }).setView([36.5, 138], 5);
 L.control.zoom({ position: 'bottomright' }).addTo(map);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -107,11 +112,17 @@ for (const spot of SPOTS) {
   const marker = L.marker([spot.lat, spot.lng], { icon: createPinIcon(spot.type) });
   markersById[spot.id] = marker;
   const mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(spot.mapsQuery);
+  const photo = PHOTOS[spot.id];
+  const photoHtml = photo ? `
+      <img class="photo" src="${photo.url}" alt="${spot.name}" loading="lazy">
+      <p class="photo-credit">Photo: <a href="${photo.sourceUrl}" target="_blank" rel="noopener">${photo.author}</a> / ${photo.license} (Wikimedia Commons)</p>
+  ` : '';
   marker.bindPopup(`
     <div class="spot-popup">
       <span class="badge">${TYPE_LABELS[spot.type]}</span>
       <h3>${spot.name}</h3>
       <p>${spot.anime}｜${spot.prefecture}</p>
+      ${photoHtml}
       <p class="desc">${spot.description}</p>
       <a href="${mapsUrl}" target="_blank" rel="noopener">Googleマップで開く</a>
     </div>
