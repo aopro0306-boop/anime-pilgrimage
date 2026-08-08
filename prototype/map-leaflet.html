@@ -13,6 +13,12 @@
   #anime-filter label{display:block;font-size:13px;margin:2px 0;}
   .type-chip{display:inline-block;margin:4px 4px 0 0;padding:4px 10px;border-radius:999px;border:1px solid #ccc;background:#fff;cursor:pointer;font-size:12px;}
   .type-chip.active{background:#333;color:#fff;}
+  .spot-popup{font-family:sans-serif;min-width:180px;}
+  .spot-popup .badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;background:#eee;margin-bottom:6px;}
+  .spot-popup h3{margin:4px 0;font-size:15px;}
+  .spot-popup p{margin:2px 0;font-size:13px;color:#555;}
+  .spot-popup .desc{margin-top:6px;font-size:13px;color:#333;}
+  .spot-popup a{display:inline-block;margin-top:8px;font-size:13px;}
 </style>
 </head>
 <body>
@@ -61,6 +67,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 const TYPE_COLORS = { scene: '#2a78d6', monument: '#eb6834', inspiration: '#1baf7a' };
+const TYPE_LABELS = { scene: '実際の舞台', monument: '像・モニュメント', inspiration: '着想元' };
 
 function createPinIcon(type) {
   const color = TYPE_COLORS[type];
@@ -86,6 +93,16 @@ const markersById = {};
 for (const spot of SPOTS) {
   const marker = L.marker([spot.lat, spot.lng], { icon: createPinIcon(spot.type) });
   markersById[spot.id] = marker;
+  const mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(spot.mapsQuery);
+  marker.bindPopup(`
+    <div class="spot-popup">
+      <span class="badge">${TYPE_LABELS[spot.type]}</span>
+      <h3>${spot.name}</h3>
+      <p>${spot.anime}｜${spot.prefecture}</p>
+      <p class="desc">${spot.description}</p>
+      <a href="${mapsUrl}" target="_blank" rel="noopener">Googleマップで開く</a>
+    </div>
+  `);
   clusterGroup.addLayer(marker);
 }
 
