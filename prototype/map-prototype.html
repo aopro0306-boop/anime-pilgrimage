@@ -85,32 +85,46 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--text-primary);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;}
 #map-root{width:100%;height:100vh;background:var(--bg);}
-.prefecture{fill:var(--prefecture-fill);stroke:var(--prefecture-stroke);stroke-width:1;cursor:pointer;transition:fill 0.15s ease;}
+/* stroke幅はviewBoxのズーム倍率に依存させない（non-scaling-stroke）。
+   ピンの大きさ（半径相当）はSVG属性で表現できないため、JS側でtransformのscaleを
+   ズーム倍率の逆数に更新して画面上のサイズを一定に保つ（updatePinTransforms）。 */
+.prefecture{fill:var(--prefecture-fill);stroke:var(--prefecture-stroke);stroke-width:1;vector-effect:non-scaling-stroke;cursor:pointer;transition:fill 0.15s ease;}
 .prefecture:hover{fill:var(--gridline);}
-.pin{fill:var(--text-muted);stroke:var(--pin-stroke);stroke-width:1.5;cursor:pointer;transition:r 0.15s ease,opacity 0.15s ease;}
-.pin[data-type="scene"]{fill:var(--pin-scene);stroke-dasharray:none;}
-.pin[data-type="monument"]{fill:var(--pin-monument);stroke-width:2;stroke-dasharray:2,1.3;}
-.pin[data-type="inspiration"]{fill:var(--pin-inspiration);stroke-width:2;stroke-dasharray:0.8,1.1;stroke-linecap:round;}
+/* 種別の識別は「色」＋「形」の2チャネルで行う（色覚特性・低コントラスト環境での冗長性）。
+   scene=円 / monument=四角 / inspiration=三角。形はズーム倍率に関係なく判別できる。 */
+.pin{fill:var(--text-muted);stroke:var(--pin-stroke);stroke-width:1.5;vector-effect:non-scaling-stroke;stroke-linejoin:round;cursor:pointer;transition:opacity 0.15s ease;}
+.pin[data-type="scene"]{fill:var(--pin-scene);}
+.pin[data-type="monument"]{fill:var(--pin-monument);}
+.pin[data-type="inspiration"]{fill:var(--pin-inspiration);}
 #filter-panel{position:absolute;top:0;left:0;z-index:10;padding:12px;max-width:280px;background:var(--surface-translucent);border-radius:8px;margin:12px;max-height:80vh;overflow-y:auto;box-shadow:0 4px 16px var(--shadow);border:1px solid var(--border);color:var(--text-primary);}
 #anime-filter label{display:block;font-size:13px;margin:2px 0;color:var(--text-secondary);}
 .type-chip{display:inline-block;margin:4px 4px 0 0;padding:4px 10px;border-radius:999px;border:1px solid var(--chip-border);background:var(--chip-bg);color:var(--chip-text);cursor:pointer;font-size:12px;transition:background 0.15s ease,color 0.15s ease;}
 .type-chip.active{background:var(--chip-active-bg);color:var(--chip-active-text);border-color:var(--chip-active-bg);}
-.type-chip[data-type]::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle;}
-.type-chip[data-type="scene"]::before{background:var(--pin-scene);}
-.type-chip[data-type="monument"]::before{background:var(--pin-monument);}
-.type-chip[data-type="inspiration"]::before{background:var(--pin-inspiration);}
+.type-chip[data-type]::before{content:"";display:inline-block;width:9px;height:9px;margin-right:5px;vertical-align:middle;}
+.type-chip[data-type="scene"]::before{background:var(--pin-scene);border-radius:50%;}
+.type-chip[data-type="monument"]::before{background:var(--pin-monument);border-radius:1px;}
+.type-chip[data-type="inspiration"]::before{background:none;width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:9px solid var(--pin-inspiration);}
 .pin.hidden{display:none;}
 #detail-card{position:absolute;right:12px;top:12px;z-index:20;width:280px;padding:16px;background:var(--surface);color:var(--text-primary);border-radius:8px;box-shadow:0 4px 16px var(--shadow);border:1px solid var(--border);}
 #detail-card.hidden{display:none;}
 #detail-close{position:absolute;top:8px;right:8px;border:none;background:none;font-size:16px;cursor:pointer;color:var(--text-secondary);}
-#detail-type-badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;background:var(--badge-bg);color:var(--badge-text);margin-bottom:6px;}
-#detail-maps-link{display:inline-block;margin-top:8px;font-size:13px;color:var(--pin-scene);}
+#detail-type-badge{display:inline-block;font-size:11px;line-height:1.5;padding:2px 8px;border-radius:999px;background:var(--badge-bg);color:var(--badge-text);letter-spacing:0.02em;}
+#detail-name{margin-top:8px;padding-right:18px;font-size:17px;font-weight:650;line-height:1.4;letter-spacing:-0.01em;color:var(--text-primary);}
+#detail-anime{margin-top:6px;font-size:13px;font-weight:600;line-height:1.5;color:var(--text-secondary);}
+#detail-prefecture{margin-top:2px;font-size:12px;line-height:1.5;color:var(--text-muted);}
+#detail-description{margin-top:12px;padding-top:12px;border-top:1px solid var(--divider);font-size:13px;line-height:1.75;color:var(--text-secondary);}
+#detail-maps-link{display:inline-block;margin-top:12px;font-size:13px;font-weight:600;color:var(--pin-scene);}
 #side-panel{position:absolute;left:12px;bottom:12px;top:auto;z-index:15;width:280px;max-height:60vh;overflow-y:auto;padding:12px;background:var(--surface);color:var(--text-primary);border-radius:8px;box-shadow:0 4px 16px var(--shadow);border:1px solid var(--border);}
 #side-panel.hidden{display:none;}
 #reset-zoom{display:block;margin-bottom:8px;border:none;background:var(--gridline);color:var(--text-primary);border-radius:6px;padding:6px 10px;cursor:pointer;font-size:12px;}
-.side-panel-item{padding:6px 4px;border-bottom:1px solid var(--divider);cursor:pointer;font-size:13px;color:var(--text-primary);}
+#side-panel-title{font-size:14px;font-weight:650;line-height:1.4;margin-bottom:6px;color:var(--text-primary);}
+.side-panel-item{padding:6px 4px;border-bottom:1px solid var(--divider);cursor:pointer;font-size:13px;line-height:1.5;color:var(--text-primary);border-left:2px solid transparent;}
 .side-panel-item:hover{background:var(--hover-bg);}
-.pin.emphasized{r:6;stroke-width:2.5;}
+.side-panel-item.selected{background:var(--hover-bg);border-left-color:var(--text-primary);font-weight:600;}
+.side-panel-empty{padding:10px 4px;font-size:12px;line-height:1.7;color:var(--text-muted);}
+/* .emphasized / .selected の拡大はJS側のtransform scaleで行う（SVGのrはCSSでズーム補正できないため）。 */
+.pin.emphasized{stroke-width:2.2;}
+.pin.selected{stroke:var(--text-primary);stroke-width:3;}
 .pin.dimmed{opacity:0.25;}
 @media (max-width:640px){
   #filter-panel{max-width:calc(100vw - 24px);margin:8px;padding:10px;max-height:40vh;}
@@ -126,6 +140,7 @@ body{background:var(--bg);color:var(--text-primary);font-family:system-ui,-apple
     <button class="type-chip" data-type="inspiration">着想元</button>
   </div>
 </div>
+<!-- 国レベル表示では近接スポットのピンが重なることがある。詳細はサイドパネル/ズームで確認できる想定（クラスタリングUIは本プロトタイプのスコープ外）。 -->
 <div id="map-root">
   <svg id="map-svg" viewBox="0 0 933 900" width="100%" height="100%"></svg>
 </div>
@@ -236,6 +251,63 @@ function project(lat, lng) {
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
+// 国レベル表示では近接スポットのピンが重なることがある。詳細はサイドパネル/ズームで
+// 確認できる想定（クラスタリングUIは本プロトタイプのスコープ外）。
+
+// ピンは原点(0,0)を中心にした単位図形として生成し、位置と大きさは transform で与える。
+// これにより、viewBoxを縮めてズームしても scale を 1/ズーム倍率 にするだけで
+// 画面上の見かけの大きさを一定に保てる（stroke幅は non-scaling-stroke がCSS側で担保）。
+const PIN_BASE_RADIUS = 4;
+// 現在のズーム倍率（PROJECTION.width / viewBoxの幅）。全国表示で 1。
+let currentZoom = 1;
+// 描画済みピン要素のキャッシュ（毎フレームのtransform更新でquerySelectorAllを避けるため）
+let pinElements = [];
+// 現在ズーム中の都道府県名（未ズーム時はnull）。フィルター変更時のサイドパネル再描画に使う。
+let activePrefName = null;
+// サイドパネル/ピンから選択中のスポットID（未選択時はnull）
+let selectedSpotId = null;
+// viewBoxアニメーションのrAFハンドル（連打時の多重ループ防止用）
+let viewBoxAnimHandle = null;
+
+function createPinShape(type) {
+  if (type === 'monument') {
+    // 四角（一辺7）
+    const rect = document.createElementNS(SVG_NS, 'rect');
+    rect.setAttribute('x', '-3.5');
+    rect.setAttribute('y', '-3.5');
+    rect.setAttribute('width', '7');
+    rect.setAttribute('height', '7');
+    return rect;
+  }
+  if (type === 'inspiration') {
+    // 三角（外接円半径5.5）
+    const tri = document.createElementNS(SVG_NS, 'polygon');
+    tri.setAttribute('points', '0,-5.5 4.76,2.75 -4.76,2.75');
+    return tri;
+  }
+  // scene（既定）: 円
+  const circle = document.createElementNS(SVG_NS, 'circle');
+  circle.setAttribute('cx', '0');
+  circle.setAttribute('cy', '0');
+  circle.setAttribute('r', String(PIN_BASE_RADIUS));
+  return circle;
+}
+
+// ピンの位置・大きさをまとめて更新する。currentZoom の逆数を掛けることで
+// ズームしてもピンが巨大化しない（レビュー指摘#1の対策）。
+function updatePinTransforms() {
+  const inv = 1 / currentZoom;
+  for (const pin of pinElements) {
+    let k = 1;
+    if (pin.classList.contains('emphasized')) k = 1.5;
+    if (pin.classList.contains('selected')) k = 1.9;
+    pin.setAttribute(
+      'transform',
+      'translate(' + pin.dataset.x + ' ' + pin.dataset.y + ') scale(' + (k * inv).toFixed(4) + ')'
+    );
+  }
+}
+
 function renderMap() {
   const svg = document.getElementById('map-svg');
   svg.innerHTML = '';
@@ -254,20 +326,22 @@ function renderMap() {
 
   const pinLayer = document.createElementNS(SVG_NS, 'g');
   pinLayer.setAttribute('id', 'pin-layer');
+  pinElements = [];
   for (const spot of SPOTS) {
     const { x, y } = project(spot.lat, spot.lng);
-    const circle = document.createElementNS(SVG_NS, 'circle');
-    circle.setAttribute('class', 'pin');
-    circle.setAttribute('data-spot-id', spot.id);
-    circle.setAttribute('data-type', spot.type);
-    circle.setAttribute('data-anime', spot.anime);
-    circle.setAttribute('data-pref-name', spot.prefecture);
-    circle.setAttribute('cx', x.toFixed(1));
-    circle.setAttribute('cy', y.toFixed(1));
-    circle.setAttribute('r', '4');
-    pinLayer.appendChild(circle);
+    const pin = createPinShape(spot.type);
+    pin.setAttribute('class', 'pin');
+    pin.setAttribute('data-spot-id', spot.id);
+    pin.setAttribute('data-type', spot.type);
+    pin.setAttribute('data-anime', spot.anime);
+    pin.setAttribute('data-pref-name', spot.prefecture);
+    pin.setAttribute('data-x', x.toFixed(2));
+    pin.setAttribute('data-y', y.toFixed(2));
+    pinLayer.appendChild(pin);
+    pinElements.push(pin);
   }
   svg.appendChild(pinLayer);
+  updatePinTransforms();
 }
 
 renderMap();
@@ -309,13 +383,24 @@ function buildTypeFilter() {
   });
 }
 
+// 地図のピン表示とサイドパネル一覧で共通に使う可視判定。
+// spot は { anime, type } を持つオブジェクト（SPOTSの要素でも pin.dataset でも可）。
+function isSpotVisible(spot) {
+  return filterState.animes.has(spot.anime) && filterState.types.has(spot.type);
+}
+
 function applyFilters() {
-  document.querySelectorAll('.pin').forEach(pin => {
-    const anime = pin.dataset.anime;
-    const type = pin.dataset.type;
-    const visible = filterState.animes.has(anime) && filterState.types.has(type);
-    pin.classList.toggle('hidden', !visible);
-  });
+  for (const pin of pinElements) {
+    pin.classList.toggle('hidden', !isSpotVisible(pin.dataset));
+  }
+  // 選択中のスポットがフィルターで非表示になったら選択と詳細カードを解除する
+  if (selectedSpotId) {
+    const selected = SPOTS.find(s => s.id === selectedSpotId);
+    if (!selected || !isSpotVisible(selected)) hideDetailCard();
+  }
+  // 都道府県ズーム中なら、サイドパネルの一覧もフィルター結果に追従させる
+  if (activePrefName) renderSidePanelList(activePrefName);
+  updatePinTransforms();
 }
 
 buildAnimeFilter();
@@ -338,16 +423,39 @@ function showDetailCard(spotId) {
 
 function hideDetailCard() {
   document.getElementById('detail-card').classList.add('hidden');
+  setSelectedSpot(null);
+}
+
+// 設計書 §2/§5「対応する地図上のピンをハイライト」の実装。
+// 選択中のピンに .selected を付け、サイドパネルの該当項目も強調する。
+function setSelectedSpot(spotId) {
+  selectedSpotId = spotId || null;
+  for (const pin of pinElements) {
+    pin.classList.toggle('selected', pin.dataset.spotId === selectedSpotId);
+  }
+  document.querySelectorAll('.side-panel-item').forEach(item => {
+    item.classList.toggle('selected', item.dataset.spotId === selectedSpotId);
+  });
+  updatePinTransforms();
 }
 
 document.getElementById('map-svg').addEventListener('click', (e) => {
-  if (e.target.matches('.pin')) showDetailCard(e.target.dataset.spotId);
+  if (e.target.matches('.pin')) {
+    showDetailCard(e.target.dataset.spotId);
+    setSelectedSpot(e.target.dataset.spotId);
+  }
 });
 document.getElementById('detail-close').addEventListener('click', hideDetailCard);
 
 // SVGのviewBox属性はCSS transitionでは確実にアニメーションしないため、
 // requestAnimationFrameで数値を補間してアニメーション遷移させる。
+// 各フレームで currentZoom を更新し、ピンの大きさをズームに追従して補正する。
 function animateViewBox(svg, toBox, duration = 400) {
+  // 連打で複数のアニメーションループが同時に走らないよう、前のループを止める。
+  if (viewBoxAnimHandle !== null) {
+    cancelAnimationFrame(viewBoxAnimHandle);
+    viewBoxAnimHandle = null;
+  }
   const current = svg.getAttribute('viewBox').split(' ').map(Number);
   const from = { x: current[0], y: current[1], w: current[2], h: current[3] };
   const start = performance.now();
@@ -360,52 +468,109 @@ function animateViewBox(svg, toBox, duration = 400) {
     const w = from.w + (toBox.w - from.w) * eased;
     const h = from.h + (toBox.h - from.h) * eased;
     svg.setAttribute('viewBox', `${x.toFixed(1)} ${y.toFixed(1)} ${w.toFixed(1)} ${h.toFixed(1)}`);
-    if (t < 1) requestAnimationFrame(step);
+    currentZoom = PROJECTION.width / w;
+    updatePinTransforms();
+    if (t < 1) {
+      viewBoxAnimHandle = requestAnimationFrame(step);
+    } else {
+      viewBoxAnimHandle = null;
+    }
   }
-  requestAnimationFrame(step);
+  viewBoxAnimHandle = requestAnimationFrame(step);
+}
+
+// ズーム先のバウンディングボックスを求める。
+// 東京都・北海道・沖縄県のように離島を含む都道府県は、県ポリゴンのbboxを使うと
+// ほとんどズームできない（東京都で約1.3倍）ため、スポットがある県では
+// 「その県のスポットの投影座標」からbboxを組み立てる。スポットが0件の県のみ県bboxを使う。
+const ZOOM_MIN_SPAN = 40; // user units（スポット1件の県で過剰にズームしないための下限）
+
+function computeZoomBox(pref) {
+  const prefSpots = SPOTS.filter(s => s.prefecture === pref.name);
+  let box;
+  if (prefSpots.length > 0) {
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    for (const s of prefSpots) {
+      const { x, y } = project(s.lat, s.lng);
+      if (x < minX) minX = x;
+      if (x > maxX) maxX = x;
+      if (y < minY) minY = y;
+      if (y > maxY) maxY = y;
+    }
+    box = { minX, minY, maxX, maxY };
+  } else {
+    box = pref.bbox;
+  }
+
+  const padding = (box.maxX - box.minX) * 0.15 + 10;
+  let x = box.minX - padding;
+  let y = box.minY - padding;
+  let w = (box.maxX - box.minX) + padding * 2;
+  let h = (box.maxY - box.minY) + padding * 2;
+
+  if (w < ZOOM_MIN_SPAN) { x -= (ZOOM_MIN_SPAN - w) / 2; w = ZOOM_MIN_SPAN; }
+  if (h < ZOOM_MIN_SPAN) { y -= (ZOOM_MIN_SPAN - h) / 2; h = ZOOM_MIN_SPAN; }
+
+  return { x, y, w, h };
+}
+
+// サイドパネルのスポット一覧を描画する。フィルター状態（isSpotVisible）を必ず反映する。
+function renderSidePanelList(prefName) {
+  const container = document.getElementById('side-panel-list');
+  const prefSpots = SPOTS.filter(s => s.prefecture === prefName);
+  const list = prefSpots.filter(isSpotVisible);
+  if (list.length === 0) {
+    const message = prefSpots.length === 0
+      ? 'このエリアの登録スポットはまだありません'
+      : '現在のフィルター条件に一致するスポットがありません';
+    container.innerHTML = `<p class="side-panel-empty">${message}</p>`;
+    return;
+  }
+  container.innerHTML = list.map(s => `
+    <div class="side-panel-item${s.id === selectedSpotId ? ' selected' : ''}" data-spot-id="${s.id}">${s.name}（${s.anime}）</div>
+  `).join('');
 }
 
 function zoomToPrefecture(prefName) {
   const pref = PREFECTURES.find(p => p.name === prefName);
   if (!pref) return;
+  activePrefName = prefName;
   const svg = document.getElementById('map-svg');
-  const padding = (pref.bbox.maxX - pref.bbox.minX) * 0.15 + 10;
-  animateViewBox(svg, {
-    x: pref.bbox.minX - padding,
-    y: pref.bbox.minY - padding,
-    w: (pref.bbox.maxX - pref.bbox.minX) + padding * 2,
-    h: (pref.bbox.maxY - pref.bbox.minY) + padding * 2
-  });
+  animateViewBox(svg, computeZoomBox(pref));
 
-  document.querySelectorAll('.pin').forEach(pin => {
+  for (const pin of pinElements) {
     const inPref = pin.dataset.prefName === prefName;
     pin.classList.toggle('emphasized', inPref);
     pin.classList.toggle('dimmed', !inPref);
-  });
+  }
+  updatePinTransforms();
 
-  const sidePanel = document.getElementById('side-panel');
   document.getElementById('side-panel-title').textContent = prefName + 'のスポット';
-  const list = SPOTS.filter(s => s.prefecture === prefName);
-  document.getElementById('side-panel-list').innerHTML = list.map(s => `
-    <div class="side-panel-item" data-spot-id="${s.id}">${s.name}（${s.anime}）</div>
-  `).join('');
-  sidePanel.classList.remove('hidden');
+  renderSidePanelList(prefName);
+  document.getElementById('side-panel').classList.remove('hidden');
 }
 
 function resetZoom() {
+  activePrefName = null;
   const svg = document.getElementById('map-svg');
   animateViewBox(svg, { x: 0, y: 0, w: PROJECTION.width, h: PROJECTION.height });
-  document.querySelectorAll('.pin').forEach(pin => {
+  for (const pin of pinElements) {
     pin.classList.remove('emphasized', 'dimmed');
-  });
+  }
   document.getElementById('side-panel').classList.add('hidden');
+  hideDetailCard();
+  updatePinTransforms();
 }
 
 document.getElementById('map-svg').addEventListener('click', (e) => {
   if (e.target.matches('.prefecture')) zoomToPrefecture(e.target.dataset.prefName);
+  else if (!e.target.matches('.pin')) hideDetailCard(); // 海・余白のクリックで詳細カードを閉じる
 });
 document.getElementById('reset-zoom').addEventListener('click', resetZoom);
 document.getElementById('side-panel-list').addEventListener('click', (e) => {
-  if (e.target.matches('.side-panel-item')) showDetailCard(e.target.dataset.spotId);
+  if (e.target.matches('.side-panel-item')) {
+    showDetailCard(e.target.dataset.spotId);
+    setSelectedSpot(e.target.dataset.spotId); // 設計書§5: 対応する地図上のピンをハイライト
+  }
 });
 </script>
