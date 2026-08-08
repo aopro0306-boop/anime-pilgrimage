@@ -138,12 +138,30 @@
 
 <script>
 const GALLERY_SPOTS = [
-  {"id":"kamakura-slamdunk-crossing","name":"鎌倉高校前駅1号踏切","nameEn":"Kamakura High School Crossing","anime":"SLAM DUNK","animeEn":"Slam Dunk","photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/0/0b/Kamakura_koukou_mae_Fumikiri.jpg","author":"Quercus acuta","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Kamakura_koukou_mae_Fumikiri.jpg"}},
-  {"id":"kiminonaha-hidafurukawa-station","name":"飛騨古川駅","nameEn":"Hida-Furukawa Station","anime":"君の名は。","animeEn":"Your Name","photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/c/c5/View_of_Hida-Furukawa_Station.JPG","author":"そらみみ","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:View_of_Hida-Furukawa_Station.JPG"}},
-  {"id":"keion-toyosato-school","name":"豊郷小学校旧校舎群","nameEn":"Former Toyosato Elementary School","anime":"けいおん!","animeEn":"K-On!","photo":{"url":"https://commons.wikimedia.org/wiki/Special:FilePath/%E8%B1%8A%E9%83%B7%E5%B0%8F%E5%AD%A6%E6%A0%A1%E6%97%A7%E6%A0%A1%E8%88%8E.jpg?width=400","author":"オクノサンライズ","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:%E8%B1%8A%E9%83%B7%E5%B0%8F%E5%AD%A6%E6%A0%A1%E6%97%A7%E6%A0%A1%E8%88%8E.jpg"}},
-  {"id":"girlspanzer-oarai-isosaki","name":"大洗磯前神社","nameEn":"Oarai Isosaki Shrine","anime":"ガールズ&パンツァー","animeEn":"Girls und Panzer","photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/5/5b/%E5%A4%A7%E6%B4%97%E7%A3%AF%E5%89%8D%E7%A5%9E%E7%A4%BE_%E6%AD%A3%E9%9D%A2%E9%B3%A5%E5%B1%85.JPG","author":"Saigen Jiro","license":"Public Domain","sourceUrl":"https://commons.wikimedia.org/wiki/File:%E5%A4%A7%E6%B4%97%E7%A3%AF%E5%89%8D%E7%A5%9E%E7%A4%BE_%E6%AD%A3%E9%9D%A2%E9%B3%A5%E5%B1%85.JPG"}},
-  {"id":"washinomiya-jinja","name":"鷲宮神社","nameEn":"Washinomiya Shrine","anime":"らき☆すた","animeEn":"Lucky Star","photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/3/38/Washinomiya-Shrine-Washimiya-Saitama-Japan.jpg","author":"LERK","license":"CC BY-SA 3.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Washinomiya-Shrine-Washimiya-Saitama-Japan.jpg"}},
-  {"id":"mizuki-shigeru-road","name":"水木しげるロード","nameEn":"Mizuki Shigeru Road","anime":"ゲゲゲの鬼太郎","animeEn":"GeGeGe no Kitaro","photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/a/a1/Mizuki_shigeru_road_%2C_%E6%B0%B4%E6%9C%A8%E3%81%97%E3%81%92%E3%82%8B%E3%83%AD%E3%83%BC%E3%83%89_-_panoramio.jpg","author":"z tanuki","license":"CC BY 3.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Mizuki_shigeru_road_,_%E6%B0%B4%E6%9C%A8%E3%81%97%E3%81%92%E3%82%8B%E3%83%AD%E3%83%BC%E3%83%89_-_panoramio.jpg"}}
+  {"id":"kamakura-slamdunk-crossing",
+    "name":{"ja":"鎌倉高校前駅1号踏切","en":"Kamakura High School Crossing","zh-TW":"鎌倉高校前站1號平交道","ko":"가마쿠라코코마에역 1호 건널목","th":"จุดตัดทางรถไฟหมายเลข 1 หน้าสถานีคามาคุระโคโค","fr":"Passage à niveau n°1 de la gare de Kamakurakōkō-mae"},
+    "anime":{"ja":"SLAM DUNK","en":"Slam Dunk","zh-TW":"灌籃高手","ko":"슬램덩크","th":"สแลมดังก์","fr":"Slam Dunk"},
+    "photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/0/0b/Kamakura_koukou_mae_Fumikiri.jpg","author":"Quercus acuta","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Kamakura_koukou_mae_Fumikiri.jpg"}},
+  {"id":"kiminonaha-hidafurukawa-station",
+    "name":{"ja":"飛騨古川駅","en":"Hida-Furukawa Station","zh-TW":"飛驒古川站","ko":"히다후루카와역","th":"สถานีฮิดะ-ฟุรุกาวะ","fr":"Gare de Hida-Furukawa"},
+    "anime":{"ja":"君の名は。","en":"Your Name","zh-TW":"你的名字。","ko":"너의 이름은.","th":"ชื่อของเธอ","fr":"Your Name."},
+    "photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/c/c5/View_of_Hida-Furukawa_Station.JPG","author":"そらみみ","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:View_of_Hida-Furukawa_Station.JPG"}},
+  {"id":"keion-toyosato-school",
+    "name":{"ja":"豊郷小学校旧校舎群","en":"Former Toyosato Elementary School","zh-TW":"豐鄉小學舊校舍群","ko":"도요사토 초등학교 옛 교사군","th":"กลุ่มอาคารเรียนเก่าโรงเรียนประถมโทโยซาโตะ","fr":"Anciens bâtiments de l'école primaire de Toyosato"},
+    "anime":{"ja":"けいおん!","en":"K-On!","zh-TW":"K-ON！輕音部","ko":"케이온!","th":"เคออน!","fr":"K-On!"},
+    "photo":{"url":"https://commons.wikimedia.org/wiki/Special:FilePath/%E8%B1%8A%E9%83%B7%E5%B0%8F%E5%AD%A6%E6%A0%A1%E6%97%A7%E6%A0%A1%E8%88%8E.jpg?width=400","author":"オクノサンライズ","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:%E8%B1%8A%E9%83%B7%E5%B0%8F%E5%AD%A6%E6%A0%A1%E6%97%A7%E6%A0%A1%E8%88%8E.jpg"}},
+  {"id":"girlspanzer-oarai-isosaki",
+    "name":{"ja":"大洗磯前神社","en":"Oarai Isosaki Shrine","zh-TW":"大洗磯前神社","ko":"오아라이 이소사키 신사","th":"ศาลเจ้าโออาไร อิโซซากิ","fr":"Sanctuaire Ōarai Isosaki"},
+    "anime":{"ja":"ガールズ&パンツァー","en":"Girls und Panzer","zh-TW":"少女與戰車","ko":"걸즈 앤 판처","th":"เกิร์ลส์อันด์แพนเซอร์","fr":"Girls und Panzer"},
+    "photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/5/5b/%E5%A4%A7%E6%B4%97%E7%A3%AF%E5%89%8D%E7%A5%9E%E7%A4%BE_%E6%AD%A3%E9%9D%A2%E9%B3%A5%E5%B1%85.JPG","author":"Saigen Jiro","license":"Public Domain","sourceUrl":"https://commons.wikimedia.org/wiki/File:%E5%A4%A7%E6%B4%97%E7%A3%AF%E5%89%8D%E7%A5%9E%E7%A4%BE_%E6%AD%A3%E9%9D%A2%E9%B3%A5%E5%B1%85.JPG"}},
+  {"id":"washinomiya-jinja",
+    "name":{"ja":"鷲宮神社","en":"Washinomiya Shrine","zh-TW":"鷲宮神社","ko":"와시노미야 신사","th":"ศาลเจ้าวาชิโนมิยะ","fr":"Sanctuaire de Washinomiya"},
+    "anime":{"ja":"らき☆すた","en":"Lucky Star","zh-TW":"幸運☆星","ko":"럭키☆스타","th":"ลัคกี้สตาร์","fr":"Lucky Star"},
+    "photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/3/38/Washinomiya-Shrine-Washimiya-Saitama-Japan.jpg","author":"LERK","license":"CC BY-SA 3.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Washinomiya-Shrine-Washimiya-Saitama-Japan.jpg"}},
+  {"id":"mizuki-shigeru-road",
+    "name":{"ja":"水木しげるロード","en":"Mizuki Shigeru Road","zh-TW":"水木茂之路","ko":"미즈키 시게루 로드","th":"ถนนมิซึกิ ชิเงรุ","fr":"Rue Mizuki Shigeru"},
+    "anime":{"ja":"ゲゲゲの鬼太郎","en":"GeGeGe no Kitaro","zh-TW":"鬼太郎","ko":"게게게의 기타로","th":"คิทาโร่","fr":"GeGeGe no Kitaro"},
+    "photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/a/a1/Mizuki_shigeru_road_%2C_%E6%B0%B4%E6%9C%A8%E3%81%97%E3%81%92%E3%82%8B%E3%83%AD%E3%83%BC%E3%83%89_-_panoramio.jpg","author":"z tanuki","license":"CC BY 3.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Mizuki_shigeru_road_,_%E6%B0%B4%E6%9C%A8%E3%81%97%E3%81%92%E3%82%8B%E3%83%AD%E3%83%BC%E3%83%89_-_panoramio.jpg"}}
 ];
 
 function toThumbnailUrl(url, width) {
@@ -163,9 +181,10 @@ function toThumbnailUrl(url, width) {
 function buildGallery() {
   const container = document.getElementById('gallery-grid');
   container.innerHTML = GALLERY_SPOTS.map(spot => {
-    const name = currentLang === 'en' ? spot.nameEn : spot.name;
-    const anime = currentLang === 'en' ? spot.animeEn : spot.anime;
-    const caption = currentLang === 'en' ? `${name} (${anime})` : `${name}（${anime}）`;
+    const name = spot.name[currentLang] || spot.name.ja;
+    const anime = spot.anime[currentLang] || spot.anime.ja;
+    const fullWidthParens = currentLang === 'ja' || currentLang === 'zh-TW';
+    const caption = fullWidthParens ? `${name}（${anime}）` : `${name} (${anime})`;
     return `
     <div class="gallery-item">
       <img src="${toThumbnailUrl(spot.photo.url, 400)}" alt="${name}" loading="lazy">
