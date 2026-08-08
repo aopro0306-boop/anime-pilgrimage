@@ -30,8 +30,10 @@
   #lang-toggle{background:transparent; border:1px solid var(--color-navy); color:var(--color-navy); border-radius:999px; padding:6px 16px; font-size:13px; cursor:pointer;}
   #lang-toggle:hover{background:var(--color-navy); color:var(--color-bg);}
 
-  #hero{position:relative; min-height:88vh; display:flex; align-items:center; justify-content:center; background-size:cover; background-position:center; background-image:linear-gradient(180deg, rgba(29,53,80,0.35), rgba(29,53,80,0.55)), url('https://commons.wikimedia.org/wiki/Special:FilePath/D%C5%8Dgo_Onsen.jpg?width=1600');}
-  .hero-inner{text-align:center; color:#F6F0E4; padding:0 24px; max-width:720px;}
+  #hero{position:relative; min-height:88vh; display:flex; align-items:center; justify-content:center; overflow:hidden;}
+  .hero-slide{position:absolute; inset:0; background-size:cover; background-position:center; opacity:0; transition:opacity 1.2s ease;}
+  .hero-slide.active{opacity:1;}
+  .hero-inner{position:relative; z-index:1; text-align:center; color:#F6F0E4; padding:0 24px; max-width:720px;}
   #hero-title{font-size:clamp(28px,5vw,52px); margin:0 0 28px 0; color:#F6F0E4;}
   .cta-button{display:inline-block; background:#9C542C; color:#F6F0E4; text-decoration:none; padding:14px 36px; border-radius:999px; font-weight:700; font-size:15px; letter-spacing:0.02em; transition:transform 0.15s ease, box-shadow 0.15s ease;}
   .cta-button:hover{transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,0.25);}
@@ -74,16 +76,17 @@
 <header id="site-header">
   <div class="header-inner">
     <span class="logo">Anime Pilgrimage Japan</span>
-    <button id="lang-toggle" type="button" aria-label="Language">EN</button>
+    <button id="lang-toggle" type="button" aria-label="Language">English</button>
   </div>
 </header>
 
 <section id="hero">
+  <div id="hero-slides"></div>
   <div class="hero-inner">
     <h1 id="hero-title" class="heading" data-i18n="heroTitle">アニメの世界を、実際に歩く。</h1>
     <a class="cta-button" data-i18n="heroCta" href="map-leaflet.html">マップを見る</a>
   </div>
-  <p id="hero-photo-credit" data-i18n="heroPhotoCredit">Photo: <a href="https://commons.wikimedia.org/wiki/File:D%C5%8Dgo_Onsen.jpg" target="_blank" rel="noopener">Arnaud Malon</a> / CC BY 2.0 (Wikimedia Commons)</p>
+  <p id="hero-photo-credit"></p>
 </section>
 
 <section id="concept">
@@ -163,12 +166,39 @@ function buildGallery() {
 
 buildGallery();
 
+// Hero slideshow reuses the same GALLERY_SPOTS photos (already
+// license-checked and displayed elsewhere on the page) rather than
+// sourcing separate hero-only images.
+let heroSlideIndex = 0;
+
+function buildHeroCreditHtml(spot) {
+  return `Photo: <a href="${spot.photo.sourceUrl}" target="_blank" rel="noopener">${spot.photo.author}</a> / ${spot.photo.license} (Wikimedia Commons)`;
+}
+
+function buildHeroSlideshow() {
+  const container = document.getElementById('hero-slides');
+  container.innerHTML = GALLERY_SPOTS.map((spot, i) => {
+    const bgUrl = toThumbnailUrl(spot.photo.url, 1600);
+    return `<div class="hero-slide${i === 0 ? ' active' : ''}" style="background-image:linear-gradient(180deg, rgba(29,53,80,0.35), rgba(29,53,80,0.55)), url('${bgUrl}')"></div>`;
+  }).join('');
+  document.getElementById('hero-photo-credit').innerHTML = buildHeroCreditHtml(GALLERY_SPOTS[0]);
+}
+
+function advanceHeroSlide() {
+  const slides = document.querySelectorAll('.hero-slide');
+  slides[heroSlideIndex].classList.remove('active');
+  heroSlideIndex = (heroSlideIndex + 1) % GALLERY_SPOTS.length;
+  slides[heroSlideIndex].classList.add('active');
+  document.getElementById('hero-photo-credit').innerHTML = buildHeroCreditHtml(GALLERY_SPOTS[heroSlideIndex]);
+}
+
+buildHeroSlideshow();
+
 const I18N = {
   ja: {
     pageTitle: 'アニメ聖地巡礼 | Anime Pilgrimage Japan',
     heroTitle: 'アニメの世界を、実際に歩く。',
     heroCta: 'マップを見る',
-    heroPhotoCredit: 'Photo: <a href="https://commons.wikimedia.org/wiki/File:D%C5%8Dgo_Onsen.jpg" target="_blank" rel="noopener">Arnaud Malon</a> / CC BY 2.0 (Wikimedia Commons)',
     conceptText: 'アニメに描かれたあの景色は、日本のどこかに実在する。世界中のファンを、その本物の舞台へ。',
     featuresHeading: 'アプリの特徴',
     feature1Title: '実地図で探す',
@@ -187,7 +217,6 @@ const I18N = {
     pageTitle: 'Anime Pilgrimage Japan',
     heroTitle: 'Walk Into the World of Anime.',
     heroCta: 'Explore the Map',
-    heroPhotoCredit: 'Photo: <a href="https://commons.wikimedia.org/wiki/File:D%C5%8Dgo_Onsen.jpg" target="_blank" rel="noopener">Arnaud Malon</a> / CC BY 2.0 (Wikimedia Commons)',
     conceptText: 'The scenery you saw in anime is real — somewhere in Japan. Connecting fans across the world to the real places behind the stories.',
     featuresHeading: 'What Makes This Different',
     feature1Title: 'Explore on a Real Map',
@@ -220,7 +249,7 @@ function applyLanguage(lang) {
   });
   const langToggle = document.getElementById('lang-toggle');
   if (lang === 'ja') {
-    langToggle.textContent = 'EN';
+    langToggle.textContent = 'English';
     langToggle.lang = 'en';
   } else {
     langToggle.textContent = '日本語';
@@ -233,6 +262,7 @@ document.getElementById('lang-toggle').addEventListener('click', () => {
 });
 
 applyLanguage('ja');
+setInterval(advanceHeroSlide, 5000);
 </script>
 
 </body>
