@@ -34,6 +34,13 @@
   #hero-title{font-size:clamp(28px,5vw,52px); margin:0 0 28px 0; color:#F6F0E4;}
   .cta-button{display:inline-block; background:var(--color-terracotta); color:#F6F0E4; text-decoration:none; padding:14px 36px; border-radius:999px; font-weight:700; font-size:15px; letter-spacing:0.02em; transition:transform 0.15s ease, box-shadow 0.15s ease;}
   .cta-button:hover{transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,0.25);}
+
+  #concept{max-width:640px; margin:0 auto; padding:88px 24px; text-align:center; font-size:18px;}
+
+  #features{max-width:1100px; margin:0 auto; padding:0 24px 88px; display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:28px;}
+  .feature-card{background:#fff; border-radius:16px; padding:28px 24px; box-shadow:0 4px 16px rgba(29,53,80,0.08);}
+  .feature-card h3{margin:0 0 10px 0; font-size:18px; color:var(--color-navy);}
+  .feature-card p{margin:0; font-size:14px; color:var(--color-text); opacity:0.85;}
 </style>
 </head>
 <body>
@@ -48,6 +55,29 @@
   <div class="hero-inner">
     <h1 id="hero-title" class="heading" data-i18n="heroTitle">アニメの世界を、実際に歩く。</h1>
     <a class="cta-button" data-i18n="heroCta" href="map-leaflet.html">マップを見る</a>
+  </div>
+</section>
+
+<section id="concept">
+  <p data-i18n="conceptText">アニメに描かれたあの景色は、日本のどこかに実在する。世界中のファンを、その本物の舞台へ。</p>
+</section>
+
+<section id="features">
+  <div class="feature-card">
+    <h3 class="heading" data-i18n="feature1Title">実地図で探す</h3>
+    <p data-i18n="feature1Body">正確な位置情報を、実際の地図上のピンで確認できます。</p>
+  </div>
+  <div class="feature-card">
+    <h3 class="heading" data-i18n="feature2Title">作品名で検索</h3>
+    <p data-i18n="feature2Body">作品名を検索すると、その作品のスポットにまとめてジャンプします。</p>
+  </div>
+  <div class="feature-card">
+    <h3 class="heading" data-i18n="feature3Title">多言語対応</h3>
+    <p data-i18n="feature3Body">英語・繁体字中国語・韓国語・タイ語・フランス語に対応しています。</p>
+  </div>
+  <div class="feature-card">
+    <h3 class="heading" data-i18n="feature4Title">出典明記の安心写真</h3>
+    <p data-i18n="feature4Body">掲載写真はすべてライセンスを確認済みで、出典を明記しています。</p>
   </div>
 </section>
 
