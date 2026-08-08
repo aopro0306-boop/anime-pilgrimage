@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>アニメ聖地巡礼 | Anime Pilgrimage Japan</title>
+<meta name="description" content="Discover real-world anime pilgrimage locations across Japan on an interactive map.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
@@ -23,21 +24,25 @@
   html[lang="en"] .heading{font-family:'Fraunces', serif;}
   a{color:inherit;}
 
-  #site-header{position:sticky; top:0; z-index:50; background:rgba(246,240,228,0.92); backdrop-filter:blur(4px); border-bottom:1px solid rgba(29,53,80,0.12);}
+  #site-header{position:sticky; top:0; z-index:50; background:rgba(246,240,228,0.92); -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); border-bottom:1px solid rgba(29,53,80,0.12);}
   .header-inner{max-width:1100px; margin:0 auto; padding:14px 24px; display:flex; align-items:center; justify-content:space-between;}
   .logo{font-weight:700; color:var(--color-navy); letter-spacing:0.02em;}
   #lang-toggle{background:transparent; border:1px solid var(--color-navy); color:var(--color-navy); border-radius:999px; padding:6px 16px; font-size:13px; cursor:pointer;}
   #lang-toggle:hover{background:var(--color-navy); color:var(--color-bg);}
 
-  #hero{position:relative; min-height:88vh; display:flex; align-items:center; justify-content:center; background-size:cover; background-position:center; background-image:linear-gradient(180deg, rgba(29,53,80,0.35), rgba(29,53,80,0.55)), url('https://upload.wikimedia.org/wikipedia/commons/8/83/D%C5%8Dgo_Onsen.jpg');}
+  #hero{position:relative; min-height:88vh; display:flex; align-items:center; justify-content:center; background-size:cover; background-position:center; background-image:linear-gradient(180deg, rgba(29,53,80,0.35), rgba(29,53,80,0.55)), url('https://commons.wikimedia.org/wiki/Special:FilePath/D%C5%8Dgo_Onsen.jpg?width=1600');}
   .hero-inner{text-align:center; color:#F6F0E4; padding:0 24px; max-width:720px;}
   #hero-title{font-size:clamp(28px,5vw,52px); margin:0 0 28px 0; color:#F6F0E4;}
-  .cta-button{display:inline-block; background:var(--color-terracotta); color:#F6F0E4; text-decoration:none; padding:14px 36px; border-radius:999px; font-weight:700; font-size:15px; letter-spacing:0.02em; transition:transform 0.15s ease, box-shadow 0.15s ease;}
+  .cta-button{display:inline-block; background:#9C542C; color:#F6F0E4; text-decoration:none; padding:14px 36px; border-radius:999px; font-weight:700; font-size:15px; letter-spacing:0.02em; transition:transform 0.15s ease, box-shadow 0.15s ease;}
   .cta-button:hover{transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,0.25);}
+  #hero-photo-credit{position:absolute; bottom:12px; right:16px; margin:0; font-size:11px; color:rgba(246,240,228,0.75); z-index:1;}
+  #hero-photo-credit a{color:inherit;}
 
   #concept{max-width:640px; margin:0 auto; padding:88px 24px; text-align:center; font-size:18px;}
 
-  #features{max-width:1100px; margin:0 auto; padding:0 24px 88px; display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:28px;}
+  #features{max-width:1100px; margin:0 auto; padding:0 24px 88px;}
+  #features h2{text-align:center; margin:0 0 40px 0; font-size:clamp(22px,3vw,32px); color:var(--color-navy);}
+  .feature-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:28px;}
   .feature-card{background:#fff; border-radius:16px; padding:28px 24px; box-shadow:0 4px 16px rgba(29,53,80,0.08);}
   .feature-card h3{margin:0 0 10px 0; font-size:18px; color:var(--color-navy);}
   .feature-card p{margin:0; font-size:14px; color:var(--color-text); opacity:0.85;}
@@ -48,13 +53,13 @@
   .gallery-item img{width:100%; height:220px; object-fit:cover; display:block;}
   .gallery-caption{padding:14px 16px;}
   .gallery-caption .spot-name{font-weight:700; color:var(--color-navy); font-size:14px;}
-  .gallery-caption .photo-credit{margin-top:6px; font-size:11px; color:var(--color-text); opacity:0.6;}
+  .gallery-caption .photo-credit{margin-top:6px; font-size:11px; color:var(--color-text); opacity:0.75;}
   .gallery-caption .photo-credit a{color:inherit;}
 
   #closing{background:var(--color-navy); color:#F6F0E4; text-align:center; padding:88px 24px;}
   #closing h2{margin:0 0 28px 0; color:#F6F0E4;}
 
-  footer{max-width:1100px; margin:0 auto; padding:32px 24px; font-size:12px; color:var(--color-text); opacity:0.6; text-align:center;}
+  footer{max-width:1100px; margin:0 auto; padding:32px 24px; font-size:12px; color:var(--color-text); opacity:0.75; text-align:center;}
 
   @media (max-width: 640px) {
     .header-inner{padding:12px 16px;}
@@ -69,7 +74,7 @@
 <header id="site-header">
   <div class="header-inner">
     <span class="logo">Anime Pilgrimage Japan</span>
-    <button id="lang-toggle" type="button">EN</button>
+    <button id="lang-toggle" type="button" aria-label="Language">EN</button>
   </div>
 </header>
 
@@ -78,6 +83,7 @@
     <h1 id="hero-title" class="heading" data-i18n="heroTitle">アニメの世界を、実際に歩く。</h1>
     <a class="cta-button" data-i18n="heroCta" href="map-leaflet.html">マップを見る</a>
   </div>
+  <p id="hero-photo-credit" data-i18n="heroPhotoCredit">Photo: <a href="https://commons.wikimedia.org/wiki/File:D%C5%8Dgo_Onsen.jpg" target="_blank" rel="noopener">Arnaud Malon</a> / CC BY 2.0 (Wikimedia Commons)</p>
 </section>
 
 <section id="concept">
@@ -85,21 +91,24 @@
 </section>
 
 <section id="features">
-  <div class="feature-card">
-    <h3 class="heading" data-i18n="feature1Title">実地図で探す</h3>
-    <p data-i18n="feature1Body">正確な位置情報を、実際の地図上のピンで確認できます。</p>
-  </div>
-  <div class="feature-card">
-    <h3 class="heading" data-i18n="feature2Title">作品名で検索</h3>
-    <p data-i18n="feature2Body">作品名を検索すると、その作品のスポットにまとめてジャンプします。</p>
-  </div>
-  <div class="feature-card">
-    <h3 class="heading" data-i18n="feature3Title">多言語対応</h3>
-    <p data-i18n="feature3Body">英語・繁体字中国語・韓国語・タイ語・フランス語に対応しています。</p>
-  </div>
-  <div class="feature-card">
-    <h3 class="heading" data-i18n="feature4Title">出典明記の安心写真</h3>
-    <p data-i18n="feature4Body">掲載写真はすべてライセンスを確認済みで、出典を明記しています。</p>
+  <h2 class="heading" data-i18n="featuresHeading">アプリの特徴</h2>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <h3 class="heading" data-i18n="feature1Title">実地図で探す</h3>
+      <p data-i18n="feature1Body">正確な位置情報を、実際の地図上のピンで確認できます。</p>
+    </div>
+    <div class="feature-card">
+      <h3 class="heading" data-i18n="feature2Title">作品名で検索</h3>
+      <p data-i18n="feature2Body">作品名を検索すると、その作品のスポットにまとめてジャンプします。</p>
+    </div>
+    <div class="feature-card">
+      <h3 class="heading" data-i18n="feature3Title">多言語対応</h3>
+      <p data-i18n="feature3Body">英語・繁体字中国語・韓国語・タイ語・フランス語に対応しています。</p>
+    </div>
+    <div class="feature-card">
+      <h3 class="heading" data-i18n="feature4Title">出典明記の安心写真</h3>
+      <p data-i18n="feature4Body">掲載写真はすべてライセンスを確認済みで、出典を明記しています。</p>
+    </div>
   </div>
 </section>
 
@@ -127,11 +136,23 @@ const GALLERY_SPOTS = [
   {"id":"mizuki-shigeru-road","name":"水木しげるロード","anime":"ゲゲゲの鬼太郎","photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/a/a1/Mizuki_shigeru_road_%2C_%E6%B0%B4%E6%9C%A8%E3%81%97%E3%81%92%E3%82%8B%E3%83%AD%E3%83%BC%E3%83%89_-_panoramio.jpg","author":"z tanuki","license":"CC BY 3.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Mizuki_shigeru_road_,_%E6%B0%B4%E6%9C%A8%E3%81%97%E3%81%92%E3%82%8B%E3%83%AD%E3%83%BC%E3%83%89_-_panoramio.jpg"}}
 ];
 
+function toThumbnailUrl(url, width) {
+  // Convert a Wikimedia Commons direct upload.wikimedia.org URL into a
+  // sized Special:FilePath thumbnail URL. Leaves already-sized
+  // Special:FilePath URLs (and non-Wikimedia URLs) untouched.
+  if (typeof url !== 'string' || !url.includes('upload.wikimedia.org')) return url;
+  if (url.includes('Special:FilePath')) return url;
+  const filename = url.substring(url.lastIndexOf('/') + 1);
+  const alreadyEncoded = /%[0-9A-Fa-f]{2}/.test(filename);
+  const encodedFilename = alreadyEncoded ? filename : encodeURIComponent(filename);
+  return `https://commons.wikimedia.org/wiki/Special:FilePath/${encodedFilename}?width=${width}`;
+}
+
 function buildGallery() {
   const container = document.getElementById('gallery-grid');
   container.innerHTML = GALLERY_SPOTS.map(spot => `
     <div class="gallery-item">
-      <img src="${spot.photo.url}" alt="${spot.name}" loading="lazy">
+      <img src="${toThumbnailUrl(spot.photo.url, 400)}" alt="${spot.name}" loading="lazy">
       <div class="gallery-caption">
         <div class="spot-name">${spot.name}（${spot.anime}）</div>
         <p class="photo-credit">Photo: <a href="${spot.photo.sourceUrl}" target="_blank" rel="noopener">${spot.photo.author}</a> / ${spot.photo.license} (Wikimedia Commons)</p>
@@ -147,7 +168,9 @@ const I18N = {
     pageTitle: 'アニメ聖地巡礼 | Anime Pilgrimage Japan',
     heroTitle: 'アニメの世界を、実際に歩く。',
     heroCta: 'マップを見る',
+    heroPhotoCredit: 'Photo: <a href="https://commons.wikimedia.org/wiki/File:D%C5%8Dgo_Onsen.jpg" target="_blank" rel="noopener">Arnaud Malon</a> / CC BY 2.0 (Wikimedia Commons)',
     conceptText: 'アニメに描かれたあの景色は、日本のどこかに実在する。世界中のファンを、その本物の舞台へ。',
+    featuresHeading: 'アプリの特徴',
     feature1Title: '実地図で探す',
     feature1Body: '正確な位置情報を、実際の地図上のピンで確認できます。',
     feature2Title: '作品名で検索',
@@ -164,7 +187,9 @@ const I18N = {
     pageTitle: 'Anime Pilgrimage Japan',
     heroTitle: 'Walk Into the World of Anime.',
     heroCta: 'Explore the Map',
+    heroPhotoCredit: 'Photo: <a href="https://commons.wikimedia.org/wiki/File:D%C5%8Dgo_Onsen.jpg" target="_blank" rel="noopener">Arnaud Malon</a> / CC BY 2.0 (Wikimedia Commons)',
     conceptText: 'The scenery you saw in anime is real — somewhere in Japan. Connecting fans across the world to the real places behind the stories.',
+    featuresHeading: 'What Makes This Different',
     feature1Title: 'Explore on a Real Map',
     feature1Body: 'Every spot is pinned on an actual map, not an illustration.',
     feature2Title: 'Search by Title',
@@ -187,9 +212,20 @@ function applyLanguage(lang) {
   document.title = I18N[lang].pageTitle;
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.dataset.i18n;
-    if (I18N[lang][key] !== undefined) el.textContent = I18N[lang][key];
+    if (I18N[lang][key] !== undefined) {
+      el.innerHTML = I18N[lang][key];
+    } else {
+      console.warn('missing i18n key:', key, lang);
+    }
   });
-  document.getElementById('lang-toggle').textContent = lang === 'ja' ? 'EN' : '日本語';
+  const langToggle = document.getElementById('lang-toggle');
+  if (lang === 'ja') {
+    langToggle.textContent = 'EN';
+    langToggle.lang = 'en';
+  } else {
+    langToggle.textContent = '日本語';
+    langToggle.lang = 'ja';
+  }
 }
 
 document.getElementById('lang-toggle').addEventListener('click', () => {
