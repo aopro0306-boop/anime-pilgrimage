@@ -27,8 +27,8 @@
   #site-header{position:sticky; top:0; z-index:50; background:rgba(246,240,228,0.92); -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); border-bottom:1px solid rgba(29,53,80,0.12);}
   .header-inner{max-width:1100px; margin:0 auto; padding:14px 24px; display:flex; align-items:center; justify-content:space-between;}
   .logo{font-weight:700; color:var(--color-navy); letter-spacing:0.02em;}
-  #lang-toggle{background:transparent; border:1px solid var(--color-navy); color:var(--color-navy); border-radius:999px; padding:6px 16px; font-size:13px; cursor:pointer;}
-  #lang-toggle:hover{background:var(--color-navy); color:var(--color-bg);}
+  #lang-select{background:transparent; border:1px solid var(--color-navy); color:var(--color-navy); border-radius:999px; padding:6px 30px 6px 16px; font-size:13px; font-family:inherit; cursor:pointer; appearance:none; -webkit-appearance:none; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%231D3550' d='M7 10l5 5 5-5z'/></svg>"); background-repeat:no-repeat; background-position:right 10px center; background-size:16px;}
+  #lang-select:hover{background-color:rgba(29,53,80,0.06);}
 
   #hero{position:relative; min-height:88vh; display:flex; align-items:center; justify-content:center; overflow:hidden;}
   .hero-slide{position:absolute; inset:0; background-size:cover; background-position:center; opacity:0; transition:opacity 1.2s ease;}
@@ -76,7 +76,14 @@
 <header id="site-header">
   <div class="header-inner">
     <span class="logo">Anime Pilgrimage Japan</span>
-    <button id="lang-toggle" type="button" aria-label="Language">English</button>
+    <select id="lang-select" aria-label="Language">
+      <option value="ja">日本語</option>
+      <option value="en">English</option>
+      <option value="zh-TW">繁體中文</option>
+      <option value="ko">한국어</option>
+      <option value="th">ไทย</option>
+      <option value="fr">Français</option>
+    </select>
   </div>
 </header>
 
@@ -131,12 +138,12 @@
 
 <script>
 const GALLERY_SPOTS = [
-  {"id":"kamakura-slamdunk-crossing","name":"鎌倉高校前駅1号踏切","anime":"SLAM DUNK","photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/0/0b/Kamakura_koukou_mae_Fumikiri.jpg","author":"Quercus acuta","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Kamakura_koukou_mae_Fumikiri.jpg"}},
-  {"id":"kiminonaha-hidafurukawa-station","name":"飛騨古川駅","anime":"君の名は。","photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/c/c5/View_of_Hida-Furukawa_Station.JPG","author":"そらみみ","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:View_of_Hida-Furukawa_Station.JPG"}},
-  {"id":"keion-toyosato-school","name":"豊郷小学校旧校舎群","anime":"けいおん!","photo":{"url":"https://commons.wikimedia.org/wiki/Special:FilePath/%E8%B1%8A%E9%83%B7%E5%B0%8F%E5%AD%A6%E6%A0%A1%E6%97%A7%E6%A0%A1%E8%88%8E.jpg?width=400","author":"オクノサンライズ","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:%E8%B1%8A%E9%83%B7%E5%B0%8F%E5%AD%A6%E6%A0%A1%E6%97%A7%E6%A0%A1%E8%88%8E.jpg"}},
-  {"id":"girlspanzer-oarai-isosaki","name":"大洗磯前神社","anime":"ガールズ&パンツァー","photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/5/5b/%E5%A4%A7%E6%B4%97%E7%A3%AF%E5%89%8D%E7%A5%9E%E7%A4%BE_%E6%AD%A3%E9%9D%A2%E9%B3%A5%E5%B1%85.JPG","author":"Saigen Jiro","license":"Public Domain","sourceUrl":"https://commons.wikimedia.org/wiki/File:%E5%A4%A7%E6%B4%97%E7%A3%AF%E5%89%8D%E7%A5%9E%E7%A4%BE_%E6%AD%A3%E9%9D%A2%E9%B3%A5%E5%B1%85.JPG"}},
-  {"id":"washinomiya-jinja","name":"鷲宮神社","anime":"らき☆すた","photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/3/38/Washinomiya-Shrine-Washimiya-Saitama-Japan.jpg","author":"LERK","license":"CC BY-SA 3.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Washinomiya-Shrine-Washimiya-Saitama-Japan.jpg"}},
-  {"id":"mizuki-shigeru-road","name":"水木しげるロード","anime":"ゲゲゲの鬼太郎","photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/a/a1/Mizuki_shigeru_road_%2C_%E6%B0%B4%E6%9C%A8%E3%81%97%E3%81%92%E3%82%8B%E3%83%AD%E3%83%BC%E3%83%89_-_panoramio.jpg","author":"z tanuki","license":"CC BY 3.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Mizuki_shigeru_road_,_%E6%B0%B4%E6%9C%A8%E3%81%97%E3%81%92%E3%82%8B%E3%83%AD%E3%83%BC%E3%83%89_-_panoramio.jpg"}}
+  {"id":"kamakura-slamdunk-crossing","name":"鎌倉高校前駅1号踏切","nameEn":"Kamakura High School Crossing","anime":"SLAM DUNK","animeEn":"Slam Dunk","photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/0/0b/Kamakura_koukou_mae_Fumikiri.jpg","author":"Quercus acuta","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Kamakura_koukou_mae_Fumikiri.jpg"}},
+  {"id":"kiminonaha-hidafurukawa-station","name":"飛騨古川駅","nameEn":"Hida-Furukawa Station","anime":"君の名は。","animeEn":"Your Name","photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/c/c5/View_of_Hida-Furukawa_Station.JPG","author":"そらみみ","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:View_of_Hida-Furukawa_Station.JPG"}},
+  {"id":"keion-toyosato-school","name":"豊郷小学校旧校舎群","nameEn":"Former Toyosato Elementary School","anime":"けいおん!","animeEn":"K-On!","photo":{"url":"https://commons.wikimedia.org/wiki/Special:FilePath/%E8%B1%8A%E9%83%B7%E5%B0%8F%E5%AD%A6%E6%A0%A1%E6%97%A7%E6%A0%A1%E8%88%8E.jpg?width=400","author":"オクノサンライズ","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:%E8%B1%8A%E9%83%B7%E5%B0%8F%E5%AD%A6%E6%A0%A1%E6%97%A7%E6%A0%A1%E8%88%8E.jpg"}},
+  {"id":"girlspanzer-oarai-isosaki","name":"大洗磯前神社","nameEn":"Oarai Isosaki Shrine","anime":"ガールズ&パンツァー","animeEn":"Girls und Panzer","photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/5/5b/%E5%A4%A7%E6%B4%97%E7%A3%AF%E5%89%8D%E7%A5%9E%E7%A4%BE_%E6%AD%A3%E9%9D%A2%E9%B3%A5%E5%B1%85.JPG","author":"Saigen Jiro","license":"Public Domain","sourceUrl":"https://commons.wikimedia.org/wiki/File:%E5%A4%A7%E6%B4%97%E7%A3%AF%E5%89%8D%E7%A5%9E%E7%A4%BE_%E6%AD%A3%E9%9D%A2%E9%B3%A5%E5%B1%85.JPG"}},
+  {"id":"washinomiya-jinja","name":"鷲宮神社","nameEn":"Washinomiya Shrine","anime":"らき☆すた","animeEn":"Lucky Star","photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/3/38/Washinomiya-Shrine-Washimiya-Saitama-Japan.jpg","author":"LERK","license":"CC BY-SA 3.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Washinomiya-Shrine-Washimiya-Saitama-Japan.jpg"}},
+  {"id":"mizuki-shigeru-road","name":"水木しげるロード","nameEn":"Mizuki Shigeru Road","anime":"ゲゲゲの鬼太郎","animeEn":"GeGeGe no Kitaro","photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/a/a1/Mizuki_shigeru_road_%2C_%E6%B0%B4%E6%9C%A8%E3%81%97%E3%81%92%E3%82%8B%E3%83%AD%E3%83%BC%E3%83%89_-_panoramio.jpg","author":"z tanuki","license":"CC BY 3.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Mizuki_shigeru_road_,_%E6%B0%B4%E6%9C%A8%E3%81%97%E3%81%92%E3%82%8B%E3%83%AD%E3%83%BC%E3%83%89_-_panoramio.jpg"}}
 ];
 
 function toThumbnailUrl(url, width) {
@@ -151,20 +158,25 @@ function toThumbnailUrl(url, width) {
   return `https://commons.wikimedia.org/wiki/Special:FilePath/${encodedFilename}?width=${width}`;
 }
 
+// Re-run whenever the language changes (see applyLanguage()) so spot/anime
+// names switch between the Japanese name and its English localized title.
 function buildGallery() {
   const container = document.getElementById('gallery-grid');
-  container.innerHTML = GALLERY_SPOTS.map(spot => `
+  container.innerHTML = GALLERY_SPOTS.map(spot => {
+    const name = currentLang === 'en' ? spot.nameEn : spot.name;
+    const anime = currentLang === 'en' ? spot.animeEn : spot.anime;
+    const caption = currentLang === 'en' ? `${name} (${anime})` : `${name}（${anime}）`;
+    return `
     <div class="gallery-item">
-      <img src="${toThumbnailUrl(spot.photo.url, 400)}" alt="${spot.name}" loading="lazy">
+      <img src="${toThumbnailUrl(spot.photo.url, 400)}" alt="${name}" loading="lazy">
       <div class="gallery-caption">
-        <div class="spot-name">${spot.name}（${spot.anime}）</div>
+        <div class="spot-name">${caption}</div>
         <p class="photo-credit">Photo: <a href="${spot.photo.sourceUrl}" target="_blank" rel="noopener">${spot.photo.author}</a> / ${spot.photo.license} (Wikimedia Commons)</p>
       </div>
     </div>
-  `).join('');
+  `;
+  }).join('');
 }
-
-buildGallery();
 
 // Hero slideshow reuses the same GALLERY_SPOTS photos (already
 // license-checked and displayed elsewhere on the page) rather than
@@ -230,6 +242,78 @@ const I18N = {
     galleryHeading: 'A Few Featured Locations',
     closingHeading: 'Ready to Start Your Pilgrimage?',
     footerCredit: 'Photos via Wikimedia Commons (see individual credits above).'
+  },
+  'zh-TW': {
+    pageTitle: '動畫聖地巡禮 | Anime Pilgrimage Japan',
+    heroTitle: '走進動畫的世界。',
+    heroCta: '查看地圖',
+    conceptText: '動畫中描繪的那片風景，其實就存在於日本的某個角落。將世界各地的粉絲，帶往那真實的舞台。',
+    featuresHeading: '應用特色',
+    feature1Title: '透過實際地圖尋找',
+    feature1Body: '每個地點都精準標示在真實地圖上，而非插畫。',
+    feature2Title: '依作品名稱搜尋',
+    feature2Body: '搜尋作品名稱，即可直接跳轉至該作品的所有地點。',
+    feature3Title: '多語言支援',
+    feature3Body: '支援英文、繁體中文、韓文、泰文及法文。',
+    feature4Title: '附出處的安心照片',
+    feature4Body: '所有照片皆經過授權確認，並清楚標示出處。',
+    galleryHeading: '精選地點',
+    closingHeading: '現在就打開地圖，展開你的聖地巡禮吧',
+    footerCredit: '照片提供：Wikimedia Commons（詳細出處請見各張照片說明）'
+  },
+  ko: {
+    pageTitle: '애니메이션 성지순례 | Anime Pilgrimage Japan',
+    heroTitle: '애니메이션 속 세계를, 직접 걸어보다.',
+    heroCta: '지도 보기',
+    conceptText: '애니메이션에 그려진 그 풍경은, 일본 어딘가에 실제로 존재합니다. 전 세계의 팬들을 그 진짜 무대로 연결합니다.',
+    featuresHeading: '앱의 특징',
+    feature1Title: '실제 지도에서 찾기',
+    feature1Body: '모든 장소가 그림이 아닌 실제 지도 위에 정확히 표시됩니다.',
+    feature2Title: '작품명으로 검색',
+    feature2Body: '작품명을 검색하면 해당 작품의 장소로 한 번에 이동합니다.',
+    feature3Title: '다국어 지원',
+    feature3Body: '영어·중국어 번체·한국어·태국어·프랑스어를 지원합니다.',
+    feature4Title: '출처가 명확한 안심 사진',
+    feature4Body: '게재된 사진은 모두 라이선스를 확인했으며 출처를 명시하고 있습니다.',
+    galleryHeading: '대표 스팟 소개',
+    closingHeading: '자, 지도를 열고 성지순례를 떠나볼까요',
+    footerCredit: '사진 제공: Wikimedia Commons(자세한 출처는 각 사진의 크레딧 참조)'
+  },
+  th: {
+    pageTitle: 'ตามรอยอนิเมะ | Anime Pilgrimage Japan',
+    heroTitle: 'ก้าวเข้าสู่โลกของอนิเมะอย่างแท้จริง',
+    heroCta: 'ดูแผนที่',
+    conceptText: 'ทิวทัศน์ที่ปรากฏในอนิเมะนั้นมีอยู่จริงที่ไหนสักแห่งในญี่ปุ่น เชื่อมโยงแฟนๆ ทั่วโลกไปยังสถานที่จริงเบื้องหลังเรื่องราวเหล่านั้น',
+    featuresHeading: 'จุดเด่นของแอป',
+    feature1Title: 'ค้นหาบนแผนที่จริง',
+    feature1Body: 'ทุกสถานที่ถูกปักหมุดบนแผนที่จริง ไม่ใช่ภาพประกอบ',
+    feature2Title: 'ค้นหาด้วยชื่อผลงาน',
+    feature2Body: 'ค้นหาชื่อผลงานเพื่อไปยังสถานที่ทั้งหมดของเรื่องนั้นได้ทันที',
+    feature3Title: 'รองรับหลายภาษา',
+    feature3Body: 'รองรับภาษาอังกฤษ จีนตัวเต็ม เกาหลี ไทย และฝรั่งเศส',
+    feature4Title: 'ภาพถ่ายที่น่าเชื่อถือพร้อมแหล่งที่มา',
+    feature4Body: 'ภาพถ่ายทุกภาพผ่านการตรวจสอบลิขสิทธิ์และระบุแหล่งที่มาอย่างชัดเจน',
+    galleryHeading: 'ตัวอย่างสถานที่แนะนำ',
+    closingHeading: 'มาเปิดแผนที่แล้วออกเดินทางตามรอยกันเถอะ',
+    footerCredit: 'ภาพถ่ายจาก Wikimedia Commons (ดูรายละเอียดแหล่งที่มาของแต่ละภาพด้านบน)'
+  },
+  fr: {
+    pageTitle: 'Pèlerinage Anime | Anime Pilgrimage Japan',
+    heroTitle: "Marchez au cœur de l'univers de l'anime.",
+    heroCta: 'Explorer la carte',
+    conceptText: "Le décor que vous avez vu dans un anime existe vraiment, quelque part au Japon. Nous relions les fans du monde entier à ces lieux authentiques.",
+    featuresHeading: 'Ce qui nous distingue',
+    feature1Title: 'Explorez sur une vraie carte',
+    feature1Body: "Chaque lieu est localisé sur une carte réelle, pas une illustration.",
+    feature2Title: 'Recherchez par titre',
+    feature2Body: "Recherchez le titre d'un anime pour accéder directement à ses lieux.",
+    feature3Title: 'Plusieurs langues',
+    feature3Body: 'Disponible en anglais, chinois traditionnel, coréen, thaï et français.',
+    feature4Title: 'Photos vérifiées et créditées',
+    feature4Body: "Chaque photo est vérifiée sur le plan des droits d'auteur et dûment créditée.",
+    galleryHeading: 'Quelques lieux emblématiques',
+    closingHeading: 'Ouvrez la carte et commencez votre pèlerinage',
+    footerCredit: 'Photos via Wikimedia Commons (voir les crédits de chaque photo ci-dessus).'
   }
 };
 
@@ -239,6 +323,7 @@ function applyLanguage(lang) {
   currentLang = lang;
   document.documentElement.lang = lang;
   document.title = I18N[lang].pageTitle;
+  buildGallery();
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.dataset.i18n;
     if (I18N[lang][key] !== undefined) {
@@ -247,18 +332,11 @@ function applyLanguage(lang) {
       console.warn('missing i18n key:', key, lang);
     }
   });
-  const langToggle = document.getElementById('lang-toggle');
-  if (lang === 'ja') {
-    langToggle.textContent = 'English';
-    langToggle.lang = 'en';
-  } else {
-    langToggle.textContent = '日本語';
-    langToggle.lang = 'ja';
-  }
+  document.getElementById('lang-select').value = lang;
 }
 
-document.getElementById('lang-toggle').addEventListener('click', () => {
-  applyLanguage(currentLang === 'ja' ? 'en' : 'ja');
+document.getElementById('lang-select').addEventListener('change', (e) => {
+  applyLanguage(e.target.value);
 });
 
 applyLanguage('ja');
