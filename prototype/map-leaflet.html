@@ -8,34 +8,47 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
-  html, body { margin: 0; padding: 0; height: 100%; }
+  html, body { margin: 0; padding: 0; height: 100%; font-family: 'M PLUS Rounded 1c', sans-serif; }
   #map { width: 100%; height: 100vh; }
-  #filter-panel{position:absolute;top:12px;left:12px;z-index:690;padding:12px;max-width:280px;background:rgba(255,255,255,0.95);border-radius:8px;max-height:70vh;overflow-y:auto;box-shadow:0 2px 8px rgba(0,0,0,0.2);}
+  #filter-panel{position:absolute;top:12px;left:12px;z-index:690;padding:14px;max-width:280px;background:rgba(255,255,255,0.97);border-radius:18px;max-height:70vh;overflow-y:auto;box-shadow:0 6px 20px rgba(47,128,255,0.18);}
   #anime-filter label{display:block;font-size:13px;margin:2px 0;}
   #lang-switcher{margin-bottom:8px;}
-  #lang-select{width:100%;box-sizing:border-box;padding:6px 8px;font-size:13px;border:1px solid #ccc;border-radius:6px;background:#fff;}
+  #lang-select{width:100%;box-sizing:border-box;padding:7px 10px;font-size:13px;font-family:inherit;border:2px solid #e2ddd0;border-radius:12px;background:#fff;}
   #anime-search-box{margin-bottom:8px;}
-  #anime-search-input{width:100%;box-sizing:border-box;padding:6px 8px;font-size:13px;border:1px solid #ccc;border-radius:6px;}
-  #anime-search-results{max-height:160px;overflow-y:auto;margin-top:4px;border:1px solid #eee;border-radius:6px;}
+  #anime-search-input{width:100%;box-sizing:border-box;padding:7px 10px;font-size:13px;font-family:inherit;border:2px solid #e2ddd0;border-radius:12px;}
+  #anime-search-input:focus{outline:none;border-color:#2F80FF;}
+  #anime-search-results{max-height:160px;overflow-y:auto;margin-top:4px;border:2px solid #f0ede4;border-radius:12px;}
   #anime-search-results.hidden{display:none;}
   .anime-search-result{padding:5px 8px;font-size:13px;cursor:pointer;}
   .anime-search-result:hover{background:#f0f0f0;}
-  .type-chip{display:inline-block;margin:4px 4px 0 0;padding:4px 10px;border-radius:999px;border:1px solid #ccc;background:#fff;cursor:pointer;font-size:12px;}
-  .type-chip.active{background:#333;color:#fff;}
-  .spot-popup{font-family:sans-serif;min-width:180px;}
-  .spot-popup .badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;background:#eee;margin-bottom:6px;}
+  .type-chip{display:inline-block;margin:4px 4px 0 0;padding:5px 12px;border-radius:999px;border:2px solid #ddd;background:#fff;cursor:pointer;font-size:12px;font-family:inherit;font-weight:700;transition:transform 0.1s ease;}
+  .type-chip:hover{transform:translateY(-1px);}
+  .type-chip.active{color:#fff;border-color:transparent;}
+  .type-chip[data-type="scene"].active{background:#2F80FF;}
+  .type-chip[data-type="monument"].active{background:#FF6F3C;}
+  .type-chip[data-type="inspiration"].active{background:#00C48C;}
+  .spot-popup{font-family:'M PLUS Rounded 1c', sans-serif;min-width:180px;}
+  .spot-popup .badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;background:#eee;color:#555;margin-bottom:6px;}
+  .spot-popup .badge.type-scene{background:#e4efff;color:#1a5fc4;}
+  .spot-popup .badge.type-monument{background:#ffe9e0;color:#d94f1e;}
+  .spot-popup .badge.type-inspiration{background:#dff8ee;color:#009468;}
   .spot-popup h3{margin:4px 0;font-size:15px;}
   .spot-popup p{margin:2px 0;font-size:13px;color:#555;}
   .spot-popup .desc{margin-top:6px;font-size:13px;color:#333;}
   .spot-popup a{display:inline-block;margin-top:8px;font-size:13px;}
-  .spot-popup .photo{width:100%;max-width:240px;height:auto;border-radius:6px;display:block;margin-top:4px;}
+  .spot-popup .gmaps-btn{background:#FF4D6D;color:#fff;text-decoration:none;padding:7px 16px;border-radius:999px;font-weight:700;font-size:12px;}
+  .spot-popup .gmaps-btn:hover{background:#e8395a;}
+  .spot-popup .photo{width:100%;max-width:240px;height:auto;border-radius:12px;display:block;margin-top:4px;}
   .spot-popup .photo-credit{margin-top:2px;font-size:10px;color:#999;}
   .spot-popup .photo-credit a{margin-top:0;font-size:10px;}
-  #pref-nav{position:absolute;top:12px;right:12px;z-index:690;padding:12px;width:200px;max-height:70vh;overflow-y:auto;background:rgba(255,255,255,0.95);border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.2);}
-  #pref-nav h4{margin:0 0 8px 0;font-size:13px;}
-  .pref-nav-item{padding:4px 2px;font-size:13px;cursor:pointer;border-bottom:1px solid #eee;}
-  .pref-nav-item:hover{background:#f5f5f5;}
+  #pref-nav{position:absolute;top:12px;right:12px;z-index:690;padding:14px;width:200px;max-height:70vh;overflow-y:auto;background:rgba(255,255,255,0.97);border-radius:18px;box-shadow:0 6px 20px rgba(47,128,255,0.18);}
+  #pref-nav h4{margin:0 0 8px 0;font-size:13px;font-weight:800;}
+  .pref-nav-item{padding:5px 8px;font-size:13px;cursor:pointer;border-radius:10px;}
+  .pref-nav-item:hover{background:#e4efff;color:#1a5fc4;}
   @media (max-width: 640px) {
     #filter-panel, #pref-nav { width: calc(50vw - 24px); max-width: none; box-sizing: border-box; }
   }
@@ -96,7 +109,7 @@ L.maplibreGL({
   style: 'https://tiles.openfreemap.org/styles/liberty'
 }).addTo(map);
 
-const TYPE_COLORS = { scene: '#2a78d6', monument: '#eb6834', inspiration: '#1baf7a' };
+const TYPE_COLORS = { scene: '#2F80FF', monument: '#FF6F3C', inspiration: '#00C48C' };
 
 // UI-text-only translations. Spot names/anime titles/descriptions stay in
 // Japanese for now (deferred to a later task) — only chrome around the
@@ -189,12 +202,12 @@ function buildPopupHtml(spot) {
   ` : '';
   return `
     <div class="spot-popup">
-      <span class="badge">${I18N[currentLang].types[spot.type]}</span>
+      <span class="badge type-${spot.type}">${I18N[currentLang].types[spot.type]}</span>
       <h3>${spot.name}</h3>
       <p>${spot.anime}｜${spot.prefecture}</p>
       ${photoHtml}
       <p class="desc">${spot.description}</p>
-      <a href="${mapsUrl}" target="_blank" rel="noopener">${I18N[currentLang].openInGoogleMaps}</a>
+      <a class="gmaps-btn" href="${mapsUrl}" target="_blank" rel="noopener">${I18N[currentLang].openInGoogleMaps}</a>
     </div>
   `;
 }
