@@ -133,6 +133,62 @@ function buildGallery() {
 }
 
 buildGallery();
+
+const I18N = {
+  ja: {
+    pageTitle: 'アニメ聖地巡礼 | Anime Pilgrimage Japan',
+    heroTitle: 'アニメの世界を、実際に歩く。',
+    heroCta: 'マップを見る',
+    conceptText: 'アニメに描かれたあの景色は、日本のどこかに実在する。世界中のファンを、その本物の舞台へ。',
+    feature1Title: '実地図で探す',
+    feature1Body: '正確な位置情報を、実際の地図上のピンで確認できます。',
+    feature2Title: '作品名で検索',
+    feature2Body: '作品名を検索すると、その作品のスポットにまとめてジャンプします。',
+    feature3Title: '多言語対応',
+    feature3Body: '英語・繁体字中国語・韓国語・タイ語・フランス語に対応しています。',
+    feature4Title: '出典明記の安心写真',
+    feature4Body: '掲載写真はすべてライセンスを確認済みで、出典を明記しています。',
+    galleryHeading: 'スポットの一例',
+    closingHeading: 'さあ、地図を開いて聖地を巡ろう',
+    footerCredit: '写真提供: Wikimedia Commons（詳細は各写真のクレジット参照）'
+  },
+  en: {
+    pageTitle: 'Anime Pilgrimage Japan',
+    heroTitle: 'Walk Into the World of Anime.',
+    heroCta: 'Explore the Map',
+    conceptText: 'The scenery you saw in anime is real — somewhere in Japan. Connecting fans across the world to the real places behind the stories.',
+    feature1Title: 'Explore on a Real Map',
+    feature1Body: 'Every spot is pinned on an actual map, not an illustration.',
+    feature2Title: 'Search by Title',
+    feature2Body: 'Search any anime title to jump straight to its locations.',
+    feature3Title: 'Multiple Languages',
+    feature3Body: 'Available in English, Traditional Chinese, Korean, Thai, and French.',
+    feature4Title: 'Verified, Credited Photos',
+    feature4Body: 'Every photo is license-checked and properly credited.',
+    galleryHeading: 'A Few Featured Locations',
+    closingHeading: 'Ready to Start Your Pilgrimage?',
+    footerCredit: 'Photos via Wikimedia Commons (see individual credits above).'
+  }
+};
+
+let currentLang = 'ja';
+
+function applyLanguage(lang) {
+  currentLang = lang;
+  document.documentElement.lang = lang;
+  document.title = I18N[lang].pageTitle;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (I18N[lang][key] !== undefined) el.textContent = I18N[lang][key];
+  });
+  document.getElementById('lang-toggle').textContent = lang === 'ja' ? 'EN' : '日本語';
+}
+
+document.getElementById('lang-toggle').addEventListener('click', () => {
+  applyLanguage(currentLang === 'ja' ? 'en' : 'ja');
+});
+
+applyLanguage('ja');
 </script>
 
 </body>
