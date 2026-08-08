@@ -13,6 +13,8 @@
   #map { width: 100%; height: 100vh; }
   #filter-panel{position:absolute;top:12px;left:12px;z-index:690;padding:12px;max-width:280px;background:rgba(255,255,255,0.95);border-radius:8px;max-height:70vh;overflow-y:auto;box-shadow:0 2px 8px rgba(0,0,0,0.2);}
   #anime-filter label{display:block;font-size:13px;margin:2px 0;}
+  #lang-switcher{margin-bottom:8px;}
+  #lang-select{width:100%;box-sizing:border-box;padding:6px 8px;font-size:13px;border:1px solid #ccc;border-radius:6px;background:#fff;}
   #anime-search-box{margin-bottom:8px;}
   #anime-search-input{width:100%;box-sizing:border-box;padding:6px 8px;font-size:13px;border:1px solid #ccc;border-radius:6px;}
   #anime-search-results{max-height:160px;overflow-y:auto;margin-top:4px;border:1px solid #eee;border-radius:6px;}
@@ -41,6 +43,16 @@
 </head>
 <body>
 <div id="filter-panel">
+  <div id="lang-switcher">
+    <select id="lang-select" aria-label="Language">
+      <option value="ja">日本語</option>
+      <option value="en">English</option>
+      <option value="zh-TW">繁體中文</option>
+      <option value="ko">한국어</option>
+      <option value="th">ไทย</option>
+      <option value="fr">Français</option>
+    </select>
+  </div>
   <div id="anime-search-box">
     <input type="text" id="anime-search-input" placeholder="作品名で検索...">
     <div id="anime-search-results" class="hidden"></div>
@@ -73,14 +85,68 @@ const PHOTOS = {"kamakura-slamdunk-crossing":{"url":"https://upload.wikimedia.or
 // without prior arrangement. Served as vector tiles via MapLibre GL,
 // wrapped as a normal Leaflet layer so markers/clustering/zoom/flyTo
 // all keep working exactly as before.
-const map = L.map('map', { zoomControl: false, minZoom: 1 }).setView([36.5, 138], 5);
+// maxZoom is set explicitly because L.maplibreGL (vector tiles) doesn't
+// auto-populate it on the map the way L.tileLayer used to — leaving it
+// unset makes map.getMaxZoom() return Infinity, which crashes
+// leaflet.markercluster's onAdd() with "Map has no maxZoom specified"
+// and halts the rest of the script (markers, search, pref nav all break).
+const map = L.map('map', { zoomControl: false, minZoom: 1, maxZoom: 19 }).setView([36.5, 138], 5);
 L.control.zoom({ position: 'bottomright' }).addTo(map);
 L.maplibreGL({
   style: 'https://tiles.openfreemap.org/styles/liberty'
 }).addTo(map);
 
 const TYPE_COLORS = { scene: '#2a78d6', monument: '#eb6834', inspiration: '#1baf7a' };
-const TYPE_LABELS = { scene: '実際の舞台', monument: '像・モニュメント', inspiration: '着想元' };
+
+// UI-text-only translations. Spot names/anime titles/descriptions stay in
+// Japanese for now (deferred to a later task) — only chrome around the
+// map is localized here.
+const I18N = {
+  ja: {
+    title: 'アニメ聖地巡礼マップ（実地図版）',
+    searchPlaceholder: '作品名で検索...',
+    types: { scene: '実際の舞台', monument: '像・モニュメント', inspiration: '着想元' },
+    prefNavHeader: '都道府県から探す',
+    openInGoogleMaps: 'Googleマップで開く'
+  },
+  en: {
+    title: 'Anime Pilgrimage Map',
+    searchPlaceholder: 'Search by anime title...',
+    types: { scene: 'Real Locations', monument: 'Statues & Monuments', inspiration: 'Inspiration Sites' },
+    prefNavHeader: 'Browse by Prefecture',
+    openInGoogleMaps: 'Open in Google Maps'
+  },
+  'zh-TW': {
+    title: '動畫聖地巡禮地圖',
+    searchPlaceholder: '搜尋作品名稱...',
+    types: { scene: '實際場景', monument: '雕像・紀念碑', inspiration: '靈感來源地' },
+    prefNavHeader: '依都道府縣瀏覽',
+    openInGoogleMaps: '在Google地圖開啟'
+  },
+  ko: {
+    title: '애니메이션 성지순례 지도',
+    searchPlaceholder: '작품명으로 검색...',
+    types: { scene: '실제 촬영지', monument: '동상・기념물', inspiration: '모티브가 된 장소' },
+    prefNavHeader: '지역별로 찾기',
+    openInGoogleMaps: 'Google 지도에서 열기'
+  },
+  th: {
+    title: 'แผนที่ตามรอยอนิเมะ',
+    searchPlaceholder: 'ค้นหาชื่อผลงาน...',
+    types: { scene: 'สถานที่จริง', monument: 'รูปปั้น・อนุสรณ์สถาน', inspiration: 'สถานที่ที่เป็นแรงบันดาลใจ' },
+    prefNavHeader: 'ค้นหาตามจังหวัด',
+    openInGoogleMaps: 'เปิดใน Google Maps'
+  },
+  fr: {
+    title: 'Carte des lieux de pèlerinage anime',
+    searchPlaceholder: 'Rechercher un titre...',
+    types: { scene: 'Lieux réels', monument: 'Statues et monuments', inspiration: "Lieux d'inspiration" },
+    prefNavHeader: 'Parcourir par préfecture',
+    openInGoogleMaps: 'Ouvrir dans Google Maps'
+  }
+};
+
+let currentLang = 'ja';
 
 function createPinIcon(type) {
   const color = TYPE_COLORS[type];
@@ -111,25 +177,32 @@ function createPinIcon(type) {
 const clusterGroup = L.markerClusterGroup();
 const markersById = {};
 
-for (const spot of SPOTS) {
-  const marker = L.marker([spot.lat, spot.lng], { icon: createPinIcon(spot.type) });
-  markersById[spot.id] = marker;
+// Popup content is built lazily (via a function passed to bindPopup, which
+// Leaflet calls fresh every time the popup opens) so already-created
+// markers automatically show the current language without being rebuilt.
+function buildPopupHtml(spot) {
   const mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(spot.mapsQuery);
   const photo = PHOTOS[spot.id];
   const photoHtml = photo ? `
       <img class="photo" src="${photo.url}" alt="${spot.name}" loading="lazy">
       <p class="photo-credit">Photo: <a href="${photo.sourceUrl}" target="_blank" rel="noopener">${photo.author}</a> / ${photo.license} (Wikimedia Commons)</p>
   ` : '';
-  marker.bindPopup(`
+  return `
     <div class="spot-popup">
-      <span class="badge">${TYPE_LABELS[spot.type]}</span>
+      <span class="badge">${I18N[currentLang].types[spot.type]}</span>
       <h3>${spot.name}</h3>
       <p>${spot.anime}｜${spot.prefecture}</p>
       ${photoHtml}
       <p class="desc">${spot.description}</p>
-      <a href="${mapsUrl}" target="_blank" rel="noopener">Googleマップで開く</a>
+      <a href="${mapsUrl}" target="_blank" rel="noopener">${I18N[currentLang].openInGoogleMaps}</a>
     </div>
-  `);
+  `;
+}
+
+for (const spot of SPOTS) {
+  const marker = L.marker([spot.lat, spot.lng], { icon: createPinIcon(spot.type) });
+  markersById[spot.id] = marker;
+  marker.bindPopup(() => buildPopupHtml(spot));
   clusterGroup.addLayer(marker);
 }
 
@@ -246,6 +319,26 @@ function buildPrefNav() {
 }
 
 buildPrefNav();
+
+// Updates the static filter-panel/pref-nav chrome. Already-open or
+// future popups pick up the new language on their own since buildPopupHtml
+// reads currentLang live each time Leaflet calls it.
+function applyLanguage(lang) {
+  currentLang = lang;
+  document.title = I18N[lang].title;
+  document.documentElement.lang = lang;
+  document.getElementById('anime-search-input').placeholder = I18N[lang].searchPlaceholder;
+  document.querySelectorAll('.type-chip').forEach(chip => {
+    chip.textContent = I18N[lang].types[chip.dataset.type];
+  });
+  document.querySelector('#pref-nav h4').textContent = I18N[lang].prefNavHeader;
+}
+
+document.getElementById('lang-select').addEventListener('change', (e) => {
+  applyLanguage(e.target.value);
+});
+
+applyLanguage('ja');
 </script>
 </body>
 </html>
