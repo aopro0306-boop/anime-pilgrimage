@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>アニメ聖地巡礼 | Anime Pilgrimage Japan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --color-bg: #F6F0E4;
+    --color-navy: #1D3550;
+    --color-terracotta: #B5673A;
+    --color-moss: #5C7A5E;
+    --color-text: #2B2621;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{font-family:'Zen Kaku Gothic New', sans-serif; background:var(--color-bg); color:var(--color-text); line-height:1.7;}
+  .heading{font-weight:600; text-wrap:balance;}
+  html[lang="ja"] .heading{font-family:'Shippori Mincho', serif;}
+  html[lang="en"] .heading{font-family:'Fraunces', serif;}
+  a{color:inherit;}
+
+  #site-header{position:sticky; top:0; z-index:50; background:rgba(246,240,228,0.92); backdrop-filter:blur(4px); border-bottom:1px solid rgba(29,53,80,0.12);}
+  .header-inner{max-width:1100px; margin:0 auto; padding:14px 24px; display:flex; align-items:center; justify-content:space-between;}
+  .logo{font-weight:700; color:var(--color-navy); letter-spacing:0.02em;}
+  #lang-toggle{background:transparent; border:1px solid var(--color-navy); color:var(--color-navy); border-radius:999px; padding:6px 16px; font-size:13px; cursor:pointer;}
+  #lang-toggle:hover{background:var(--color-navy); color:var(--color-bg);}
+
+  #hero{position:relative; min-height:88vh; display:flex; align-items:center; justify-content:center; background-size:cover; background-position:center; background-image:linear-gradient(180deg, rgba(29,53,80,0.35), rgba(29,53,80,0.55)), url('https://upload.wikimedia.org/wikipedia/commons/8/83/D%C5%8Dgo_Onsen.jpg');}
+  .hero-inner{text-align:center; color:#F6F0E4; padding:0 24px; max-width:720px;}
+  #hero-title{font-size:clamp(28px,5vw,52px); margin:0 0 28px 0; color:#F6F0E4;}
+  .cta-button{display:inline-block; background:var(--color-terracotta); color:#F6F0E4; text-decoration:none; padding:14px 36px; border-radius:999px; font-weight:700; font-size:15px; letter-spacing:0.02em; transition:transform 0.15s ease, box-shadow 0.15s ease;}
+  .cta-button:hover{transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,0.25);}
+</style>
+</head>
+<body>
+<header id="site-header">
+  <div class="header-inner">
+    <span class="logo">Anime Pilgrimage Japan</span>
+    <button id="lang-toggle" type="button">EN</button>
+  </div>
+</header>
+
+<section id="hero">
+  <div class="hero-inner">
+    <h1 id="hero-title" class="heading" data-i18n="heroTitle">アニメの世界を、実際に歩く。</h1>
+    <a class="cta-button" data-i18n="heroCta" href="map-leaflet.html">マップを見る</a>
+  </div>
+</section>
+
+</body>
+</html>
