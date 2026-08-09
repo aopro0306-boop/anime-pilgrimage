@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://aopro0306-boop.github.io/anime-pilgrimage/sitemap.xml
