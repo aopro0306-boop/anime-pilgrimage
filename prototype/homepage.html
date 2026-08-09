@@ -438,7 +438,25 @@ document.getElementById('lang-select').addEventListener('change', (e) => {
   applyLanguage(e.target.value);
 });
 
-applyLanguage('ja');
+// This site targets overseas visitors, so the default language is detected
+// from the browser rather than always starting in Japanese. Falls back to
+// English (rather than Japanese) for any language this site doesn't support.
+function detectBrowserLang() {
+  const supported = ['ja', 'en', 'zh-TW', 'ko', 'th', 'fr'];
+  const browserLangs = navigator.languages || [navigator.language || 'en'];
+  for (const bl of browserLangs) {
+    const lower = bl.toLowerCase();
+    const exact = supported.find(s => s.toLowerCase() === lower);
+    if (exact) return exact;
+    const base = lower.split('-')[0];
+    if (base === 'zh') return 'zh-TW';
+    const baseMatch = supported.find(s => s.toLowerCase() === base);
+    if (baseMatch) return baseMatch;
+  }
+  return 'en';
+}
+
+applyLanguage(detectBrowserLang());
 setInterval(advanceHeroSlide, 5000);
 </script>
 

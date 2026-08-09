@@ -122,6 +122,19 @@ document.getElementById('lang-toggle').addEventListener('click', () => {
   currentLang = currentLang === 'ja' ? 'en' : 'ja';
   applyLang(currentLang);
 });
+
+// This site targets overseas visitors, so the default language is detected
+// from the browser rather than always starting in Japanese.
+function detectBrowserLang() {
+  const browserLangs = navigator.languages || [navigator.language || 'en'];
+  for (const bl of browserLangs) {
+    if (bl.toLowerCase().startsWith('ja')) return 'ja';
+  }
+  return 'en';
+}
+
+currentLang = detectBrowserLang();
+applyLang(currentLang);
 </script>
 </body>
 </html>
