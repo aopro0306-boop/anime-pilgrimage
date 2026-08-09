@@ -251,6 +251,91 @@ function translatePrefecture(pref) {
   return pref;
 }
 
+// English names for all 75 spots, keyed by spot id. Same scope note as
+// ANIME_TITLES_EN/PREFECTURE_NAMES_EN above (English only for now).
+const SPOT_NAMES_EN = {
+  'kamakura-slamdunk-crossing': 'Kamakura High School Crossing',
+  'washinomiya-jinja': 'Washinomiya Shrine',
+  'kumamoto-luffy-statue': 'Luffy Statue',
+  'ueda-castle-summerwars': 'Ueda Castle',
+  'dogo-onsen-honkan': 'Dogo Onsen Honkan',
+  'kiminonaha-hidafurukawa-station': 'Hida-Furukawa Station',
+  'kiminonaha-keta-wakamiya-jinja': 'Keta Wakamiya Shrine',
+  'kiminonaha-hie-jinja': 'Hida Sanno-gu Hie Shrine',
+  'kiminonaha-hida-library': 'Hida City Library',
+  'kiminonaha-shinanomachi-hodokyo': 'Shinanomachi Pedestrian Bridge',
+  'kiminonaha-kitte-garden': 'KITTE Marunouchi Rooftop Garden',
+  'kimetsu-homan-kamado-jinja': 'Homangu Kamado Shrine',
+  'kimetsu-mizoguchi-kamado-jinja': 'Mizoguchi Kamado Shrine',
+  'kimetsu-hachiman-kamado-jinja': 'Hachiman Kamado Shrine',
+  'sen-tatemonoen-kodakarayu': 'Edo-Tokyo Open Air Architectural Museum: Kodakara-yu Bathhouse',
+  'sen-gunchuko-station': 'Iyo Railway Tracks Near Gunchuko Port Station',
+  'yurucamp-fuefukigawa-park': 'Fuefukigawa Fruit Park',
+  'yurucamp-shibireko-suimeiso': 'Lake Shibire: Suimeiso Lodge',
+  'yurucamp-utsubuna-station': 'Utsubuna Station',
+  'yurucamp-takabocchi-kogen': 'Takabocchi Highland',
+  'shingeki-hita-levi-statue': 'Levi Statue, Hita Station South Plaza',
+  'shingeki-oyama-dam-statue': 'Childhood Statues at Oyama Dam',
+  'shingeki-hita-museum': 'Attack on Titan in HITA Museum',
+  'keion-toyosato-school': 'Former Toyosato Elementary School',
+  'keion-teramachi-kyogoku': 'Teramachi Kyogoku Shopping Street',
+  'haruhi-koyoen-station': 'Koyoen Station',
+  'haruhi-nishinomiyakitaguchi': 'Nishinomiya-Kitaguchi Area',
+  'summerwars-besshosen-marumado': 'Ueda Dentetsu Bessho Line: Round-Window Train',
+  'summerwars-toishi-yoneyama-castle': 'Toishi-Yoneyama Castle Ruins',
+  'summerwars-unnomachi-shopping': 'Unnomachi Shopping Street',
+  'onepiece-chopper-statue': 'Chopper Statue',
+  'onepiece-usopp-statue': 'Usopp Statue',
+  'onepiece-franky-statue': 'Franky Statue',
+  'onepiece-sanji-statue': 'Sanji Statue',
+  'onepiece-brook-statue': 'Brook Statue',
+  'onepiece-zoro-statue': 'Zoro Statue',
+  'onepiece-nami-statue': 'Nami Statue',
+  'onepiece-robin-statue': 'Robin Statue',
+  'onepiece-jinbe-statue': 'Jinbe Statue',
+  'conan-aoyama-furusatokan': 'Gosho Aoyama Manga Factory',
+  'conan-street': 'Conan Street',
+  'conan-yura-station': 'Yura Station (Conan Station)',
+  'ryosuke-kameari-statues': 'Ryo-san Statues Around Kameari Station',
+  'mizuki-shigeru-road': 'Mizuki Shigeru Road',
+  'atom-takadanobaba': 'Astro Boy Mural and Related Sites, Takadanobaba',
+  'tezuka-niiza-studio': 'Tezuka Productions Niiza Studio Area',
+  'fujiko-f-fujio-museum': 'Fujiko F. Fujio Museum',
+  'pokelid-tsukuba': 'Poke Lid (Pokémon Manhole) in Tsukuba',
+  'natsume-hitoyoshi': "Model Area for Natsume's Book of Friends",
+  'suzume-matsuyama-port': 'Model for the Ferry in Suzume',
+  'heroaca-owariasahi': 'Real-World Model for a Fictional City in My Hero Academia',
+  'initiald-haruna-pass': 'Mt. Haruna Pass Road (Route 33)',
+  'initiald-harunako': 'Lake Haruna',
+  'initiald-manhole': 'Initial D Manhole Cover',
+  'initiald-dz-garage': "D'Z GARAGE Racing Cafe",
+  'girlspanzer-oarai-isosaki': 'Oarai Isosaki Shrine',
+  'girlspanzer-marine-tower': 'Oarai Marine Tower',
+  'girlspanzer-oarai-beach': 'Oarai Beach',
+  'girlspanzer-oarai-shopping': 'Oarai Shopping Street Area',
+  'anohana-hitsujiyama-park': 'Hitsujiyama Park',
+  'anohana-myoken-park': 'Chichibu Shrine: Myoken-no-Mori Park',
+  'anohana-chichibu-crossing': 'Chichibu Railway Crossing',
+  'anohana-seibu-chichibu-station': 'Seibu-Chichibu Station',
+  'hyouka-kajibashi': 'Kajibashi Bridge',
+  'hyouka-yayoibashi': 'Yayoibashi Bridge',
+  'hyouka-honmachi-maneki': 'Honmachi Street, by the Beckoning Cat Statue',
+  'yowapeda-keisei-sakura': 'Keisei-Sakura Station',
+  'yowapeda-cycle-sports-center': 'Japan Cycle Sports Center',
+  'working-sapporo-station': 'Around JR Sapporo Station',
+  'working-kumanosawa-park': 'Kumanosawa Park',
+  'working-nopporo-station': 'Around JR Nopporo Station',
+  'barakamon-fukue-airport': 'Fukue Airport',
+  'barakamon-onidake': 'Mt. Onidake Observation Point',
+  'barakamon-house-model': "Model Area for the Protagonist's Old House",
+  'barakamon-narushima': 'Narushima Island'
+};
+
+function translateSpotName(spot) {
+  if (currentLang === 'en' && SPOT_NAMES_EN[spot.id]) return SPOT_NAMES_EN[spot.id];
+  return spot.name;
+}
+
 function createPinIcon(type) {
   const color = TYPE_COLORS[type];
   let mark;
@@ -286,14 +371,15 @@ const markersById = {};
 function buildPopupHtml(spot) {
   const mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(spot.mapsQuery);
   const photo = PHOTOS[spot.id];
+  const name = translateSpotName(spot);
   const photoHtml = photo ? `
-      <img class="photo" src="${photo.url}" alt="${spot.name}" loading="lazy">
+      <img class="photo" src="${photo.url}" alt="${name}" loading="lazy">
       <p class="photo-credit">Photo: <a href="${photo.sourceUrl}" target="_blank" rel="noopener">${photo.author}</a> / ${photo.license} (Wikimedia Commons)</p>
   ` : '';
   return `
     <div class="spot-popup">
       <span class="badge type-${spot.type}">${I18N[currentLang].types[spot.type]}</span>
-      <h3>${spot.name}</h3>
+      <h3>${name}</h3>
       <p>${translateAnime(spot.anime)}${currentLang === 'en' ? ' | ' : '｜'}${translatePrefecture(spot.prefecture)}</p>
       ${photoHtml}
       <p class="desc">${spot.description}</p>
