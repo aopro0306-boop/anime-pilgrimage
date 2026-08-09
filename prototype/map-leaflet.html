@@ -87,6 +87,17 @@
   .favorite-item .favorite-item-anime{font-size:11px;color:#888;display:block;}
   .favorite-remove-btn{background:none;border:none;font-size:16px;cursor:pointer;color:#999;padding:0 0 0 8px;flex-shrink:0;}
   .favorite-remove-btn:hover{color:#e8395a;}
+  .favorite-item-actions{display:flex;align-items:center;gap:2px;flex-shrink:0;}
+  .favorite-move-btn{background:none;border:none;font-size:14px;cursor:pointer;color:#999;padding:0 4px;}
+  .favorite-move-btn:hover:not(:disabled){color:#1a5fc4;}
+  .favorite-move-btn:disabled{opacity:0.25;cursor:default;}
+  #route-actions{display:flex;flex-direction:column;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid #f0ede4;}
+  #route-actions.hidden{display:none;}
+  #route-actions button{border-radius:999px;padding:8px 0;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;border:2px solid #FF4D6D;}
+  #view-route-btn{background:#FF4D6D;color:#fff;}
+  #view-route-btn:hover{background:#e8395a;border-color:#e8395a;}
+  #open-route-gmaps-btn{background:#fff;color:#FF4D6D;}
+  #open-route-gmaps-btn:hover{background:#ffe3ea;}
   @media (max-width: 640px) {
     #filter-panel, #pref-nav { width: calc(50vw - 24px); max-width: none; box-sizing: border-box; }
   }
@@ -124,6 +135,10 @@
   </div>
   <div id="favorites-tab-content" class="hidden">
     <div id="favorites-list"></div>
+    <div id="route-actions" class="hidden">
+      <button id="view-route-btn" type="button">ルートを地図で見る</button>
+      <button id="open-route-gmaps-btn" type="button">Googleマップでルートを開く</button>
+    </div>
   </div>
 </div>
 <div id="pref-nav">
@@ -189,6 +204,41 @@ function toggleFavorite(id) {
   if (typeof buildFavoritesTab === 'function') buildFavoritesTab();
 }
 
+const FAVORITES_ORDER_KEY = 'pilgrimage-favorites-order';
+
+let favoritesOrder;
+try {
+  favoritesOrder = JSON.parse(localStorage.getItem(FAVORITES_ORDER_KEY) || '[]');
+} catch (e) {
+  favoritesOrder = [];
+}
+
+function saveFavoritesOrder() {
+  localStorage.setItem(FAVORITES_ORDER_KEY, JSON.stringify(favoritesOrder));
+}
+
+// Reconciles favoritesOrder with the current favorites Set: keeps existing
+// entries in their relative order, appends newly favorited ids at the end,
+// and drops ids that were unfavorited. Called at the top of every
+// buildFavoritesTab() render so favoritesOrder stays in sync without
+// needing a separate hook into toggleFavorite().
+function syncFavoritesOrder() {
+  favoritesOrder = favoritesOrder.filter(id => favorites.has(id));
+  for (const id of favorites) {
+    if (!favoritesOrder.includes(id)) favoritesOrder.push(id);
+  }
+  saveFavoritesOrder();
+}
+
+function moveFavorite(id, direction) {
+  const index = favoritesOrder.indexOf(id);
+  const swapWith = index + direction;
+  if (index === -1 || swapWith < 0 || swapWith >= favoritesOrder.length) return;
+  [favoritesOrder[index], favoritesOrder[swapWith]] = [favoritesOrder[swapWith], favoritesOrder[index]];
+  saveFavoritesOrder();
+  buildFavoritesTab();
+}
+
 // UI-text-only translations. Spot names/anime titles/descriptions stay in
 // Japanese for now (deferred to a later task) — only chrome around the
 // map is localized here.
@@ -204,7 +254,11 @@ const I18N = {
     favoritesTab: 'お気に入り',
     favoritesEmpty: 'まだお気に入りがありません',
     favoriteToggle: 'お気に入りに追加',
-    removeFavorite: 'お気に入りから削除'
+    removeFavorite: 'お気に入りから削除',
+    moveUp: '上へ移動',
+    moveDown: '下へ移動',
+    viewRouteOnMap: 'ルートを地図で見る',
+    openRouteInGoogleMaps: 'Googleマップでルートを開く'
   },
   en: {
     title: 'Anime Pilgrimage Map',
@@ -217,7 +271,11 @@ const I18N = {
     favoritesTab: 'Favorites',
     favoritesEmpty: 'No favorites yet.',
     favoriteToggle: 'Add to favorites',
-    removeFavorite: 'Remove from favorites'
+    removeFavorite: 'Remove from favorites',
+    moveUp: 'Move up',
+    moveDown: 'Move down',
+    viewRouteOnMap: 'View route on map',
+    openRouteInGoogleMaps: 'Open route in Google Maps'
   },
   'zh-TW': {
     title: '動畫聖地巡禮地圖',
@@ -230,7 +288,11 @@ const I18N = {
     favoritesTab: '收藏',
     favoritesEmpty: '尚無收藏的地點。',
     favoriteToggle: '加入收藏',
-    removeFavorite: '從收藏中移除'
+    removeFavorite: '從收藏中移除',
+    moveUp: '上移',
+    moveDown: '下移',
+    viewRouteOnMap: '在地圖上查看路線',
+    openRouteInGoogleMaps: '在Google地圖開啟路線'
   },
   ko: {
     title: '애니메이션 성지순례 지도',
@@ -243,7 +305,11 @@ const I18N = {
     favoritesTab: '즐겨찾기',
     favoritesEmpty: '아직 즐겨찾기가 없습니다.',
     favoriteToggle: '즐겨찾기에 추가',
-    removeFavorite: '즐겨찾기에서 삭제'
+    removeFavorite: '즐겨찾기에서 삭제',
+    moveUp: '위로 이동',
+    moveDown: '아래로 이동',
+    viewRouteOnMap: '지도에서 경로 보기',
+    openRouteInGoogleMaps: 'Google 지도에서 경로 열기'
   },
   th: {
     title: 'แผนที่ตามรอยอนิเมะ',
@@ -256,7 +322,11 @@ const I18N = {
     favoritesTab: 'รายการโปรด',
     favoritesEmpty: 'ยังไม่มีรายการโปรด',
     favoriteToggle: 'เพิ่มในรายการโปรด',
-    removeFavorite: 'ลบออกจากรายการโปรด'
+    removeFavorite: 'ลบออกจากรายการโปรด',
+    moveUp: 'เลื่อนขึ้น',
+    moveDown: 'เลื่อนลง',
+    viewRouteOnMap: 'ดูเส้นทางบนแผนที่',
+    openRouteInGoogleMaps: 'เปิดเส้นทางใน Google Maps'
   },
   fr: {
     title: 'Carte des lieux de pèlerinage anime',
@@ -269,7 +339,11 @@ const I18N = {
     favoritesTab: 'Favoris',
     favoritesEmpty: 'Aucun favori pour le moment.',
     favoriteToggle: 'Ajouter aux favoris',
-    removeFavorite: 'Retirer des favoris'
+    removeFavorite: 'Retirer des favoris',
+    moveUp: 'Monter',
+    moveDown: 'Descendre',
+    viewRouteOnMap: "Voir l'itinéraire sur la carte",
+    openRouteInGoogleMaps: "Ouvrir l'itinéraire dans Google Maps"
   }
 };
 
@@ -716,26 +790,38 @@ wirePrefNav();
 // only renders (called again from applyLanguage() and toggleFavorite()),
 // wireFavoritesTab attaches the one-time delegated click listener.
 function buildFavoritesTab() {
+  syncFavoritesOrder();
   const container = document.getElementById('favorites-list');
-  const favSpots = SPOTS.filter(s => favorites.has(s.id));
+  const favSpots = favoritesOrder.map(id => SPOTS.find(s => s.id === id)).filter(Boolean);
   if (favSpots.length === 0) {
     container.innerHTML = `<p class="favorites-empty">${I18N[currentLang].favoritesEmpty}</p>`;
+    document.getElementById('route-actions')?.classList.add('hidden');
     return;
   }
-  container.innerHTML = favSpots.map(s => `
+  container.innerHTML = favSpots.map((s, i) => `
     <div class="favorite-item" data-id="${s.id}">
       <div class="favorite-item-info">
         <span class="favorite-item-name">${translateSpotName(s)}</span>
         <span class="favorite-item-anime">${translateAnime(s.anime)}</span>
       </div>
-      <button class="favorite-remove-btn" type="button" data-remove-id="${s.id}" aria-label="${I18N[currentLang].removeFavorite}">×</button>
+      <div class="favorite-item-actions">
+        <button class="favorite-move-btn" type="button" data-move-id="${s.id}" data-direction="-1" aria-label="${I18N[currentLang].moveUp}"${i === 0 ? ' disabled' : ''}>↑</button>
+        <button class="favorite-move-btn" type="button" data-move-id="${s.id}" data-direction="1" aria-label="${I18N[currentLang].moveDown}"${i === favSpots.length - 1 ? ' disabled' : ''}>↓</button>
+        <button class="favorite-remove-btn" type="button" data-remove-id="${s.id}" aria-label="${I18N[currentLang].removeFavorite}">×</button>
+      </div>
     </div>
   `).join('');
+  document.getElementById('route-actions')?.classList.toggle('hidden', favSpots.length < 2);
 }
 
 function wireFavoritesTab() {
   const container = document.getElementById('favorites-list');
   container.addEventListener('click', (e) => {
+    const moveBtn = e.target.closest('.favorite-move-btn');
+    if (moveBtn) {
+      moveFavorite(moveBtn.dataset.moveId, Number(moveBtn.dataset.direction));
+      return;
+    }
     const removeBtn = e.target.closest('.favorite-remove-btn');
     if (removeBtn) {
       toggleFavorite(removeBtn.dataset.removeId);
@@ -755,6 +841,33 @@ function wireFavoritesTab() {
 buildFavoritesTab();
 wireFavoritesTab();
 
+let routeLine = null;
+
+function viewRouteOnMap() {
+  syncFavoritesOrder();
+  const latlngs = favoritesOrder.map(id => {
+    const s = SPOTS.find(sp => sp.id === id);
+    return [s.lat, s.lng];
+  });
+  if (routeLine) map.removeLayer(routeLine);
+  routeLine = L.polyline(latlngs, { color: '#FF4D6D', weight: 3, dashArray: '6, 8' }).addTo(map);
+  map.fitBounds(routeLine.getBounds(), { padding: [40, 40] });
+}
+
+function openRouteInGoogleMaps() {
+  syncFavoritesOrder();
+  const spots = favoritesOrder.map(id => SPOTS.find(s => s.id === id));
+  const origin = `${spots[0].lat},${spots[0].lng}`;
+  const destination = `${spots[spots.length - 1].lat},${spots[spots.length - 1].lng}`;
+  const waypoints = spots.slice(1, -1).map(s => `${s.lat},${s.lng}`).join('|');
+  let url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}`;
+  if (waypoints) url += `&waypoints=${encodeURIComponent(waypoints)}`;
+  window.open(url, '_blank', 'noopener');
+}
+
+document.getElementById('view-route-btn').addEventListener('click', viewRouteOnMap);
+document.getElementById('open-route-gmaps-btn').addEventListener('click', openRouteInGoogleMaps);
+
 // Updates the static filter-panel/pref-nav chrome. Already-open or
 // future popups pick up the new language on their own since buildPopupHtml
 // reads currentLang live each time Leaflet calls it.
@@ -770,6 +883,8 @@ function applyLanguage(lang) {
   document.getElementById('privacy-link').textContent = I18N[lang].privacyLink;
   document.querySelector('.panel-tab[data-tab="filter"]').textContent = I18N[lang].filterTab;
   document.querySelector('.panel-tab[data-tab="favorites"]').textContent = '♡ ' + I18N[lang].favoritesTab;
+  document.getElementById('view-route-btn').textContent = I18N[lang].viewRouteOnMap;
+  document.getElementById('open-route-gmaps-btn').textContent = I18N[lang].openRouteInGoogleMaps;
   buildAnimeFilter();
   buildPrefNav();
   buildFavoritesTab();
