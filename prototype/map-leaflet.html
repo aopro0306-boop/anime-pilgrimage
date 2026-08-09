@@ -336,6 +336,91 @@ function translateSpotName(spot) {
   return spot.name;
 }
 
+// English descriptions for all 75 spots, keyed by spot id. Same scope note
+// as SPOT_NAMES_EN above (English only for now).
+const SPOT_DESCRIPTIONS_EN = {
+  'kamakura-slamdunk-crossing': 'The level crossing that inspired the scene in the opening sequence where Hanamichi Sakuragi waits for the Enoden train.',
+  'washinomiya-jinja': 'The model for the "Takanomiya Shrine" in the series. Considered the birthplace of "itaema" fan-art votive plaques and the origin of anime pilgrimage culture.',
+  'kumamoto-luffy-statue': 'A statue on the Kumamoto Prefectural Government promenade, erected as a wish for recovery from the Kumamoto earthquake.',
+  'ueda-castle-summerwars': 'The castle ruins in Ueda, Nagano, that served as the setting for the Jinnouchi family\'s story.',
+  'dogo-onsen-honkan': 'A nationally designated Important Cultural Property bathhouse, considered one of the models for the Aburaya bathhouse.',
+  'kiminonaha-hidafurukawa-station': 'The gateway station to Hida City that inspired the fictional town of Itomori.',
+  'kiminonaha-keta-wakamiya-jinja': 'The shrine that inspired the torii gate and grounds of Miyamizu Shrine in the film.',
+  'kiminonaha-hie-jinja': 'An ancient shrine in Takayama said to be linked to the staircase and torii scenes in the film.',
+  'kiminonaha-hida-library': 'The library that inspired the scene where Taki and friends research the town of Itomori.',
+  'kiminonaha-shinanomachi-hodokyo': 'The setting for the memorable scene where Taki tries to call Mitsuha.',
+  'kiminonaha-kitte-garden': 'A rooftop garden overlooking Tokyo Station, which appears in a scene where Taki and friends visit.',
+  'kimetsu-homan-kamado-jinja': 'A shrine believed to have inspired protagonist Tanjiro\'s surname "Kamado," now a pilgrimage site for fans.',
+  'kimetsu-mizoguchi-kamado-jinja': 'A shrine considered a pilgrimage site for its pattern resembling the characters\' earrings and its "Kamado" name.',
+  'kimetsu-hachiman-kamado-jinja': 'A shrine bearing the name "Kamado," considered a pilgrimage site for its resemblance to the series\' world.',
+  'sen-tatemonoen-kodakarayu': 'A reconstructed public bathhouse considered one of the models for the exterior and interior of the Aburaya.',
+  'sen-gunchuko-station': 'Tracks stretching toward the sea, said to have inspired the scene where Chihiro boards the train.',
+  'yurucamp-fuefukigawa-park': 'A park that appears in the series as a viewpoint overlooking the night view and Mt. Fuji.',
+  'yurucamp-shibireko-suimeiso': 'A lodge that appears in the series as a campsite beside the mountain lake, Lake Shibire.',
+  'yurucamp-utsubuna-station': 'Depicted in the series as a local station along the Minobu Line.',
+  'yurucamp-takabocchi-kogen': 'A highland offering views of Lake Suwa and Mt. Fuji, visited by Rin Shima and friends in the series.',
+  'shingeki-hita-levi-statue': 'A bronze statue of Captain Levi, installed in Hita City, the hometown of creator Hajime Isayama.',
+  'shingeki-oyama-dam-statue': 'Statues depicting the childhood forms of Eren, Mikasa, and Armin, installed at the plaza downstream of Oyama Dam.',
+  'shingeki-hita-museum': 'A museum inside a roadside station in Hita/Oyama displaying original artwork by Hajime Isayama.',
+  'keion-toyosato-school': 'A former school building by architect William Merrell Vories that inspired the anime\'s Sakuragaoka High School.',
+  'keion-teramachi-kyogoku': 'A shopping street that appears in the episode where Yui and friends visit Kyoto.',
+  'haruhi-koyoen-station': 'A station on the Hankyu Koyo Line that appears in the series.',
+  'haruhi-nishinomiyakitaguchi': 'A downtown area of Nishinomiya City believed to be the model for the series\' setting.',
+  'summerwars-besshosen-marumado': 'The Ueda Dentetsu local line that appears in the series, running through the Jinnouchi family\'s hometown.',
+  'summerwars-toishi-yoneyama-castle': 'Mountain castle ruins in Ueda, said to appear as part of the series\' scenery.',
+  'summerwars-unnomachi-shopping': 'An arcade shopping street believed to be the model for the one in the Jinnouchi family\'s neighborhood in Ueda.',
+  'onepiece-chopper-statue': 'A statue of the Straw Hat crew installed in front of the main entrance of Kumamoto City Zoo and Botanical Garden.',
+  'onepiece-usopp-statue': 'A statue installed in front of Aso Station as part of the Kumamoto earthquake recovery project.',
+  'onepiece-franky-statue': 'A statue of a crew member installed in front of Takamori Station in Takamori Town.',
+  'onepiece-sanji-statue': 'A statue installed within Mashiki Town Sports Park.',
+  'onepiece-brook-statue': 'A statue installed at Mifune Town Fureai Plaza (Dinosaur Park).',
+  'onepiece-zoro-statue': 'A statue installed at Ozu Town Central Park.',
+  'onepiece-nami-statue': 'A statue installed at Tawarayama Exchange Center Moe no Sato in Nishihara Village.',
+  'onepiece-robin-statue': 'A statue installed near the former Tokai University Aso Campus in Minami-Aso Village.',
+  'onepiece-jinbe-statue': 'A statue of the Straw Hat crew installed at Sumiyoshi Coast Park in Uto City.',
+  'conan-aoyama-furusatokan': 'A memorial hall built in the hometown of creator Gosho Aoyama.',
+  'conan-street': 'A street lined with Conan character statues, running from Yura Station to the memorial hall.',
+  'conan-yura-station': 'A station on the JR San\'in Main Line, nicknamed "Conan Station."',
+  'ryosuke-kameari-statues': 'A collection of "Kochikame" Ryo-san bronze statues installed around Kameari Station.',
+  'mizuki-shigeru-road': 'A tourist street lined with yokai bronze statues in Sakaiminato, the hometown of manga artist Shigeru Mizuki.',
+  'atom-takadanobaba': 'An area around Takadanobaba Station, where Osamu Tezuka spent his youth, linked to Astro Boy.',
+  'tezuka-niiza-studio': 'The animation production base of Tezuka Productions.',
+  'fujiko-f-fujio-museum': 'A museum in Kawasaki introducing the creative world of Fujiko F. Fujio.',
+  'pokelid-tsukuba': 'A Pokémon manhole cover ("Poke Lid") installed in front of the Tsukuba Expo Center.',
+  'natsume-hitoyoshi': 'An area around Hitoyoshi Station and elsewhere, believed to be the model for the series\' rural town scenery.',
+  'suzume-matsuyama-port': 'Matsuyama Kanko Port, considered one of the models for the ferry port in the film.',
+  'heroaca-owariasahi': 'A town fans believe to be one of the models for a fictional city in the series.',
+  'initiald-haruna-pass': 'The setting for one of the series\' most iconic scenes, where Takumi Fujiwara races through in his Hachiroku.',
+  'initiald-harunako': 'A lake at the top of the mountain pass, also depicted as a backdrop in the series.',
+  'initiald-manhole': 'A manhole cover in Shibukawa City featuring a design collaboration with Initial D.',
+  'initiald-dz-garage': 'A racing cafe near Ikaho Onsen that serves as a hub for fans\' pilgrimages.',
+  'girlspanzer-oarai-isosaki': 'A shrine on a hilltop in Oarai that appears repeatedly throughout the series.',
+  'girlspanzer-marine-tower': 'A landmark tower in Oarai that also appears as a backdrop in the series.',
+  'girlspanzer-oarai-beach': 'A beach that served as the setting for tankery practice and other scenes in the series.',
+  'girlspanzer-oarai-shopping': 'A shopping area in Oarai decorated with many fan-made votive plaques and panels.',
+  'anohana-hitsujiyama-park': 'A park overlooking the town of Chichibu, the setting for a key scene in the series.',
+  'anohana-myoken-park': 'A park near Chichibu Shrine that appears in the series.',
+  'anohana-chichibu-crossing': 'Believed to be the model for the railway crossing Menma and friends regularly crossed.',
+  'anohana-seibu-chichibu-station': 'The terminal station of the Seibu Railway, a hub for the Chichibu pilgrimage.',
+  'hyouka-kajibashi': 'A bridge over the Miya River in Takayama that also appears in the opening sequence.',
+  'hyouka-yayoibashi': 'A bridge within Takayama City that appears in the series.',
+  'hyouka-honmachi-maneki': 'A shopping street with a beckoning-cat statue that appears at the start of the opening sequence.',
+  'yowapeda-keisei-sakura': 'A station on the Keisei Main Line that appears as one of the series\' settings.',
+  'yowapeda-cycle-sports-center': 'The athletic facility that inspired the series\' Inter-High tournament.',
+  'working-sapporo-station': 'The area around Sapporo Station, depicted as the gateway to Hokkaido, the series\' setting.',
+  'working-kumanosawa-park': 'A park in Atsubetsu Ward, considered one of the series\' backdrops.',
+  'working-nopporo-station': 'The area around the station in Ebetsu City, believed to be the model for the series\' setting.',
+  'barakamon-fukue-airport': 'The setting for the opening scene where protagonist Seishu Handa arrives on Goto.',
+  'barakamon-onidake': 'A grass-covered mountain that serves as the symbol of Fukue Island.',
+  'barakamon-house-model': 'A house in Tomie, believed to be the model for the old folk house where Handa comes to live.',
+  'barakamon-narushima': 'One of the islands of the Goto Islands, said to be part of the series\' setting.'
+};
+
+function translateDescription(spot) {
+  if (currentLang === 'en' && SPOT_DESCRIPTIONS_EN[spot.id]) return SPOT_DESCRIPTIONS_EN[spot.id];
+  return spot.description;
+}
+
 function createPinIcon(type) {
   const color = TYPE_COLORS[type];
   let mark;
@@ -382,7 +467,7 @@ function buildPopupHtml(spot) {
       <h3>${name}</h3>
       <p>${translateAnime(spot.anime)}${currentLang === 'en' ? ' | ' : '｜'}${translatePrefecture(spot.prefecture)}</p>
       ${photoHtml}
-      <p class="desc">${spot.description}</p>
+      <p class="desc">${translateDescription(spot)}</p>
       <a class="gmaps-btn" href="${mapsUrl}" target="_blank" rel="noopener">${I18N[currentLang].openInGoogleMaps}</a>
     </div>
   `;
