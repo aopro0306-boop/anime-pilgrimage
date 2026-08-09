@@ -95,6 +95,12 @@
 
   footer{max-width:1100px; margin:0 auto; padding:32px 24px; font-size:12px; color:var(--color-text); opacity:0.75; text-align:center;}
 
+  #guide-links{max-width:1100px; margin:0 auto; padding:0 24px 24px; text-align:center;}
+  #guide-links p{font-weight:700; color:var(--color-navy); margin:0 0 10px 0; font-size:14px;}
+  #guide-links ul{list-style:none; padding:0; margin:0; display:flex; flex-wrap:wrap; justify-content:center; gap:10px 18px;}
+  #guide-links a{font-size:13px; text-decoration:none; color:var(--color-navy); opacity:0.8;}
+  #guide-links a:hover{opacity:1; text-decoration:underline;}
+
   @media (max-width: 640px) {
     .header-inner{padding:12px 16px;}
     #concept{padding:56px 20px;}
@@ -184,6 +190,18 @@
   <h2 class="heading" data-i18n="closingHeading">さあ、地図を開いて聖地を巡ろう</h2>
   <a class="cta-button" data-i18n="heroCta" href="map-leaflet.html">マップを見る</a>
 </section>
+
+<div id="guide-links">
+  <p data-i18n="guidesHeading">エリア・作品別ガイド</p>
+  <ul>
+    <li><a href="guides/gifu.html">Gifu</a></li>
+    <li><a href="guides/kumamoto.html">Kumamoto</a></li>
+    <li><a href="guides/ibaraki.html">Ibaraki</a></li>
+    <li><a href="guides/kiminonaha.html">Your Name</a></li>
+    <li><a href="guides/kimetsu.html">Demon Slayer</a></li>
+    <li><a href="guides/yurucamp.html">Laid-Back Camp</a></li>
+  </ul>
+</div>
 
 <footer>
   <p data-i18n="footerCredit">写真提供: Wikimedia Commons（詳細は各写真のクレジット参照）</p>
@@ -351,7 +369,8 @@ const I18N = {
     galleryHeading: 'スポットの一例',
     closingHeading: 'さあ、地図を開いて聖地を巡ろう',
     footerCredit: '写真提供: Wikimedia Commons（詳細は各写真のクレジット参照）',
-    privacyLink: 'プライバシーポリシー'
+    privacyLink: 'プライバシーポリシー',
+    guidesHeading: 'エリア・作品別ガイド'
   },
   en: {
     pageTitle: 'Anime Pilgrimage Japan',
@@ -373,7 +392,8 @@ const I18N = {
     galleryHeading: 'A Few Featured Locations',
     closingHeading: 'Ready to Start Your Pilgrimage?',
     footerCredit: 'Photos via Wikimedia Commons (see individual credits above).',
-    privacyLink: 'Privacy Policy'
+    privacyLink: 'Privacy Policy',
+    guidesHeading: 'Guides by Area & Anime'
   },
   'zh-TW': {
     pageTitle: '動畫聖地巡禮 | Anime Pilgrimage Japan',
@@ -395,7 +415,8 @@ const I18N = {
     galleryHeading: '精選地點',
     closingHeading: '現在就打開地圖，展開你的聖地巡禮吧',
     footerCredit: '照片提供：Wikimedia Commons（詳細出處請見各張照片說明）',
-    privacyLink: '隱私權政策'
+    privacyLink: '隱私權政策',
+    guidesHeading: '依地區與作品分類的指南'
   },
   ko: {
     pageTitle: '애니메이션 성지순례 | Anime Pilgrimage Japan',
@@ -417,7 +438,8 @@ const I18N = {
     galleryHeading: '대표 스팟 소개',
     closingHeading: '자, 지도를 열고 성지순례를 떠나볼까요',
     footerCredit: '사진 제공: Wikimedia Commons(자세한 출처는 각 사진의 크레딧 참조)',
-    privacyLink: '개인정보처리방침'
+    privacyLink: '개인정보처리방침',
+    guidesHeading: '지역·작품별 가이드'
   },
   th: {
     pageTitle: 'ตามรอยอนิเมะ | Anime Pilgrimage Japan',
@@ -439,7 +461,8 @@ const I18N = {
     galleryHeading: 'ตัวอย่างสถานที่แนะนำ',
     closingHeading: 'มาเปิดแผนที่แล้วออกเดินทางตามรอยกันเถอะ',
     footerCredit: 'ภาพถ่ายจาก Wikimedia Commons (ดูรายละเอียดแหล่งที่มาของแต่ละภาพด้านบน)',
-    privacyLink: 'นโยบายความเป็นส่วนตัว'
+    privacyLink: 'นโยบายความเป็นส่วนตัว',
+    guidesHeading: 'คู่มือแยกตามพื้นที่และผลงาน'
   },
   fr: {
     pageTitle: 'Pèlerinage Anime | Anime Pilgrimage Japan',
@@ -461,7 +484,8 @@ const I18N = {
     galleryHeading: 'Quelques lieux emblématiques',
     closingHeading: 'Ouvrez la carte et commencez votre pèlerinage',
     footerCredit: 'Photos via Wikimedia Commons (voir les crédits de chaque photo ci-dessus).',
-    privacyLink: 'Politique de confidentialité'
+    privacyLink: 'Politique de confidentialité',
+    guidesHeading: 'Guides par région et par anime'
   }
 };
 
