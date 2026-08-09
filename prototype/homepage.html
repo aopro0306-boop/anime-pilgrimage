@@ -63,7 +63,9 @@
   .gallery-item img{width:100%; height:220px; object-fit:cover; display:block;}
   .gallery-caption{padding:14px 16px;}
   .gallery-caption .spot-name{font-weight:700; color:var(--color-navy); font-size:14px;}
-  .gallery-caption .photo-credit{margin-top:6px; font-size:11px; color:var(--color-text); opacity:0.75;}
+  .gallery-caption .spot-name a{color:var(--color-terracotta); text-decoration:underline; text-underline-offset:2px;}
+  .gallery-caption .spot-desc{margin:6px 0 0 0; font-size:13px; color:var(--color-text); opacity:0.85; line-height:1.6;}
+  .gallery-caption .photo-credit{margin-top:8px; font-size:11px; color:var(--color-text); opacity:0.75;}
   .gallery-caption .photo-credit a{color:inherit;}
 
   #closing{background:var(--color-navy); color:#F6F0E4; text-align:center; padding:88px 24px;}
@@ -150,26 +152,38 @@ const GALLERY_SPOTS = [
   {"id":"kamakura-slamdunk-crossing",
     "name":{"ja":"鎌倉高校前駅1号踏切","en":"Kamakura High School Crossing","zh-TW":"鎌倉高校前站1號平交道","ko":"가마쿠라코코마에역 1호 건널목","th":"จุดตัดทางรถไฟหมายเลข 1 หน้าสถานีคามาคุระโคโค","fr":"Passage à niveau n°1 de la gare de Kamakurakōkō-mae"},
     "anime":{"ja":"SLAM DUNK","en":"Slam Dunk","zh-TW":"灌籃高手","ko":"슬램덩크","th":"สแลมดังก์","fr":"Slam Dunk"},
+    "officialUrl":"https://lineup.toei-anim.co.jp/ja/tv/movie_slumdunk/",
+    "description":{"ja":"OP映像で桜木花道が江ノ電を待つシーンのモデルとなった踏切。","en":"The level crossing where Hanamichi Sakuragi waits for the Enoden train in the anime's opening sequence.","zh-TW":"動畫片頭中，櫻木花道等待江之電列車的場景原型平交道。","ko":"OP 영상에서 사쿠라기 하나미치가 에노덴 열차를 기다리는 장면의 모델이 된 건널목.","th":"จุดตัดทางรถไฟที่เป็นต้นแบบฉากที่ฮานามิจิ ซากุรางิ รอรถไฟเอโนเดนในภาพเปิดเรื่อง","fr":"Le passage à niveau qui a inspiré la scène du générique où Hanamichi Sakuragi attend le train Enoden."},
     "photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/0/0b/Kamakura_koukou_mae_Fumikiri.jpg","author":"Quercus acuta","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Kamakura_koukou_mae_Fumikiri.jpg"}},
   {"id":"kiminonaha-hidafurukawa-station",
     "name":{"ja":"飛騨古川駅","en":"Hida-Furukawa Station","zh-TW":"飛驒古川站","ko":"히다후루카와역","th":"สถานีฮิดะ-ฟุรุกาวะ","fr":"Gare de Hida-Furukawa"},
     "anime":{"ja":"君の名は。","en":"Your Name","zh-TW":"你的名字。","ko":"너의 이름은.","th":"ชื่อของเธอ","fr":"Your Name."},
+    "officialUrl":"https://www.kiminona.com/",
+    "description":{"ja":"糸守町のモデルとなった飛騨市の玄関口となる駅。","en":"The gateway station to Hida City that inspired the fictional town of Itomori.","zh-TW":"作為虛構小鎮「糸守町」原型的飛驒市玄關口車站。","ko":"이토모리 마을의 모델이 된 히다시의 관문 역.","th":"สถานีประตูสู่เมืองฮิดะ ต้นแบบของเมืองสมมติอิโตโมริ","fr":"La gare d'entrée de la ville de Hida qui a inspiré la ville fictive d'Itomori."},
     "photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/c/c5/View_of_Hida-Furukawa_Station.JPG","author":"そらみみ","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:View_of_Hida-Furukawa_Station.JPG"}},
   {"id":"keion-toyosato-school",
     "name":{"ja":"豊郷小学校旧校舎群","en":"Former Toyosato Elementary School","zh-TW":"豐鄉小學舊校舍群","ko":"도요사토 초등학교 옛 교사군","th":"กลุ่มอาคารเรียนเก่าโรงเรียนประถมโทโยซาโตะ","fr":"Anciens bâtiments de l'école primaire de Toyosato"},
     "anime":{"ja":"けいおん!","en":"K-On!","zh-TW":"K-ON！輕音部","ko":"케이온!","th":"เคออน!","fr":"K-On!"},
+    "officialUrl":"https://www.kyotoanimation.co.jp/works/k-on/",
+    "description":{"ja":"作中の桜が丘高校のモデルとなった、ヴォーリズ建築の旧校舎。","en":"A former school building by architect William Merrell Vories that inspired the anime's Sakuragaoka High School.","zh-TW":"沃利斯建築師設計的舊校舍，是劇中「櫻丘高中」的原型。","ko":"작중 사쿠라가오카 고등학교의 모델이 된, 보리스 건축의 옛 교사.","th":"อาคารเรียนเก่าสไตล์สถาปนิกวอริส ต้นแบบของโรงเรียนมัธยมซากุระงาโอกะในเรื่อง","fr":"Un ancien bâtiment scolaire conçu par l'architecte William Merrell Vories, qui a inspiré le lycée Sakuragaoka de l'anime."},
     "photo":{"url":"https://commons.wikimedia.org/wiki/Special:FilePath/%E8%B1%8A%E9%83%B7%E5%B0%8F%E5%AD%A6%E6%A0%A1%E6%97%A7%E6%A0%A1%E8%88%8E.jpg?width=400","author":"オクノサンライズ","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:%E8%B1%8A%E9%83%B7%E5%B0%8F%E5%AD%A6%E6%A0%A1%E6%97%A7%E6%A0%A1%E8%88%8E.jpg"}},
   {"id":"girlspanzer-oarai-isosaki",
     "name":{"ja":"大洗磯前神社","en":"Oarai Isosaki Shrine","zh-TW":"大洗磯前神社","ko":"오아라이 이소사키 신사","th":"ศาลเจ้าโออาไร อิโซซากิ","fr":"Sanctuaire Ōarai Isosaki"},
     "anime":{"ja":"ガールズ&パンツァー","en":"Girls und Panzer","zh-TW":"少女與戰車","ko":"걸즈 앤 판처","th":"เกิร์ลส์อันด์แพนเซอร์","fr":"Girls und Panzer"},
+    "officialUrl":"https://girls-und-panzer.jp/",
+    "description":{"ja":"大洗の高台に立つ神社で、作中にたびたび登場する。","en":"A shrine on a hilltop in Oarai that appears repeatedly throughout the series.","zh-TW":"位於大洗高地上的神社，在劇中多次登場。","ko":"오아라이의 언덕 위에 있는 신사로, 작중에 여러 번 등장한다.","th":"ศาลเจ้าบนเนินเขาในโออาไร ที่ปรากฏซ้ำหลายครั้งตลอดเรื่อง","fr":"Un sanctuaire perché sur une colline à Ōarai, qui apparaît à plusieurs reprises dans la série."},
     "photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/5/5b/%E5%A4%A7%E6%B4%97%E7%A3%AF%E5%89%8D%E7%A5%9E%E7%A4%BE_%E6%AD%A3%E9%9D%A2%E9%B3%A5%E5%B1%85.JPG","author":"Saigen Jiro","license":"Public Domain","sourceUrl":"https://commons.wikimedia.org/wiki/File:%E5%A4%A7%E6%B4%97%E7%A3%AF%E5%89%8D%E7%A5%9E%E7%A4%BE_%E6%AD%A3%E9%9D%A2%E9%B3%A5%E5%B1%85.JPG"}},
   {"id":"washinomiya-jinja",
     "name":{"ja":"鷲宮神社","en":"Washinomiya Shrine","zh-TW":"鷲宮神社","ko":"와시노미야 신사","th":"ศาลเจ้าวาชิโนมิยะ","fr":"Sanctuaire de Washinomiya"},
     "anime":{"ja":"らき☆すた","en":"Lucky Star","zh-TW":"幸運☆星","ko":"럭키☆스타","th":"ลัคกี้สตาร์","fr":"Lucky Star"},
+    "officialUrl":"https://www.lucky-ch.com/",
+    "description":{"ja":"作中の「鷹宮神社」のモデル。痛絵馬発祥の地とされる、聖地巡礼文化の原点。","en":"The model for the anime's Takanomiya Shrine, and the birthplace of \"itaema\" fan-art votive plaques — often cited as the origin of anime pilgrimage culture itself.","zh-TW":"劇中「鷹宮神社」的原型，被視為「痛繪馬」發源地，也是動畫聖地巡禮文化的起點。","ko":"작중 '다카노미야 신사'의 모델. 이타에마(오타쿠 그림 에마) 발상지로 여겨지며, 성지순례 문화의 원점이라 불린다.","th":"ต้นแบบของศาลเจ้าทาคาโนมิยะในเรื่อง ถือเป็นจุดกำเนิดของแผ่นไม้อิตะเอมะ และจุดเริ่มต้นของวัฒนธรรมตามรอยอนิเมะ","fr":"Le modèle du sanctuaire Takanomiya de l'anime, considéré comme le berceau des plaques votives « itaema » et l'origine même de la culture du pèlerinage anime."},
     "photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/3/38/Washinomiya-Shrine-Washimiya-Saitama-Japan.jpg","author":"LERK","license":"CC BY-SA 3.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Washinomiya-Shrine-Washimiya-Saitama-Japan.jpg"}},
   {"id":"mizuki-shigeru-road",
     "name":{"ja":"水木しげるロード","en":"Mizuki Shigeru Road","zh-TW":"水木茂之路","ko":"미즈키 시게루 로드","th":"ถนนมิซึกิ ชิเงรุ","fr":"Rue Mizuki Shigeru"},
     "anime":{"ja":"ゲゲゲの鬼太郎","en":"GeGeGe no Kitaro","zh-TW":"鬼太郎","ko":"게게게의 기타로","th":"คิทาโร่","fr":"GeGeGe no Kitaro"},
+    "officialUrl":"https://www.toei-anim.co.jp/kitaro/",
+    "description":{"ja":"妖怪ブロンズ像が並ぶ、水木しげるの故郷・境港市の観光通り。","en":"A tourist street lined with yokai bronze statues in Sakaiminato, the hometown of manga artist Shigeru Mizuki.","zh-TW":"林立妖怪銅像的觀光街道，是漫畫家水木茂的故鄉——境港市。","ko":"요괴 동상이 늘어선, 미즈키 시게루의 고향 사카이미나토시의 관광 거리.","th":"ถนนท่องเที่ยวที่เรียงรายไปด้วยรูปปั้นทองแดงโยไค ในเมืองซาไกมินาโตะ บ้านเกิดของนักเขียนมังงะ มิซึกิ ชิเงรุ","fr":"Une rue touristique bordée de statues de bronze de yōkai, à Sakaiminato, ville natale du mangaka Shigeru Mizuki."},
     "photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/a/a1/Mizuki_shigeru_road_%2C_%E6%B0%B4%E6%9C%A8%E3%81%97%E3%81%92%E3%82%8B%E3%83%AD%E3%83%BC%E3%83%89_-_panoramio.jpg","author":"z tanuki","license":"CC BY 3.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Mizuki_shigeru_road_,_%E6%B0%B4%E6%9C%A8%E3%81%97%E3%81%92%E3%82%8B%E3%83%AD%E3%83%BC%E3%83%89_-_panoramio.jpg"}}
 ];
 
@@ -192,13 +206,16 @@ function buildGallery() {
   container.innerHTML = GALLERY_SPOTS.map(spot => {
     const name = spot.name[currentLang] || spot.name.ja;
     const anime = spot.anime[currentLang] || spot.anime.ja;
+    const description = spot.description[currentLang] || spot.description.ja;
+    const animeLink = `<a href="${spot.officialUrl}" target="_blank" rel="noopener">${anime}</a>`;
     const fullWidthParens = currentLang === 'ja' || currentLang === 'zh-TW';
-    const caption = fullWidthParens ? `${name}（${anime}）` : `${name} (${anime})`;
+    const caption = fullWidthParens ? `${name}（${animeLink}）` : `${name} (${animeLink})`;
     return `
     <div class="gallery-item">
       <img src="${toThumbnailUrl(spot.photo.url, 400)}" alt="${name}" loading="lazy">
       <div class="gallery-caption">
         <div class="spot-name">${caption}</div>
+        <p class="spot-desc">${description}</p>
         <p class="photo-credit">Photo: <a href="${spot.photo.sourceUrl}" target="_blank" rel="noopener">${spot.photo.author}</a> / ${spot.photo.license} (Wikimedia Commons)</p>
       </div>
     </div>
