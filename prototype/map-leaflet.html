@@ -923,7 +923,12 @@ document.getElementById('lang-select').addEventListener('change', (e) => {
 
 // This site targets overseas visitors, so the default language is detected
 // from the browser rather than always starting in Japanese. Falls back to
-// English (rather than Japanese) for any language this site doesn't support.
+// Japanese (not English) when no supported language is detected at all —
+// this is the path crawlers like Googlebot hit (their rendering environment
+// doesn't reliably report navigator.languages), and this is a Japan-based
+// site, so indexing the Japanese content is the safer default for SEO. Real
+// visitors with a browser language set (the vast majority, including
+// foreign tourists) are unaffected and still get their own language above.
 function detectBrowserLang() {
   const supported = ['ja', 'en', 'zh-TW', 'ko', 'th', 'fr'];
   const browserLangs = navigator.languages || [navigator.language || 'en'];
@@ -936,7 +941,7 @@ function detectBrowserLang() {
     const baseMatch = supported.find(s => s.toLowerCase() === base);
     if (baseMatch) return baseMatch;
   }
-  return 'en';
+  return 'ja';
 }
 
 applyLanguage(detectBrowserLang());
