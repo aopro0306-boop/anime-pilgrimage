@@ -64,6 +64,8 @@ function langBlockHtml(data, lang) {
     <div class="spot-grid">${cards}
     </div>
 
+    <div class="mini-map-slot" data-mini-map-slot="${lang}"></div>
+
     <div class="tips duration">
       <h2>${escapeHtml(UI_I18N[lang].durationTitle)}</h2>
       <p>${escapeHtml(duration)}</p>
@@ -185,7 +187,6 @@ function generateGuidePage(data) {
 </header>
 
 <main>
-<div id="mini-map"></div>
 ${LANGS.map(l => langBlockHtml(data, l)).join('\n')}
 </main>
 
@@ -197,10 +198,26 @@ const UI_I18N = ${JSON.stringify(UI_I18N)};
 
 // Small locator map for this page's spots (English names only — this
 // preview map isn't re-translated on language switch, unlike the full
-// interactive map at ../map-leaflet.html which this links out to).
-(function initMiniMap() {
+// interactive map at ../map-leaflet.html which this links out to). Only
+// one Leaflet instance is created; since each language's content lives in
+// its own hidden/visible <div> (see langBlockHtml), the single map element
+// is physically moved into the currently visible language block's
+// .mini-map-slot on every language switch (see placeMiniMap below) rather
+// than duplicating a live map per language.
+let miniMap = null;
+let miniMapEl = null;
+
+function initMiniMap() {
   const spots = ${JSON.stringify(data.spots.map(s => ({ name: s.name_en, lat: s.lat, lng: s.lng })))};
-  const miniMap = L.map('mini-map', { zoomControl: true, scrollWheelZoom: false, minZoom: 1, maxZoom: 19 });
+  miniMapEl = document.createElement('div');
+  miniMapEl.id = 'mini-map';
+  // The element must already be attached to the DOM (with real, non-zero
+  // dimensions) before L.map()/fitBounds() run — Leaflet computes the
+  // initial view from the container's current size, and a detached element
+  // has 0x0, which produces a wrong zoom/center that invalidateSize() alone
+  // cannot fix later (it only recalculates rendering, not the prior fit).
+  document.querySelector('.mini-map-slot[data-mini-map-slot="ja"]').appendChild(miniMapEl);
+  miniMap = L.map(miniMapEl, { zoomControl: true, scrollWheelZoom: false, minZoom: 1, maxZoom: 19 });
   L.maplibreGL({ style: 'https://tiles.openfreemap.org/styles/liberty' }).addTo(miniMap);
   const markers = spots.map(s => L.circleMarker([s.lat, s.lng], { radius: 8, color: '#fff', weight: 2, fillColor: '#B5673A', fillOpacity: 1 }).bindPopup(s.name).addTo(miniMap));
   if (markers.length === 1) {
@@ -208,13 +225,24 @@ const UI_I18N = ${JSON.stringify(UI_I18N)};
   } else {
     miniMap.fitBounds(L.featureGroup(markers).getBounds(), { padding: [24, 24] });
   }
-})();
+}
+
+function placeMiniMap(lang) {
+  if (!miniMapEl) return;
+  const slot = document.querySelector('.mini-map-slot[data-mini-map-slot="' + lang + '"]');
+  if (!slot) return;
+  slot.appendChild(miniMapEl);
+  if (miniMap) setTimeout(() => miniMap.invalidateSize(), 0);
+}
+
+initMiniMap();
 
 function applyLang(lang) {
   document.documentElement.lang = lang;
   document.querySelectorAll('main > div[data-i18n]').forEach(el => {
     el.hidden = el.dataset.i18n !== lang;
   });
+  placeMiniMap(lang);
   const contentLang = lang === 'ja' ? 'ja' : 'en';
   document.title = (contentLang === 'ja' ? '${escapeHtml(data.titleJa)}' : '${escapeHtml(data.titleEn)}') + ' | Anime Pilgrimage Japan';
   document.getElementById('lang-select').value = lang;

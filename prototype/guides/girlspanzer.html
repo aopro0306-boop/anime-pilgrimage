@@ -104,7 +104,6 @@
 </header>
 
 <main>
-<div id="mini-map"></div>
 
   <div data-i18n="ja" lang="ja">
     <h1 class="heading">『ガールズ&amp;パンツァー』聖地巡礼完全ガイド</h1>
@@ -159,6 +158,8 @@
         </div>
       </div>
     </div>
+
+    <div class="mini-map-slot" data-mini-map-slot="ja"></div>
 
     <div class="tips duration">
       <h2>所要時間の目安</h2>
@@ -231,6 +232,8 @@
       </div>
     </div>
 
+    <div class="mini-map-slot" data-mini-map-slot="en"></div>
+
     <div class="tips duration">
       <h2>Estimated Time Needed</h2>
       <p>All spots are within Oarai town, walkable or reachable by rental bicycle in about half a day.</p>
@@ -301,6 +304,8 @@
         </div>
       </div>
     </div>
+
+    <div class="mini-map-slot" data-mini-map-slot="zh-TW"></div>
 
     <div class="tips duration">
       <h2>所需時間參考</h2>
@@ -373,6 +378,8 @@
       </div>
     </div>
 
+    <div class="mini-map-slot" data-mini-map-slot="ko"></div>
+
     <div class="tips duration">
       <h2>예상 소요 시간</h2>
       <p>All spots are within Oarai town, walkable or reachable by rental bicycle in about half a day.</p>
@@ -443,6 +450,8 @@
         </div>
       </div>
     </div>
+
+    <div class="mini-map-slot" data-mini-map-slot="th"></div>
 
     <div class="tips duration">
       <h2>ระยะเวลาโดยประมาณ</h2>
@@ -515,6 +524,8 @@
       </div>
     </div>
 
+    <div class="mini-map-slot" data-mini-map-slot="fr"></div>
+
     <div class="tips duration">
       <h2>Durée estimée</h2>
       <p>All spots are within Oarai town, walkable or reachable by rental bicycle in about half a day.</p>
@@ -541,10 +552,26 @@ const UI_I18N = {"ja":{"langName":"日本語","tipsTitle":"巡礼のヒント","
 
 // Small locator map for this page's spots (English names only — this
 // preview map isn't re-translated on language switch, unlike the full
-// interactive map at ../map-leaflet.html which this links out to).
-(function initMiniMap() {
+// interactive map at ../map-leaflet.html which this links out to). Only
+// one Leaflet instance is created; since each language's content lives in
+// its own hidden/visible <div> (see langBlockHtml), the single map element
+// is physically moved into the currently visible language block's
+// .mini-map-slot on every language switch (see placeMiniMap below) rather
+// than duplicating a live map per language.
+let miniMap = null;
+let miniMapEl = null;
+
+function initMiniMap() {
   const spots = [{"name":"Oarai Isosaki Shrine","lat":36.3158,"lng":140.5875},{"name":"Oarai Marine Tower","lat":36.3105,"lng":140.5706},{"name":"Oarai Beach","lat":36.3033,"lng":140.5682},{"name":"Oarai Shopping Street Area","lat":36.309,"lng":140.572}];
-  const miniMap = L.map('mini-map', { zoomControl: true, scrollWheelZoom: false, minZoom: 1, maxZoom: 19 });
+  miniMapEl = document.createElement('div');
+  miniMapEl.id = 'mini-map';
+  // The element must already be attached to the DOM (with real, non-zero
+  // dimensions) before L.map()/fitBounds() run — Leaflet computes the
+  // initial view from the container's current size, and a detached element
+  // has 0x0, which produces a wrong zoom/center that invalidateSize() alone
+  // cannot fix later (it only recalculates rendering, not the prior fit).
+  document.querySelector('.mini-map-slot[data-mini-map-slot="ja"]').appendChild(miniMapEl);
+  miniMap = L.map(miniMapEl, { zoomControl: true, scrollWheelZoom: false, minZoom: 1, maxZoom: 19 });
   L.maplibreGL({ style: 'https://tiles.openfreemap.org/styles/liberty' }).addTo(miniMap);
   const markers = spots.map(s => L.circleMarker([s.lat, s.lng], { radius: 8, color: '#fff', weight: 2, fillColor: '#B5673A', fillOpacity: 1 }).bindPopup(s.name).addTo(miniMap));
   if (markers.length === 1) {
@@ -552,13 +579,24 @@ const UI_I18N = {"ja":{"langName":"日本語","tipsTitle":"巡礼のヒント","
   } else {
     miniMap.fitBounds(L.featureGroup(markers).getBounds(), { padding: [24, 24] });
   }
-})();
+}
+
+function placeMiniMap(lang) {
+  if (!miniMapEl) return;
+  const slot = document.querySelector('.mini-map-slot[data-mini-map-slot="' + lang + '"]');
+  if (!slot) return;
+  slot.appendChild(miniMapEl);
+  if (miniMap) setTimeout(() => miniMap.invalidateSize(), 0);
+}
+
+initMiniMap();
 
 function applyLang(lang) {
   document.documentElement.lang = lang;
   document.querySelectorAll('main > div[data-i18n]').forEach(el => {
     el.hidden = el.dataset.i18n !== lang;
   });
+  placeMiniMap(lang);
   const contentLang = lang === 'ja' ? 'ja' : 'en';
   document.title = (contentLang === 'ja' ? '『ガールズ&amp;パンツァー』聖地巡礼完全ガイド' : '&quot;Girls und Panzer&quot; Anime Pilgrimage Guide') + ' | Anime Pilgrimage Japan';
   document.getElementById('lang-select').value = lang;
