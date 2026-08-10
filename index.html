@@ -2,18 +2,16 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="refresh" content="0; url=prototype/homepage.html">
-<link rel="canonical" href="prototype/homepage.html">
-<title>Anime Pilgrimage Japan</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>アニメ聖地巡礼 | Anime Pilgrimage Japan</title>
 <meta name="description" content="Discover real-world anime pilgrimage locations across Japan on an interactive map.">
-
-<!-- Open Graph / social share preview. Included here (not just on
-     homepage.html) because most social-share crawlers read the raw HTML of
-     the shared URL and do not follow the meta-refresh above, so a share of
-     the root URL needs its own copy of these tags. -->
+<link rel="canonical" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/homepage.html">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"Anime Pilgrimage Japan","alternateName":"アニメ聖地巡礼マップ","url":"https://aopro0306-boop.github.io/anime-pilgrimage/prototype/homepage.html","description":"Discover real-world anime pilgrimage locations across Japan on an interactive map."}
+</script>
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Anime Pilgrimage Japan">
-<meta property="og:url" content="https://aopro0306-boop.github.io/anime-pilgrimage/">
+<meta property="og:url" content="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/homepage.html">
 <meta property="og:title" content="Anime Pilgrimage Japan | アニメ聖地巡礼マップ">
 <meta property="og:description" content="Discover real-world anime pilgrimage locations across Japan on an interactive map.">
 <meta property="og:image" content="https://commons.wikimedia.org/wiki/Special:FilePath/Kamakura_koukou_mae_Fumikiri.jpg?width=1200">
@@ -21,12 +19,578 @@
 <meta name="twitter:title" content="Anime Pilgrimage Japan | アニメ聖地巡礼マップ">
 <meta name="twitter:description" content="Discover real-world anime pilgrimage locations across Japan on an interactive map.">
 <meta name="twitter:image" content="https://commons.wikimedia.org/wiki/Special:FilePath/Kamakura_koukou_mae_Fumikiri.jpg?width=1200">
-
 <!-- Google AdSense site-verification code -->
 <meta name="google-adsense-account" content="ca-pub-8374504931423627">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8374504931423627" crossorigin="anonymous"></script>
+<!-- Google Analytics (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HQJNYMSM07"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-HQJNYMSM07');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --color-bg: #F6F0E4;
+    --color-navy: #1D3550;
+    --color-terracotta: #B5673A;
+    --color-moss: #5C7A5E;
+    --color-text: #2B2621;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{font-family:'Zen Kaku Gothic New', sans-serif; background:var(--color-bg); color:var(--color-text); line-height:1.7;}
+  .heading{font-weight:600; text-wrap:balance;}
+  html[lang="ja"] .heading{font-family:'Shippori Mincho', serif;}
+  html[lang="en"] .heading{font-family:'Fraunces', serif;}
+  a{color:inherit;}
+
+  #site-header{position:sticky; top:0; z-index:50; background:rgba(246,240,228,0.92); -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); border-bottom:1px solid rgba(29,53,80,0.12);}
+  .header-inner{max-width:1200px; margin:0 auto; padding:14px 24px; display:flex; align-items:center; justify-content:space-between; gap:24px;}
+  .logo-block{display:flex; flex-direction:column; line-height:1.3; flex-shrink:0; text-decoration:none;}
+  .logo-en{font-weight:700; color:var(--color-navy); letter-spacing:0.14em; font-size:13px;}
+  .logo-ja{font-size:11px; color:var(--color-navy); opacity:0.65; letter-spacing:0.04em;}
+  .header-nav{display:flex; align-items:center; gap:32px; flex:1; justify-content:center;}
+  .nav-item{display:flex; flex-direction:column; align-items:center; gap:5px; text-decoration:none; color:var(--color-navy); font-size:11px; letter-spacing:0.02em; white-space:nowrap; background:none; border:none; padding:0; font-family:inherit; cursor:pointer;}
+  .nav-item svg{width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:1.3; stroke-linecap:round; stroke-linejoin:round;}
+  .nav-item:hover{color:var(--color-terracotta);}
+  .nav-item-wrapper{position:relative; display:flex; flex-direction:column; align-items:center;}
+  .nav-dropdown{position:absolute; top:calc(100% + 14px); left:50%; transform:translateX(-50%); background:#fff; border-radius:14px; box-shadow:0 8px 24px rgba(29,53,80,0.18); padding:8px; min-width:170px; display:none; z-index:100;}
+  .nav-dropdown.open{display:block;}
+  .nav-dropdown a{display:block; padding:8px 12px; font-size:13px; color:var(--color-navy); text-decoration:none; border-radius:8px; white-space:nowrap;}
+  .nav-dropdown a:hover{background:#f5f2ea; color:var(--color-terracotta);}
+  @media (max-width: 900px) {
+    .header-nav{display:none;}
+  }
+  #lang-select{background:transparent; border:1px solid var(--color-navy); color:var(--color-navy); border-radius:999px; padding:6px 30px 6px 16px; font-size:13px; font-family:inherit; cursor:pointer; appearance:none; -webkit-appearance:none; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%231D3550' d='M7 10l5 5 5-5z'/></svg>"); background-repeat:no-repeat; background-position:right 10px center; background-size:16px;}
+  #lang-select:hover{background-color:rgba(29,53,80,0.06);}
+
+  #hero{position:relative; min-height:88vh; display:flex; align-items:center; justify-content:center; overflow:hidden;}
+  .hero-slide{position:absolute; inset:0; background-size:cover; background-position:center; opacity:0; transition:opacity 1.2s ease;}
+  .hero-slide.active{opacity:1;}
+  .hero-inner{position:relative; z-index:1; text-align:center; color:#F6F0E4; padding:0 24px; max-width:720px;}
+  #hero-title{font-size:clamp(28px,5vw,52px); margin:0 0 28px 0; color:#F6F0E4;}
+  .cta-button{display:inline-block; background:#9C542C; color:#F6F0E4; text-decoration:none; padding:14px 36px; border-radius:999px; font-weight:700; font-size:15px; letter-spacing:0.02em; transition:transform 0.15s ease, box-shadow 0.15s ease;}
+  .cta-button:hover{transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,0.25);}
+  #hero-photo-credit{position:absolute; bottom:12px; right:16px; margin:0; font-size:11px; color:rgba(246,240,228,0.75); z-index:1;}
+  #hero-photo-credit a{color:inherit;}
+
+  #concept{max-width:640px; margin:0 auto; padding:88px 24px; text-align:center; font-size:18px;}
+
+  #features{max-width:1100px; margin:0 auto; padding:0 24px 88px;}
+  #features h2{text-align:center; margin:0 0 40px 0; font-size:clamp(22px,3vw,32px); color:var(--color-navy);}
+  .feature-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:28px;}
+  .feature-card{background:#fff; border-radius:16px; padding:28px 24px; box-shadow:0 4px 16px rgba(29,53,80,0.08);}
+  .feature-card h3{margin:0 0 10px 0; font-size:18px; color:var(--color-navy);}
+  .feature-card p{margin:0; font-size:14px; color:var(--color-text); opacity:0.85;}
+  #gallery{max-width:1100px; margin:0 auto; padding:0 24px 88px;}
+  #gallery h2{text-align:center; margin:0 0 40px 0; font-size:clamp(22px,3vw,32px); color:var(--color-navy);}
+  .gallery-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:24px;}
+  .gallery-item{border-radius:16px; overflow:hidden; background:#fff; box-shadow:0 4px 16px rgba(29,53,80,0.08);}
+  .gallery-item img{width:100%; height:220px; object-fit:cover; display:block;}
+  .gallery-caption{padding:14px 16px;}
+  .gallery-caption .spot-name{font-weight:700; color:var(--color-navy); font-size:14px;}
+  .gallery-caption .spot-name a{color:var(--color-terracotta); text-decoration:underline; text-underline-offset:2px;}
+  .gallery-caption .spot-desc{margin:6px 0 0 0; font-size:13px; color:var(--color-text); opacity:0.85; line-height:1.6;}
+  .gallery-caption .photo-credit{margin-top:8px; font-size:11px; color:var(--color-text); opacity:0.75;}
+  .gallery-caption .photo-credit a{color:inherit;}
+
+  #closing{background:var(--color-navy); color:#F6F0E4; text-align:center; padding:88px 24px;}
+  #closing h2{margin:0 0 28px 0; color:#F6F0E4;}
+
+  footer{max-width:1100px; margin:0 auto; padding:32px 24px; font-size:12px; color:var(--color-text); opacity:0.75; text-align:center;}
+
+  #guide-links{max-width:1100px; margin:0 auto; padding:0 24px 24px; text-align:center;}
+  #guide-links p{font-weight:700; color:var(--color-navy); margin:0 0 10px 0; font-size:14px;}
+  #guide-links ul{list-style:none; padding:0; margin:0; display:flex; flex-wrap:wrap; justify-content:center; gap:10px 18px;}
+  #guide-links a{font-size:13px; text-decoration:none; color:var(--color-navy); opacity:0.8;}
+  #guide-links a:hover{opacity:1; text-decoration:underline;}
+
+  @media (max-width: 640px) {
+    .header-inner{padding:12px 16px;}
+    #concept{padding:56px 20px;}
+    #features{padding:0 20px 56px;}
+    #gallery{padding:0 20px 56px;}
+    #closing{padding:56px 20px;}
+  }
+</style>
 </head>
 <body>
-<p><a href="prototype/homepage.html">Anime Pilgrimage Japan</a></p>
+<header id="site-header">
+  <div class="header-inner">
+    <a class="logo-block" href="#hero">
+      <span class="logo-en">ANIME PILGRIMAGE</span>
+      <span class="logo-ja">アニメ聖地巡礼マップ</span>
+    </a>
+    <nav class="header-nav">
+      <a class="nav-item" href="#concept">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg>
+        <span data-i18n="navConcept">コンセプト</span>
+      </a>
+      <a class="nav-item" href="#features">
+        <svg viewBox="0 0 24 24"><path d="M12 3l1.8 5.4L19 10l-5.2 1.6L12 17l-1.8-5.4L5 10l5.2-1.6z"/></svg>
+        <span data-i18n="navFeatures">特徴</span>
+      </a>
+      <a class="nav-item" href="#gallery">
+        <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1.5"/><circle cx="8.5" cy="10" r="1.5"/><path d="M3 16l5-4 4 3 3-3 6 5"/></svg>
+        <span data-i18n="navGallery">スポット紹介</span>
+      </a>
+      <div class="nav-item-wrapper">
+        <button class="nav-item" type="button" id="nav-guides-toggle" aria-expanded="false" aria-haspopup="true">
+          <svg viewBox="0 0 24 24"><path d="M4 19.5V5a2 2 0 012-2h13v16H6a2 2 0 00-2 2z"/><path d="M6 3v16"/><path d="M19 19H6a2 2 0 100 4h13"/></svg>
+          <span data-i18n="navGuides">ガイド</span>
+        </button>
+        <div class="nav-dropdown" id="guides-dropdown">
+          <a href="prototype/guides/chihiro.html" data-guide="chihiro">Spirited Away</a>
+          <a href="prototype/guides/girlspanzer.html" data-guide="girlspanzer">Girls und Panzer</a>
+          <a href="prototype/guides/conan.html" data-guide="conan">Detective Conan</a>
+          <a href="prototype/guides/kiminonaha.html" data-guide="kiminonaha">Your Name</a>
+          <a href="prototype/guides/kimetsu.html" data-guide="kimetsu">Demon Slayer</a>
+          <a href="prototype/guides/yurucamp.html" data-guide="yurucamp">Laid-Back Camp</a>
+        </div>
+      </div>
+      <a class="nav-item" href="prototype/map-leaflet.html">
+        <svg viewBox="0 0 24 24"><path d="M12 21s-7-6.5-7-11.5A7 7 0 0119 9.5C19 14.5 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
+        <span data-i18n="heroCta">マップを見る</span>
+      </a>
+    </nav>
+    <select id="lang-select" aria-label="Language">
+      <option value="ja">日本語</option>
+      <option value="en">English</option>
+      <option value="zh-TW">繁體中文</option>
+      <option value="ko">한국어</option>
+      <option value="th">ไทย</option>
+      <option value="fr">Français</option>
+    </select>
+  </div>
+</header>
+
+<section id="hero">
+  <div id="hero-slides"></div>
+  <div class="hero-inner">
+    <h1 id="hero-title" class="heading" data-i18n="heroTitle">アニメの世界を、実際に歩く。</h1>
+    <a class="cta-button" data-i18n="heroCta" href="prototype/map-leaflet.html">マップを見る</a>
+  </div>
+  <p id="hero-photo-credit"></p>
+</section>
+
+<section id="concept">
+  <p data-i18n="conceptText">アニメに描かれたあの景色は、日本のどこかに実在する。世界中のファンを、その本物の舞台へ。</p>
+</section>
+
+<section id="features">
+  <h2 class="heading" data-i18n="featuresHeading">アプリの特徴</h2>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <h3 class="heading" data-i18n="feature1Title">実地図で探す</h3>
+      <p data-i18n="feature1Body">正確な位置情報を、実際の地図上のピンで確認できます。</p>
+    </div>
+    <div class="feature-card">
+      <h3 class="heading" data-i18n="feature2Title">作品名で検索</h3>
+      <p data-i18n="feature2Body">作品名を検索すると、その作品のスポットにまとめてジャンプします。</p>
+    </div>
+    <div class="feature-card">
+      <h3 class="heading" data-i18n="feature3Title">多言語対応</h3>
+      <p data-i18n="feature3Body">英語・繁体字中国語・韓国語・タイ語・フランス語に対応しています。</p>
+    </div>
+    <div class="feature-card">
+      <h3 class="heading" data-i18n="feature4Title">出典明記の安心写真</h3>
+      <p data-i18n="feature4Body">掲載写真はすべてライセンスを確認済みで、出典を明記しています。</p>
+    </div>
+  </div>
+</section>
+
+<section id="gallery">
+  <h2 class="heading" data-i18n="galleryHeading">スポットの一例</h2>
+  <div class="gallery-grid" id="gallery-grid"></div>
+</section>
+
+<section id="closing">
+  <h2 class="heading" data-i18n="closingHeading">さあ、地図を開いて聖地を巡ろう</h2>
+  <a class="cta-button" data-i18n="heroCta" href="prototype/map-leaflet.html">マップを見る</a>
+</section>
+
+<div id="guide-links">
+  <p data-i18n="guidesHeading">作品別ガイド</p>
+  <ul>
+    <li><a href="prototype/guides/chihiro.html" data-guide="chihiro">Spirited Away</a></li>
+    <li><a href="prototype/guides/girlspanzer.html" data-guide="girlspanzer">Girls und Panzer</a></li>
+    <li><a href="prototype/guides/conan.html" data-guide="conan">Detective Conan</a></li>
+    <li><a href="prototype/guides/kiminonaha.html" data-guide="kiminonaha">Your Name</a></li>
+    <li><a href="prototype/guides/kimetsu.html" data-guide="kimetsu">Demon Slayer</a></li>
+    <li><a href="prototype/guides/yurucamp.html" data-guide="yurucamp">Laid-Back Camp</a></li>
+  </ul>
+</div>
+
+<footer>
+  <p data-i18n="footerCredit">写真提供: Wikimedia Commons（詳細は各写真のクレジット参照）</p>
+  <p><a data-i18n="privacyLink" href="prototype/privacy.html">プライバシーポリシー</a></p>
+</footer>
+
+<script>
+const GALLERY_SPOTS = [
+  {"id":"kamakura-slamdunk-crossing",
+    "name":{"ja":"鎌倉高校前駅1号踏切","en":"Kamakura High School Crossing","zh-TW":"鎌倉高校前站1號平交道","ko":"가마쿠라코코마에역 1호 건널목","th":"จุดตัดทางรถไฟหมายเลข 1 หน้าสถานีคามาคุระโคโค","fr":"Passage à niveau n°1 de la gare de Kamakurakōkō-mae"},
+    "anime":{"ja":"SLAM DUNK","en":"Slam Dunk","zh-TW":"灌籃高手","ko":"슬램덩크","th":"สแลมดังก์","fr":"Slam Dunk"},
+    "officialUrl":"https://lineup.toei-anim.co.jp/ja/tv/movie_slumdunk/",
+    "description":{"ja":"OP映像で桜木花道が江ノ電を待つシーンのモデルとなった踏切。","en":"The level crossing where Hanamichi Sakuragi waits for the Enoden train in the anime's opening sequence.","zh-TW":"動畫片頭中，櫻木花道等待江之電列車的場景原型平交道。","ko":"OP 영상에서 사쿠라기 하나미치가 에노덴 열차를 기다리는 장면의 모델이 된 건널목.","th":"จุดตัดทางรถไฟที่เป็นต้นแบบฉากที่ฮานามิจิ ซากุรางิ รอรถไฟเอโนเดนในภาพเปิดเรื่อง","fr":"Le passage à niveau qui a inspiré la scène du générique où Hanamichi Sakuragi attend le train Enoden."},
+    "photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/0/0b/Kamakura_koukou_mae_Fumikiri.jpg","author":"Quercus acuta","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Kamakura_koukou_mae_Fumikiri.jpg"}},
+  {"id":"kiminonaha-hidafurukawa-station",
+    "name":{"ja":"飛騨古川駅","en":"Hida-Furukawa Station","zh-TW":"飛驒古川站","ko":"히다후루카와역","th":"สถานีฮิดะ-ฟุรุกาวะ","fr":"Gare de Hida-Furukawa"},
+    "anime":{"ja":"君の名は。","en":"Your Name","zh-TW":"你的名字。","ko":"너의 이름은.","th":"ชื่อของเธอ","fr":"Your Name."},
+    "officialUrl":"https://www.kiminona.com/",
+    "description":{"ja":"糸守町のモデルとなった飛騨市の玄関口となる駅。","en":"The gateway station to Hida City that inspired the fictional town of Itomori.","zh-TW":"作為虛構小鎮「糸守町」原型的飛驒市玄關口車站。","ko":"이토모리 마을의 모델이 된 히다시의 관문 역.","th":"สถานีประตูสู่เมืองฮิดะ ต้นแบบของเมืองสมมติอิโตโมริ","fr":"La gare d'entrée de la ville de Hida qui a inspiré la ville fictive d'Itomori."},
+    "photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/c/c5/View_of_Hida-Furukawa_Station.JPG","author":"そらみみ","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:View_of_Hida-Furukawa_Station.JPG"}},
+  {"id":"keion-toyosato-school",
+    "name":{"ja":"豊郷小学校旧校舎群","en":"Former Toyosato Elementary School","zh-TW":"豐鄉小學舊校舍群","ko":"도요사토 초등학교 옛 교사군","th":"กลุ่มอาคารเรียนเก่าโรงเรียนประถมโทโยซาโตะ","fr":"Anciens bâtiments de l'école primaire de Toyosato"},
+    "anime":{"ja":"けいおん!","en":"K-On!","zh-TW":"K-ON！輕音部","ko":"케이온!","th":"เคออน!","fr":"K-On!"},
+    "officialUrl":"https://www.kyotoanimation.co.jp/works/k-on/",
+    "description":{"ja":"作中の桜が丘高校のモデルとなった、ヴォーリズ建築の旧校舎。","en":"A former school building by architect William Merrell Vories that inspired the anime's Sakuragaoka High School.","zh-TW":"沃利斯建築師設計的舊校舍，是劇中「櫻丘高中」的原型。","ko":"작중 사쿠라가오카 고등학교의 모델이 된, 보리스 건축의 옛 교사.","th":"อาคารเรียนเก่าสไตล์สถาปนิกวอริส ต้นแบบของโรงเรียนมัธยมซากุระงาโอกะในเรื่อง","fr":"Un ancien bâtiment scolaire conçu par l'architecte William Merrell Vories, qui a inspiré le lycée Sakuragaoka de l'anime."},
+    "photo":{"url":"https://commons.wikimedia.org/wiki/Special:FilePath/%E8%B1%8A%E9%83%B7%E5%B0%8F%E5%AD%A6%E6%A0%A1%E6%97%A7%E6%A0%A1%E8%88%8E.jpg?width=400","author":"オクノサンライズ","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:%E8%B1%8A%E9%83%B7%E5%B0%8F%E5%AD%A6%E6%A0%A1%E6%97%A7%E6%A0%A1%E8%88%8E.jpg"}},
+  {"id":"girlspanzer-oarai-isosaki",
+    "name":{"ja":"大洗磯前神社","en":"Oarai Isosaki Shrine","zh-TW":"大洗磯前神社","ko":"오아라이 이소사키 신사","th":"ศาลเจ้าโออาไร อิโซซากิ","fr":"Sanctuaire Ōarai Isosaki"},
+    "anime":{"ja":"ガールズ&パンツァー","en":"Girls und Panzer","zh-TW":"少女與戰車","ko":"걸즈 앤 판처","th":"เกิร์ลส์อันด์แพนเซอร์","fr":"Girls und Panzer"},
+    "officialUrl":"https://girls-und-panzer.jp/",
+    "description":{"ja":"大洗の高台に立つ神社で、作中にたびたび登場する。","en":"A shrine on a hilltop in Oarai that appears repeatedly throughout the series.","zh-TW":"位於大洗高地上的神社，在劇中多次登場。","ko":"오아라이의 언덕 위에 있는 신사로, 작중에 여러 번 등장한다.","th":"ศาลเจ้าบนเนินเขาในโออาไร ที่ปรากฏซ้ำหลายครั้งตลอดเรื่อง","fr":"Un sanctuaire perché sur une colline à Ōarai, qui apparaît à plusieurs reprises dans la série."},
+    "photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/5/5b/%E5%A4%A7%E6%B4%97%E7%A3%AF%E5%89%8D%E7%A5%9E%E7%A4%BE_%E6%AD%A3%E9%9D%A2%E9%B3%A5%E5%B1%85.JPG","author":"Saigen Jiro","license":"Public Domain","sourceUrl":"https://commons.wikimedia.org/wiki/File:%E5%A4%A7%E6%B4%97%E7%A3%AF%E5%89%8D%E7%A5%9E%E7%A4%BE_%E6%AD%A3%E9%9D%A2%E9%B3%A5%E5%B1%85.JPG"}},
+  {"id":"washinomiya-jinja",
+    "name":{"ja":"鷲宮神社","en":"Washinomiya Shrine","zh-TW":"鷲宮神社","ko":"와시노미야 신사","th":"ศาลเจ้าวาชิโนมิยะ","fr":"Sanctuaire de Washinomiya"},
+    "anime":{"ja":"らき☆すた","en":"Lucky Star","zh-TW":"幸運☆星","ko":"럭키☆스타","th":"ลัคกี้สตาร์","fr":"Lucky Star"},
+    "officialUrl":"https://www.lucky-ch.com/",
+    "description":{"ja":"作中の「鷹宮神社」のモデル。痛絵馬発祥の地とされる、聖地巡礼文化の原点。","en":"The model for the anime's Takanomiya Shrine, and the birthplace of \"itaema\" fan-art votive plaques — often cited as the origin of anime pilgrimage culture itself.","zh-TW":"劇中「鷹宮神社」的原型，被視為「痛繪馬」發源地，也是動畫聖地巡禮文化的起點。","ko":"작중 '다카노미야 신사'의 모델. 이타에마(오타쿠 그림 에마) 발상지로 여겨지며, 성지순례 문화의 원점이라 불린다.","th":"ต้นแบบของศาลเจ้าทาคาโนมิยะในเรื่อง ถือเป็นจุดกำเนิดของแผ่นไม้อิตะเอมะ และจุดเริ่มต้นของวัฒนธรรมตามรอยอนิเมะ","fr":"Le modèle du sanctuaire Takanomiya de l'anime, considéré comme le berceau des plaques votives « itaema » et l'origine même de la culture du pèlerinage anime."},
+    "photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/3/38/Washinomiya-Shrine-Washimiya-Saitama-Japan.jpg","author":"LERK","license":"CC BY-SA 3.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Washinomiya-Shrine-Washimiya-Saitama-Japan.jpg"}},
+  {"id":"mizuki-shigeru-road",
+    "name":{"ja":"水木しげるロード","en":"Mizuki Shigeru Road","zh-TW":"水木茂之路","ko":"미즈키 시게루 로드","th":"ถนนมิซึกิ ชิเงรุ","fr":"Rue Mizuki Shigeru"},
+    "anime":{"ja":"ゲゲゲの鬼太郎","en":"GeGeGe no Kitaro","zh-TW":"鬼太郎","ko":"게게게의 기타로","th":"คิทาโร่","fr":"GeGeGe no Kitaro"},
+    "officialUrl":"https://www.toei-anim.co.jp/kitaro/",
+    "description":{"ja":"妖怪ブロンズ像が並ぶ、水木しげるの故郷・境港市の観光通り。","en":"A tourist street lined with yokai bronze statues in Sakaiminato, the hometown of manga artist Shigeru Mizuki.","zh-TW":"林立妖怪銅像的觀光街道，是漫畫家水木茂的故鄉——境港市。","ko":"요괴 동상이 늘어선, 미즈키 시게루의 고향 사카이미나토시의 관광 거리.","th":"ถนนท่องเที่ยวที่เรียงรายไปด้วยรูปปั้นทองแดงโยไค ในเมืองซาไกมินาโตะ บ้านเกิดของนักเขียนมังงะ มิซึกิ ชิเงรุ","fr":"Une rue touristique bordée de statues de bronze de yōkai, à Sakaiminato, ville natale du mangaka Shigeru Mizuki."},
+    "photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/a/a1/Mizuki_shigeru_road_%2C_%E6%B0%B4%E6%9C%A8%E3%81%97%E3%81%92%E3%82%8B%E3%83%AD%E3%83%BC%E3%83%89_-_panoramio.jpg","author":"z tanuki","license":"CC BY 3.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Mizuki_shigeru_road_,_%E6%B0%B4%E6%9C%A8%E3%81%97%E3%81%92%E3%82%8B%E3%83%AD%E3%83%BC%E3%83%89_-_panoramio.jpg"}},
+  {"id":"dogo-onsen-honkan",
+    "name":{"ja":"道後温泉本館","en":"Dogo Onsen Honkan","zh-TW":"道後溫泉本館","ko":"도고온천 본관","th":"อาคารหลักออนเซ็นโดโงะ","fr":"Dogo Onsen Honkan"},
+    "anime":{"ja":"千と千尋の神隠し","en":"Spirited Away","zh-TW":"神隱少女","ko":"센과 치히로의 행방불명","th":"มิติวิญญาณมหัศจรรย์","fr":"Le Voyage de Chihiro"},
+    "officialUrl":"https://www.ghibli.jp/works/chihiro/",
+    "description":{"ja":"油屋のモデルの一つとされる、国指定重要文化財の共同浴場。","en":"A nationally designated Important Cultural Property bathhouse, considered one of the models for the Aburaya bathhouse.","zh-TW":"被視為「油屋」原型之一的公共浴場，為日本指定重要文化財。","ko":"'유야'의 모델 중 하나로 여겨지는, 국가지정 중요문화재 대중목욕탕.","th":"โรงอาบน้ำสาธารณะที่ได้รับการขึ้นทะเบียนเป็นทรัพย์สินทางวัฒนธรรมสำคัญของชาติ ถือเป็นหนึ่งในต้นแบบของโรงอาบน้ำอาบุระยะ","fr":"Un établissement de bains classé bien culturel important, considéré comme l'un des modèles de la maison de bains Aburaya."},
+    "photo":{"url":"https://upload.wikimedia.org/wikipedia/commons/8/83/D%C5%8Dgo_Onsen.jpg","author":"Arnaud Malon","license":"CC BY 2.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:D%C5%8Dgo_Onsen.jpg"}},
+  {"id":"kimetsu-homan-kamado-jinja",
+    "name":{"ja":"宝満宮竈門神社","en":"Homangu Kamado Shrine","zh-TW":"寶滿宮竈門神社","ko":"호만구 카마도 신사","th":"ศาลเจ้าโฮมันงู คามาโดะ","fr":"Sanctuaire Homangu Kamado"},
+    "anime":{"ja":"鬼滅の刃","en":"Demon Slayer: Kimetsu no Yaiba","zh-TW":"鬼滅之刃","ko":"귀멸의 칼날","th":"ดาบพิฆาตอสูร","fr":"Demon Slayer: Kimetsu no Yaiba"},
+    "officialUrl":"https://kimetsu.com/anime/",
+    "description":{"ja":"「竈門」の名から炭治郎の名字のモデルとされ、ファンの聖地となっている神社。","en":"A shrine believed to have inspired protagonist Tanjiro's surname \"Kamado,\" now a pilgrimage site for fans.","zh-TW":"因「竈門」之名被認為是主角炭治郎姓氏的原型，成為粉絲心中的聖地。","ko":"'카마도'라는 이름에서 탄지로의 성씨 모델로 여겨지며, 팬들의 성지가 된 신사.","th":"ศาลเจ้าที่เชื่อว่าเป็นต้นแบบนามสกุล \"คามาโดะ\" ของทันจิโร่ ปัจจุบันกลายเป็นสถานที่ศักดิ์สิทธิ์ของแฟนๆ","fr":"Un sanctuaire que l'on croit être à l'origine du nom de famille « Kamado » du héros Tanjiro, devenu un lieu de pèlerinage pour les fans."},
+    "photo":{"url":"https://commons.wikimedia.org/wiki/Special:FilePath/1st_torii_of_Kamado_Shrine.jpg?width=400","author":"そらみみ","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:1st_torii_of_Kamado_Shrine.jpg"}},
+  {"id":"fujiko-f-fujio-museum",
+    "name":{"ja":"藤子・F・不二雄ミュージアム","en":"Fujiko F. Fujio Museum","zh-TW":"藤子·F·不二雄博物館","ko":"후지코 F 후지오 뮤지엄","th":"พิพิธภัณฑ์ฟูจิโกะ เอฟ ฟูจิโอะ","fr":"Musée Fujiko F. Fujio"},
+    "anime":{"ja":"ドラえもん","en":"Doraemon","zh-TW":"哆啦A夢","ko":"도라에몽","th":"โดราเอมอน","fr":"Doraemon"},
+    "officialUrl":"https://dora-world.com/",
+    "description":{"ja":"藤子・F・不二雄の作品世界を紹介する川崎市の美術館。","en":"A museum in Kawasaki introducing the creative world of Fujiko F. Fujio.","zh-TW":"位於川崎市，介紹藤子·F·不二雄作品世界的美術館。","ko":"후지코 F 후지오의 작품 세계를 소개하는 가와사키시의 미술관.","th":"พิพิธภัณฑ์ในเมืองคาวาซากิที่นำเสนอโลกแห่งผลงานของฟูจิโกะ เอฟ ฟูจิโอะ","fr":"Un musée à Kawasaki présentant l'univers créatif de Fujiko F. Fujio."},
+    "photo":{"url":"https://commons.wikimedia.org/wiki/Special:FilePath/Fujiko%EF%BD%A5F%EF%BD%A5Fujio_Museum_-01.jpg?width=400","author":"Aimaimyi","license":"CC BY-SA 3.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Fujiko%EF%BD%A5F%EF%BD%A5Fujio_Museum_-01.jpg"}},
+  {"id":"ueda-castle-summerwars",
+    "name":{"ja":"上田城","en":"Ueda Castle","zh-TW":"上田城","ko":"우에다 성","th":"ปราสาทอุเอดะ","fr":"Château d'Ueda"},
+    "anime":{"ja":"サマーウォーズ","en":"Summer Wars","zh-TW":"夏日大作戰","ko":"썸머워즈","th":"ซัมเมอร์วอร์ส","fr":"Summer Wars"},
+    "officialUrl":"https://s-wars.jp/",
+    "description":{"ja":"陣内家の物語の舞台となった長野県上田市の城跡。","en":"The castle ruins in Ueda, Nagano, that served as the setting for the Jinnouchi family's story.","zh-TW":"長野縣上田市的城跡，是陣內家故事的舞台。","ko":"나가노현 우에다시의 성터로, 진노우치 가문 이야기의 무대가 되었다.","th":"ซากปราสาทในเมืองอุเอดะ จังหวัดนากาโนะ ที่เป็นฉากหลังของเรื่องราวตระกูลจินโนอุจิ","fr":"Les ruines du château d'Ueda, dans la préfecture de Nagano, qui ont servi de cadre à l'histoire de la famille Jinnouchi."},
+    "photo":{"url":"https://commons.wikimedia.org/wiki/Special:FilePath/Ueda_Castle.JPG?width=400","author":"Tomorobi","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Ueda_Castle.JPG"}},
+  {"id":"suzume-matsuyama-port",
+    "name":{"ja":"すずめの戸締まり フェリーのモデル","en":"Model for the Ferry in Suzume","zh-TW":"鈴芽之旅 渡輪原型港口","ko":"스즈메의 문단속 페리 모델","th":"ต้นแบบท่าเรือเฟอร์รี่ในเรื่องซูซูเมะ","fr":"Modèle du port de ferry dans Suzume"},
+    "anime":{"ja":"すずめの戸締まり","en":"Suzume","zh-TW":"鈴芽之旅","ko":"스즈메의 문단속","th":"การผนึกประตูของซุซุเมะ","fr":"Suzume"},
+    "officialUrl":"https://suzume-tojimari-movie.jp/",
+    "description":{"ja":"作中のフェリーが発着する港のモデルの一つとされる松山観光港。","en":"Matsuyama Kanko Port, considered one of the models for the ferry port in the film.","zh-TW":"松山觀光港，被視為劇中渡輪停靠港口的原型之一。","ko":"마쓰야마 관광항으로, 작중 페리가 오가는 항구의 모델 중 하나로 여겨진다.","th":"ท่าเรือท่องเที่ยวมัตสึยามะ ถือเป็นหนึ่งในต้นแบบท่าเรือเฟอร์รี่ในเรื่อง","fr":"Le port touristique de Matsuyama, considéré comme l'un des modèles du port de ferry du film."},
+    "photo":{"url":"https://commons.wikimedia.org/wiki/Special:FilePath/Ferry_Kurushima_in_Port_of_Matsuyama.jpg?width=400","author":"Si-take.","license":"CC BY-SA 3.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Ferry_Kurushima_in_Port_of_Matsuyama.jpg"}},
+  {"id":"anohana-hitsujiyama-park",
+    "name":{"ja":"羊山公園","en":"Hitsujiyama Park","zh-TW":"羊山公園","ko":"히쓰지야마 공원","th":"สวนสาธารณะฮิตสึจิยามะ","fr":"Parc Hitsujiyama"},
+    "anime":{"ja":"あの花","en":"Anohana: The Flower We Saw That Day","zh-TW":"未聞花名","ko":"그날 본 꽃의 이름을 우리는 아직 모른다","th":"อาโนะฮานะ","fr":"Anohana"},
+    "officialUrl":"https://www.aniplex.co.jp/lineup/anohana/",
+    "description":{"ja":"秩父の街を見渡せる公園で、作中の重要な場面の舞台。","en":"A park overlooking the town of Chichibu, the setting for a key scene in the series.","zh-TW":"可俯瞰秩父街景的公園，是劇中重要場景的舞台。","ko":"지치부 시내를 내려다볼 수 있는 공원으로, 작중 중요한 장면의 무대.","th":"สวนสาธารณะที่มองเห็นทัศนียภาพเมืองชิจิบุ เป็นฉากสำคัญในเรื่อง","fr":"Un parc surplombant la ville de Chichibu, cadre d'une scène clé de la série."},
+    "photo":{"url":"https://commons.wikimedia.org/wiki/Special:FilePath/Central_Chichibu_view_from_Hitsujiyama_Park.JPG?width=400","author":"Abasaa","license":"Public Domain","sourceUrl":"https://commons.wikimedia.org/wiki/File:Central_Chichibu_view_from_Hitsujiyama_Park.JPG"}}
+];
+
+function toThumbnailUrl(url, width) {
+  // Convert a Wikimedia Commons direct upload.wikimedia.org URL into a
+  // sized Special:FilePath thumbnail URL. Leaves already-sized
+  // Special:FilePath URLs (and non-Wikimedia URLs) untouched.
+  if (typeof url !== 'string' || !url.includes('upload.wikimedia.org')) return url;
+  if (url.includes('Special:FilePath')) return url;
+  const filename = url.substring(url.lastIndexOf('/') + 1);
+  const alreadyEncoded = /%[0-9A-Fa-f]{2}/.test(filename);
+  const encodedFilename = alreadyEncoded ? filename : encodeURIComponent(filename);
+  return `https://commons.wikimedia.org/wiki/Special:FilePath/${encodedFilename}?width=${width}`;
+}
+
+// Re-run whenever the language changes (see applyLanguage()) so spot/anime
+// names switch between the Japanese name and its English localized title.
+function buildGallery() {
+  const container = document.getElementById('gallery-grid');
+  container.innerHTML = GALLERY_SPOTS.map(spot => {
+    const name = spot.name[currentLang] || spot.name.ja;
+    const anime = spot.anime[currentLang] || spot.anime.ja;
+    const description = spot.description[currentLang] || spot.description.ja;
+    const animeLink = `<a href="${spot.officialUrl}" target="_blank" rel="noopener">${anime}</a>`;
+    const fullWidthParens = currentLang === 'ja' || currentLang === 'zh-TW';
+    const caption = fullWidthParens ? `${name}（${animeLink}）` : `${name} (${animeLink})`;
+    return `
+    <div class="gallery-item">
+      <img src="${toThumbnailUrl(spot.photo.url, 400)}" alt="${name}" loading="lazy">
+      <div class="gallery-caption">
+        <div class="spot-name">${caption}</div>
+        <p class="spot-desc">${description}</p>
+        <p class="photo-credit">Photo: <a href="${spot.photo.sourceUrl}" target="_blank" rel="noopener">${spot.photo.author}</a> / ${spot.photo.license} (Wikimedia Commons)</p>
+      </div>
+    </div>
+  `;
+  }).join('');
+}
+
+// Hero slideshow reuses the same GALLERY_SPOTS photos (already
+// license-checked and displayed elsewhere on the page) rather than
+// sourcing separate hero-only images.
+let heroSlideIndex = 0;
+
+function buildHeroCreditHtml(spot) {
+  return `Photo: <a href="${spot.photo.sourceUrl}" target="_blank" rel="noopener">${spot.photo.author}</a> / ${spot.photo.license} (Wikimedia Commons)`;
+}
+
+function buildHeroSlideshow() {
+  const container = document.getElementById('hero-slides');
+  container.innerHTML = GALLERY_SPOTS.map((spot, i) => {
+    const bgUrl = toThumbnailUrl(spot.photo.url, 1600);
+    return `<div class="hero-slide${i === 0 ? ' active' : ''}" style="background-image:linear-gradient(180deg, rgba(29,53,80,0.35), rgba(29,53,80,0.55)), url('${bgUrl}')"></div>`;
+  }).join('');
+  document.getElementById('hero-photo-credit').innerHTML = buildHeroCreditHtml(GALLERY_SPOTS[0]);
+}
+
+function advanceHeroSlide() {
+  const slides = document.querySelectorAll('.hero-slide');
+  slides[heroSlideIndex].classList.remove('active');
+  heroSlideIndex = (heroSlideIndex + 1) % GALLERY_SPOTS.length;
+  slides[heroSlideIndex].classList.add('active');
+  document.getElementById('hero-photo-credit').innerHTML = buildHeroCreditHtml(GALLERY_SPOTS[heroSlideIndex]);
+}
+
+buildHeroSlideshow();
+
+const I18N = {
+  ja: {
+    pageTitle: 'アニメ聖地巡礼 | Anime Pilgrimage Japan',
+    heroTitle: 'アニメの世界を、実際に歩く。',
+    heroCta: 'マップを見る',
+    navConcept: 'コンセプト',
+    navFeatures: '特徴',
+    navGallery: 'スポット紹介',
+    navGuides: 'ガイド',
+    conceptText: 'アニメに描かれたあの景色は、日本のどこかに実在する。世界中のファンを、その本物の舞台へ。',
+    featuresHeading: 'アプリの特徴',
+    feature1Title: '実地図で探す',
+    feature1Body: '正確な位置情報を、実際の地図上のピンで確認できます。',
+    feature2Title: '作品名で検索',
+    feature2Body: '作品名を検索すると、その作品のスポットにまとめてジャンプします。',
+    feature3Title: '多言語対応',
+    feature3Body: '英語・繁体字中国語・韓国語・タイ語・フランス語に対応しています。',
+    feature4Title: '出典明記の安心写真',
+    feature4Body: '掲載写真はすべてライセンスを確認済みで、出典を明記しています。',
+    galleryHeading: 'スポットの一例',
+    closingHeading: 'さあ、地図を開いて聖地を巡ろう',
+    footerCredit: '写真提供: Wikimedia Commons（詳細は各写真のクレジット参照）',
+    privacyLink: 'プライバシーポリシー',
+    guidesHeading: '作品別ガイド'
+  },
+  en: {
+    pageTitle: 'Anime Pilgrimage Japan',
+    heroTitle: 'Walk Into the World of Anime.',
+    heroCta: 'Explore the Map',
+    navConcept: 'Concept',
+    navFeatures: 'Features',
+    navGallery: 'Locations',
+    navGuides: 'Guides',
+    conceptText: 'The scenery you saw in anime is real — somewhere in Japan. Connecting fans across the world to the real places behind the stories.',
+    featuresHeading: 'What Makes This Different',
+    feature1Title: 'Explore on a Real Map',
+    feature1Body: 'Every spot is pinned on an actual map, not an illustration.',
+    feature2Title: 'Search by Title',
+    feature2Body: 'Search any anime title to jump straight to its locations.',
+    feature3Title: 'Multiple Languages',
+    feature3Body: 'Available in English, Traditional Chinese, Korean, Thai, and French.',
+    feature4Title: 'Verified, Credited Photos',
+    feature4Body: 'Every photo is license-checked and properly credited.',
+    galleryHeading: 'A Few Featured Locations',
+    closingHeading: 'Ready to Start Your Pilgrimage?',
+    footerCredit: 'Photos via Wikimedia Commons (see individual credits above).',
+    privacyLink: 'Privacy Policy',
+    guidesHeading: 'Guides by Anime'
+  },
+  'zh-TW': {
+    pageTitle: '動畫聖地巡禮 | Anime Pilgrimage Japan',
+    heroTitle: '走進動畫的世界。',
+    heroCta: '查看地圖',
+    navConcept: '概念',
+    navFeatures: '特色',
+    navGallery: '精選地點',
+    navGuides: '指南',
+    conceptText: '動畫中描繪的那片風景，其實就存在於日本的某個角落。將世界各地的粉絲，帶往那真實的舞台。',
+    featuresHeading: '應用特色',
+    feature1Title: '透過實際地圖尋找',
+    feature1Body: '每個地點都精準標示在真實地圖上，而非插畫。',
+    feature2Title: '依作品名稱搜尋',
+    feature2Body: '搜尋作品名稱，即可直接跳轉至該作品的所有地點。',
+    feature3Title: '多語言支援',
+    feature3Body: '支援英文、繁體中文、韓文、泰文及法文。',
+    feature4Title: '附出處的安心照片',
+    feature4Body: '所有照片皆經過授權確認，並清楚標示出處。',
+    galleryHeading: '精選地點',
+    closingHeading: '現在就打開地圖，展開你的聖地巡禮吧',
+    footerCredit: '照片提供：Wikimedia Commons（詳細出處請見各張照片說明）',
+    privacyLink: '隱私權政策',
+    guidesHeading: '依作品分類的指南'
+  },
+  ko: {
+    pageTitle: '애니메이션 성지순례 | Anime Pilgrimage Japan',
+    heroTitle: '애니메이션 속 세계를, 직접 걸어보다.',
+    heroCta: '지도 보기',
+    navConcept: '컨셉',
+    navFeatures: '특징',
+    navGallery: '스팟 소개',
+    navGuides: '가이드',
+    conceptText: '애니메이션에 그려진 그 풍경은, 일본 어딘가에 실제로 존재합니다. 전 세계의 팬들을 그 진짜 무대로 연결합니다.',
+    featuresHeading: '앱의 특징',
+    feature1Title: '실제 지도에서 찾기',
+    feature1Body: '모든 장소가 그림이 아닌 실제 지도 위에 정확히 표시됩니다.',
+    feature2Title: '작품명으로 검색',
+    feature2Body: '작품명을 검색하면 해당 작품의 장소로 한 번에 이동합니다.',
+    feature3Title: '다국어 지원',
+    feature3Body: '영어·중국어 번체·한국어·태국어·프랑스어를 지원합니다.',
+    feature4Title: '출처가 명확한 안심 사진',
+    feature4Body: '게재된 사진은 모두 라이선스를 확인했으며 출처를 명시하고 있습니다.',
+    galleryHeading: '대표 스팟 소개',
+    closingHeading: '자, 지도를 열고 성지순례를 떠나볼까요',
+    footerCredit: '사진 제공: Wikimedia Commons(자세한 출처는 각 사진의 크레딧 참조)',
+    privacyLink: '개인정보처리방침',
+    guidesHeading: '작품별 가이드'
+  },
+  th: {
+    pageTitle: 'ตามรอยอนิเมะ | Anime Pilgrimage Japan',
+    heroTitle: 'ก้าวเข้าสู่โลกของอนิเมะอย่างแท้จริง',
+    heroCta: 'ดูแผนที่',
+    navConcept: 'แนวคิด',
+    navFeatures: 'จุดเด่น',
+    navGallery: 'สถานที่แนะนำ',
+    navGuides: 'คู่มือ',
+    conceptText: 'ทิวทัศน์ที่ปรากฏในอนิเมะนั้นมีอยู่จริงที่ไหนสักแห่งในญี่ปุ่น เชื่อมโยงแฟนๆ ทั่วโลกไปยังสถานที่จริงเบื้องหลังเรื่องราวเหล่านั้น',
+    featuresHeading: 'จุดเด่นของแอป',
+    feature1Title: 'ค้นหาบนแผนที่จริง',
+    feature1Body: 'ทุกสถานที่ถูกปักหมุดบนแผนที่จริง ไม่ใช่ภาพประกอบ',
+    feature2Title: 'ค้นหาด้วยชื่อผลงาน',
+    feature2Body: 'ค้นหาชื่อผลงานเพื่อไปยังสถานที่ทั้งหมดของเรื่องนั้นได้ทันที',
+    feature3Title: 'รองรับหลายภาษา',
+    feature3Body: 'รองรับภาษาอังกฤษ จีนตัวเต็ม เกาหลี ไทย และฝรั่งเศส',
+    feature4Title: 'ภาพถ่ายที่น่าเชื่อถือพร้อมแหล่งที่มา',
+    feature4Body: 'ภาพถ่ายทุกภาพผ่านการตรวจสอบลิขสิทธิ์และระบุแหล่งที่มาอย่างชัดเจน',
+    galleryHeading: 'ตัวอย่างสถานที่แนะนำ',
+    closingHeading: 'มาเปิดแผนที่แล้วออกเดินทางตามรอยกันเถอะ',
+    footerCredit: 'ภาพถ่ายจาก Wikimedia Commons (ดูรายละเอียดแหล่งที่มาของแต่ละภาพด้านบน)',
+    privacyLink: 'นโยบายความเป็นส่วนตัว',
+    guidesHeading: 'คู่มือแยกตามผลงาน'
+  },
+  fr: {
+    pageTitle: 'Pèlerinage Anime | Anime Pilgrimage Japan',
+    heroTitle: "Marchez au cœur de l'univers de l'anime.",
+    heroCta: 'Explorer la carte',
+    navConcept: 'Concept',
+    navFeatures: 'Points forts',
+    navGallery: 'Lieux',
+    navGuides: 'Guides',
+    conceptText: "Le décor que vous avez vu dans un anime existe vraiment, quelque part au Japon. Nous relions les fans du monde entier à ces lieux authentiques.",
+    featuresHeading: 'Ce qui nous distingue',
+    feature1Title: 'Explorez sur une vraie carte',
+    feature1Body: "Chaque lieu est localisé sur une carte réelle, pas une illustration.",
+    feature2Title: 'Recherchez par titre',
+    feature2Body: "Recherchez le titre d'un anime pour accéder directement à ses lieux.",
+    feature3Title: 'Plusieurs langues',
+    feature3Body: 'Disponible en anglais, chinois traditionnel, coréen, thaï et français.',
+    feature4Title: 'Photos vérifiées et créditées',
+    feature4Body: "Chaque photo est vérifiée sur le plan des droits d'auteur et dûment créditée.",
+    galleryHeading: 'Quelques lieux emblématiques',
+    closingHeading: 'Ouvrez la carte et commencez votre pèlerinage',
+    footerCredit: 'Photos via Wikimedia Commons (voir les crédits de chaque photo ci-dessus).',
+    privacyLink: 'Politique de confidentialité',
+    guidesHeading: 'Guides par anime'
+  }
+};
+
+// Anime titles for the nav dropdown / footer guide links. Kept separate from
+// I18N since these are proper-noun anime titles, not generic UI chrome text
+// (same pattern as GALLERY_SPOTS' per-language name/anime fields above).
+const GUIDE_LABELS = {
+  chihiro: { ja: '千と千尋の神隠し', en: 'Spirited Away', 'zh-TW': '神隱少女', ko: '센과 치히로의 행방불명', th: 'มิติวิญญาณมหัศจรรย์', fr: 'Le Voyage de Chihiro' },
+  girlspanzer: { ja: 'ガールズ&パンツァー', en: 'Girls und Panzer', 'zh-TW': '少女與戰車', ko: '걸즈 앤 판처', th: 'สาวปิ๊งรถถัง', fr: 'Girls und Panzer' },
+  conan: { ja: '名探偵コナン', en: 'Detective Conan', 'zh-TW': '名偵探柯南', ko: '명탐정 코난', th: 'ยอดนักสืบจิ๋วโคนัน', fr: 'Détective Conan' },
+  kiminonaha: { ja: '君の名は。', en: 'Your Name', 'zh-TW': '你的名字。', ko: '너의 이름은.', th: 'ชื่อของเธอ', fr: 'Your Name' },
+  kimetsu: { ja: '鬼滅の刃', en: 'Demon Slayer', 'zh-TW': '鬼滅之刃', ko: '귀멸의 칼날', th: 'ดาบพิฆาตอสูร', fr: 'Demon Slayer' },
+  yurucamp: { ja: 'ゆるキャン△', en: 'Laid-Back Camp', 'zh-TW': '搖曳露營△', ko: '유루캠프△', th: 'แคมป์อบอุ่นใจ', fr: 'Laid-Back Camp' },
+};
+
+let currentLang = 'ja';
+
+function applyLanguage(lang) {
+  currentLang = lang;
+  document.documentElement.lang = lang;
+  document.title = I18N[lang].pageTitle;
+  buildGallery();
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    if (I18N[lang][key] !== undefined) {
+      el.innerHTML = I18N[lang][key];
+    } else {
+      console.warn('missing i18n key:', key, lang);
+    }
+  });
+  document.querySelectorAll('[data-guide]').forEach(el => {
+    const labels = GUIDE_LABELS[el.dataset.guide];
+    if (labels) el.textContent = labels[lang] || labels.en;
+  });
+  document.getElementById('lang-select').value = lang;
+}
+
+document.getElementById('lang-select').addEventListener('change', (e) => {
+  applyLanguage(e.target.value);
+});
+
+// This site targets overseas visitors, so the default language is detected
+// from the browser rather than always starting in Japanese. Falls back to
+// English (rather than Japanese) for any language this site doesn't support.
+function detectBrowserLang() {
+  const supported = ['ja', 'en', 'zh-TW', 'ko', 'th', 'fr'];
+  const browserLangs = navigator.languages || [navigator.language || 'en'];
+  for (const bl of browserLangs) {
+    const lower = bl.toLowerCase();
+    const exact = supported.find(s => s.toLowerCase() === lower);
+    if (exact) return exact;
+    const base = lower.split('-')[0];
+    if (base === 'zh') return 'zh-TW';
+    const baseMatch = supported.find(s => s.toLowerCase() === base);
+    if (baseMatch) return baseMatch;
+  }
+  return 'en';
+}
+
+const guidesToggle = document.getElementById('nav-guides-toggle');
+const guidesDropdown = document.getElementById('guides-dropdown');
+guidesToggle.addEventListener('click', (e) => {
+  e.stopPropagation();
+  const isOpen = guidesDropdown.classList.toggle('open');
+  guidesToggle.setAttribute('aria-expanded', String(isOpen));
+});
+document.addEventListener('click', (e) => {
+  if (guidesDropdown.classList.contains('open') && !guidesDropdown.contains(e.target) && e.target !== guidesToggle) {
+    guidesDropdown.classList.remove('open');
+    guidesToggle.setAttribute('aria-expanded', 'false');
+  }
+});
+
+applyLanguage(detectBrowserLang());
+setInterval(advanceHeroSlide, 5000);
+</script>
+
 </body>
 </html>
