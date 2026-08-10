@@ -84,8 +84,45 @@ function langBlockHtml(data, lang) {
   </div>`;
 }
 
+// Structured data (schema.org) so search engines can understand this page
+// as a list of tourist attractions, not just a generic article — this is
+// what enables rich results (map pins / list snippets) in Google Search,
+// separate from the OGP/Twitter tags above (which only affect social-share
+// link previews). Reuses the same spot data already on the page rather
+// than maintaining a second copy.
+function structuredDataJson(data) {
+  const pageUrl = `https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/${data.slug}.html`;
+  const itemList = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: data.titleEn,
+    description: data.metaDescEn,
+    itemListElement: data.spots.map((s, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'TouristAttraction',
+        name: s.name_en,
+        description: s.desc_en,
+        ...(s.photo ? { image: s.photo.url } : {}),
+        geo: { '@type': 'GeoCoordinates', latitude: s.lat, longitude: s.lng },
+      },
+    })),
+  };
+  const breadcrumb = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://aopro0306-boop.github.io/anime-pilgrimage/prototype/homepage.html' },
+      { '@type': 'ListItem', position: 2, name: data.titleEn, item: pageUrl },
+    ],
+  };
+  return [JSON.stringify(itemList), JSON.stringify(breadcrumb)];
+}
+
 function generateGuidePage(data) {
   const ogImage = data.spots.find(s => s.photo) ? data.spots.find(s => s.photo).photo.url : '';
+  const pageUrl = `https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/${data.slug}.html`;
   return `<!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -93,9 +130,10 @@ function generateGuidePage(data) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${escapeHtml(data.titleJa)} | Anime Pilgrimage Japan</title>
 <meta name="description" content="${escapeHtml(data.metaDescEn)}">
+<link rel="canonical" href="${pageUrl}">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Anime Pilgrimage Japan">
-<meta property="og:url" content="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/${data.slug}.html">
+<meta property="og:url" content="${pageUrl}">
 <meta property="og:title" content="${escapeHtml(data.titleEn)} | Anime Pilgrimage Japan">
 <meta property="og:description" content="${escapeHtml(data.metaDescEn)}">
 <meta property="og:image" content="${ogImage}">
@@ -103,6 +141,7 @@ function generateGuidePage(data) {
 <meta name="twitter:title" content="${escapeHtml(data.titleEn)} | Anime Pilgrimage Japan">
 <meta name="twitter:description" content="${escapeHtml(data.metaDescEn)}">
 <meta name="twitter:image" content="${ogImage}">
+${structuredDataJson(data).map(json => `<script type="application/ld+json">\n${json}\n</script>`).join('\n')}
 <!-- Google AdSense site-verification code -->
 <meta name="google-adsense-account" content="ca-pub-8374504931423627">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8374504931423627" crossorigin="anonymous"></script>
