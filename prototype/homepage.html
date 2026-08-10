@@ -141,12 +141,12 @@
           <span data-i18n="navGuides">ガイド</span>
         </button>
         <div class="nav-dropdown" id="guides-dropdown">
-          <a href="guides/gifu.html">Gifu</a>
-          <a href="guides/kumamoto.html">Kumamoto</a>
-          <a href="guides/ibaraki.html">Ibaraki</a>
-          <a href="guides/kiminonaha.html">Your Name</a>
-          <a href="guides/kimetsu.html">Demon Slayer</a>
-          <a href="guides/yurucamp.html">Laid-Back Camp</a>
+          <a href="guides/chihiro.html" data-guide="chihiro">Spirited Away</a>
+          <a href="guides/girlspanzer.html" data-guide="girlspanzer">Girls und Panzer</a>
+          <a href="guides/conan.html" data-guide="conan">Detective Conan</a>
+          <a href="guides/kiminonaha.html" data-guide="kiminonaha">Your Name</a>
+          <a href="guides/kimetsu.html" data-guide="kimetsu">Demon Slayer</a>
+          <a href="guides/yurucamp.html" data-guide="yurucamp">Laid-Back Camp</a>
         </div>
       </div>
       <a class="nav-item" href="map-leaflet.html">
@@ -211,14 +211,14 @@
 </section>
 
 <div id="guide-links">
-  <p data-i18n="guidesHeading">エリア・作品別ガイド</p>
+  <p data-i18n="guidesHeading">作品別ガイド</p>
   <ul>
-    <li><a href="guides/gifu.html">Gifu</a></li>
-    <li><a href="guides/kumamoto.html">Kumamoto</a></li>
-    <li><a href="guides/ibaraki.html">Ibaraki</a></li>
-    <li><a href="guides/kiminonaha.html">Your Name</a></li>
-    <li><a href="guides/kimetsu.html">Demon Slayer</a></li>
-    <li><a href="guides/yurucamp.html">Laid-Back Camp</a></li>
+    <li><a href="guides/chihiro.html" data-guide="chihiro">Spirited Away</a></li>
+    <li><a href="guides/girlspanzer.html" data-guide="girlspanzer">Girls und Panzer</a></li>
+    <li><a href="guides/conan.html" data-guide="conan">Detective Conan</a></li>
+    <li><a href="guides/kiminonaha.html" data-guide="kiminonaha">Your Name</a></li>
+    <li><a href="guides/kimetsu.html" data-guide="kimetsu">Demon Slayer</a></li>
+    <li><a href="guides/yurucamp.html" data-guide="yurucamp">Laid-Back Camp</a></li>
   </ul>
 </div>
 
@@ -390,7 +390,7 @@ const I18N = {
     closingHeading: 'さあ、地図を開いて聖地を巡ろう',
     footerCredit: '写真提供: Wikimedia Commons（詳細は各写真のクレジット参照）',
     privacyLink: 'プライバシーポリシー',
-    guidesHeading: 'エリア・作品別ガイド'
+    guidesHeading: '作品別ガイド'
   },
   en: {
     pageTitle: 'Anime Pilgrimage Japan',
@@ -414,7 +414,7 @@ const I18N = {
     closingHeading: 'Ready to Start Your Pilgrimage?',
     footerCredit: 'Photos via Wikimedia Commons (see individual credits above).',
     privacyLink: 'Privacy Policy',
-    guidesHeading: 'Guides by Area & Anime'
+    guidesHeading: 'Guides by Anime'
   },
   'zh-TW': {
     pageTitle: '動畫聖地巡禮 | Anime Pilgrimage Japan',
@@ -438,7 +438,7 @@ const I18N = {
     closingHeading: '現在就打開地圖，展開你的聖地巡禮吧',
     footerCredit: '照片提供：Wikimedia Commons（詳細出處請見各張照片說明）',
     privacyLink: '隱私權政策',
-    guidesHeading: '依地區與作品分類的指南'
+    guidesHeading: '依作品分類的指南'
   },
   ko: {
     pageTitle: '애니메이션 성지순례 | Anime Pilgrimage Japan',
@@ -462,7 +462,7 @@ const I18N = {
     closingHeading: '자, 지도를 열고 성지순례를 떠나볼까요',
     footerCredit: '사진 제공: Wikimedia Commons(자세한 출처는 각 사진의 크레딧 참조)',
     privacyLink: '개인정보처리방침',
-    guidesHeading: '지역·작품별 가이드'
+    guidesHeading: '작품별 가이드'
   },
   th: {
     pageTitle: 'ตามรอยอนิเมะ | Anime Pilgrimage Japan',
@@ -486,7 +486,7 @@ const I18N = {
     closingHeading: 'มาเปิดแผนที่แล้วออกเดินทางตามรอยกันเถอะ',
     footerCredit: 'ภาพถ่ายจาก Wikimedia Commons (ดูรายละเอียดแหล่งที่มาของแต่ละภาพด้านบน)',
     privacyLink: 'นโยบายความเป็นส่วนตัว',
-    guidesHeading: 'คู่มือแยกตามพื้นที่และผลงาน'
+    guidesHeading: 'คู่มือแยกตามผลงาน'
   },
   fr: {
     pageTitle: 'Pèlerinage Anime | Anime Pilgrimage Japan',
@@ -510,8 +510,20 @@ const I18N = {
     closingHeading: 'Ouvrez la carte et commencez votre pèlerinage',
     footerCredit: 'Photos via Wikimedia Commons (voir les crédits de chaque photo ci-dessus).',
     privacyLink: 'Politique de confidentialité',
-    guidesHeading: 'Guides par région et par anime'
+    guidesHeading: 'Guides par anime'
   }
+};
+
+// Anime titles for the nav dropdown / footer guide links. Kept separate from
+// I18N since these are proper-noun anime titles, not generic UI chrome text
+// (same pattern as GALLERY_SPOTS' per-language name/anime fields above).
+const GUIDE_LABELS = {
+  chihiro: { ja: '千と千尋の神隠し', en: 'Spirited Away', 'zh-TW': '神隱少女', ko: '센과 치히로의 행방불명', th: 'มิติวิญญาณมหัศจรรย์', fr: 'Le Voyage de Chihiro' },
+  girlspanzer: { ja: 'ガールズ&パンツァー', en: 'Girls und Panzer', 'zh-TW': '少女與戰車', ko: '걸즈 앤 판처', th: 'สาวปิ๊งรถถัง', fr: 'Girls und Panzer' },
+  conan: { ja: '名探偵コナン', en: 'Detective Conan', 'zh-TW': '名偵探柯南', ko: '명탐정 코난', th: 'ยอดนักสืบจิ๋วโคนัน', fr: 'Détective Conan' },
+  kiminonaha: { ja: '君の名は。', en: 'Your Name', 'zh-TW': '你的名字。', ko: '너의 이름은.', th: 'ชื่อของเธอ', fr: 'Your Name' },
+  kimetsu: { ja: '鬼滅の刃', en: 'Demon Slayer', 'zh-TW': '鬼滅之刃', ko: '귀멸의 칼날', th: 'ดาบพิฆาตอสูร', fr: 'Demon Slayer' },
+  yurucamp: { ja: 'ゆるキャン△', en: 'Laid-Back Camp', 'zh-TW': '搖曳露營△', ko: '유루캠프△', th: 'แคมป์อบอุ่นใจ', fr: 'Laid-Back Camp' },
 };
 
 let currentLang = 'ja';
@@ -528,6 +540,10 @@ function applyLanguage(lang) {
     } else {
       console.warn('missing i18n key:', key, lang);
     }
+  });
+  document.querySelectorAll('[data-guide]').forEach(el => {
+    const labels = GUIDE_LABELS[el.dataset.guide];
+    if (labels) el.textContent = labels[lang] || labels.en;
   });
   document.getElementById('lang-select').value = lang;
 }
