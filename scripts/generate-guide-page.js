@@ -13,12 +13,12 @@ const LANGS = ['ja', 'en', 'zh-TW', 'ko', 'th', 'fr'];
 // scope decision for SPOT_NAMES_EN/SPOT_DESCRIPTIONS_EN in map-leaflet.html —
 // zh-TW/ko/th/fr fall back to the English content, not machine-translated.
 const UI_I18N = {
-  ja: { langName: '日本語', tipsTitle: '巡礼のヒント', ctaButton: 'マップで全スポットを見る', googleMapsLink: 'Googleマップで見る', interactiveMapLink: 'インタラクティブマップで見る', backToHome: '← ホームに戻る', privacyPolicy: 'プライバシーポリシー', mapNav: 'マップ' },
-  en: { langName: 'English', tipsTitle: 'Pilgrimage Tips', ctaButton: 'See all spots on the map', googleMapsLink: 'View on Google Maps', interactiveMapLink: 'View on interactive map', backToHome: '← Back to Home', privacyPolicy: 'Privacy Policy', mapNav: 'Map' },
-  'zh-TW': { langName: '繁體中文', tipsTitle: '巡禮小提示', ctaButton: '在地圖上查看所有地點', googleMapsLink: '在Google地圖上查看', interactiveMapLink: '在互動地圖上查看', backToHome: '← 回到首頁', privacyPolicy: '隱私權政策', mapNav: '地圖' },
-  ko: { langName: '한국어', tipsTitle: '순례 팁', ctaButton: '지도에서 모든 스팟 보기', googleMapsLink: 'Google 지도에서 보기', interactiveMapLink: '인터랙티브 지도에서 보기', backToHome: '← 홈으로 돌아가기', privacyPolicy: '개인정보처리방침', mapNav: '지도' },
-  th: { langName: 'ไทย', tipsTitle: 'เคล็ดลับการตามรอย', ctaButton: 'ดูทุกสถานที่บนแผนที่', googleMapsLink: 'ดูใน Google Maps', interactiveMapLink: 'ดูบนแผนที่แบบอินเทอร์แอกทีฟ', backToHome: '← กลับหน้าแรก', privacyPolicy: 'นโยบายความเป็นส่วนตัว', mapNav: 'แผนที่' },
-  fr: { langName: 'Français', tipsTitle: 'Conseils pour le pèlerinage', ctaButton: 'Voir tous les lieux sur la carte', googleMapsLink: 'Voir sur Google Maps', interactiveMapLink: 'Voir sur la carte interactive', backToHome: "← Retour à l'accueil", privacyPolicy: 'Politique de confidentialité', mapNav: 'Carte' },
+  ja: { langName: '日本語', tipsTitle: '巡礼のヒント', durationTitle: '所要時間の目安', ctaButton: 'マップで全スポットを見る', googleMapsLink: 'Googleマップで見る', interactiveMapLink: 'インタラクティブマップで見る', backToHome: '← ホームに戻る', privacyPolicy: 'プライバシーポリシー', mapNav: 'マップ' },
+  en: { langName: 'English', tipsTitle: 'Pilgrimage Tips', durationTitle: 'Estimated Time Needed', ctaButton: 'See all spots on the map', googleMapsLink: 'View on Google Maps', interactiveMapLink: 'View on interactive map', backToHome: '← Back to Home', privacyPolicy: 'Privacy Policy', mapNav: 'Map' },
+  'zh-TW': { langName: '繁體中文', tipsTitle: '巡禮小提示', durationTitle: '所需時間參考', ctaButton: '在地圖上查看所有地點', googleMapsLink: '在Google地圖上查看', interactiveMapLink: '在互動地圖上查看', backToHome: '← 回到首頁', privacyPolicy: '隱私權政策', mapNav: '地圖' },
+  ko: { langName: '한국어', tipsTitle: '순례 팁', durationTitle: '예상 소요 시간', ctaButton: '지도에서 모든 스팟 보기', googleMapsLink: 'Google 지도에서 보기', interactiveMapLink: '인터랙티브 지도에서 보기', backToHome: '← 홈으로 돌아가기', privacyPolicy: '개인정보처리방침', mapNav: '지도' },
+  th: { langName: 'ไทย', tipsTitle: 'เคล็ดลับการตามรอย', durationTitle: 'ระยะเวลาโดยประมาณ', ctaButton: 'ดูทุกสถานที่บนแผนที่', googleMapsLink: 'ดูใน Google Maps', interactiveMapLink: 'ดูบนแผนที่แบบอินเทอร์แอกทีฟ', backToHome: '← กลับหน้าแรก', privacyPolicy: 'นโยบายความเป็นส่วนตัว', mapNav: 'แผนที่' },
+  fr: { langName: 'Français', tipsTitle: 'Conseils pour le pèlerinage', durationTitle: 'Durée estimée', ctaButton: 'Voir tous les lieux sur la carte', googleMapsLink: 'Voir sur Google Maps', interactiveMapLink: 'Voir sur la carte interactive', backToHome: "← Retour à l'accueil", privacyPolicy: 'Politique de confidentialité', mapNav: 'Carte' },
 };
 
 // JA/EN-authored content falls back to English for the other 4 UI languages.
@@ -51,6 +51,7 @@ function langBlockHtml(data, lang) {
   const title = cl === 'ja' ? data.titleJa : data.titleEn;
   const intro = cl === 'ja' ? data.introJa : data.introEn;
   const tips = cl === 'ja' ? data.tipsJa : data.tipsEn;
+  const duration = cl === 'ja' ? data.durationJa : data.durationEn;
   const heroHtml = heroPhoto ? `
     <img id="hero-photo" src="${heroPhoto.url}" alt="${escapeHtml(title)}">
     <p class="photo-credit">Photo: <a href="${heroPhoto.sourceUrl}" target="_blank" rel="noopener">${heroPhoto.author}</a> / ${heroPhoto.license} (Wikimedia Commons)</p>` : '';
@@ -61,6 +62,11 @@ function langBlockHtml(data, lang) {
     <p class="intro">${escapeHtml(intro)}</p>
 
     <div class="spot-grid">${cards}
+    </div>
+
+    <div class="tips duration">
+      <h2>${escapeHtml(UI_I18N[lang].durationTitle)}</h2>
+      <p>${escapeHtml(duration)}</p>
     </div>
 
     <div class="tips">
@@ -109,6 +115,8 @@ function generateGuidePage(data) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css">
 <style>
   :root{
     --color-bg: #F6F0E4;
@@ -147,9 +155,12 @@ function generateGuidePage(data) {
   .spot-card .spot-desc{font-size:13px; margin:0 0 10px 0;}
   .spot-links{display:flex; flex-direction:column; gap:4px; font-size:12px;}
 
+  #mini-map{height:260px; border-radius:16px; margin:0 0 24px 0; position:relative; z-index:1; overflow:hidden;}
+
   .tips{background:rgba(29,53,80,0.05); border-radius:14px; padding:20px 24px; margin:0 0 32px 0;}
   .tips h2{margin:0 0 8px 0; font-size:16px; color:var(--color-navy);}
   .tips p{margin:0; font-size:14px;}
+  .tips.duration{background:rgba(181,103,58,0.08); margin-bottom:12px;}
 
   .cta-row{text-align:center; margin:0 0 40px 0;}
   .cta-button{display:inline-block; background:var(--color-terracotta); color:#F6F0E4; text-decoration:none; padding:14px 36px; border-radius:999px; font-weight:700; font-size:15px;}
@@ -173,11 +184,31 @@ function generateGuidePage(data) {
   </div>
 </header>
 
-<main>${LANGS.map(l => langBlockHtml(data, l)).join('\n')}
+<main>
+<div id="mini-map"></div>
+${LANGS.map(l => langBlockHtml(data, l)).join('\n')}
 </main>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js"></script>
+<script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet/leaflet-maplibre-gl.js"></script>
 <script>
 const UI_I18N = ${JSON.stringify(UI_I18N)};
+
+// Small locator map for this page's spots (English names only — this
+// preview map isn't re-translated on language switch, unlike the full
+// interactive map at ../map-leaflet.html which this links out to).
+(function initMiniMap() {
+  const spots = ${JSON.stringify(data.spots.map(s => ({ name: s.name_en, lat: s.lat, lng: s.lng })))};
+  const miniMap = L.map('mini-map', { zoomControl: true, scrollWheelZoom: false, minZoom: 1, maxZoom: 19 });
+  L.maplibreGL({ style: 'https://tiles.openfreemap.org/styles/liberty' }).addTo(miniMap);
+  const markers = spots.map(s => L.circleMarker([s.lat, s.lng], { radius: 8, color: '#fff', weight: 2, fillColor: '#B5673A', fillOpacity: 1 }).bindPopup(s.name).addTo(miniMap));
+  if (markers.length === 1) {
+    miniMap.setView([spots[0].lat, spots[0].lng], 13);
+  } else {
+    miniMap.fitBounds(L.featureGroup(markers).getBounds(), { padding: [24, 24] });
+  }
+})();
 
 function applyLang(lang) {
   document.documentElement.lang = lang;
