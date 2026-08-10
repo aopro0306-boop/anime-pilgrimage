@@ -6,9 +6,30 @@ function mapsUrl(query) {
   return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(query);
 }
 
+const LANGS = ['ja', 'en', 'zh-TW', 'ko', 'th', 'fr'];
+
+// UI chrome text only (nav/buttons/labels). Page content (title/intro/tips)
+// and spot names/descriptions are JA/EN-authored only, matching the existing
+// scope decision for SPOT_NAMES_EN/SPOT_DESCRIPTIONS_EN in map-leaflet.html —
+// zh-TW/ko/th/fr fall back to the English content, not machine-translated.
+const UI_I18N = {
+  ja: { langName: '日本語', tipsTitle: '巡礼のヒント', ctaButton: 'マップで全スポットを見る', googleMapsLink: 'Googleマップで見る', interactiveMapLink: 'インタラクティブマップで見る', backToHome: '← ホームに戻る', privacyPolicy: 'プライバシーポリシー', mapNav: 'マップ' },
+  en: { langName: 'English', tipsTitle: 'Pilgrimage Tips', ctaButton: 'See all spots on the map', googleMapsLink: 'View on Google Maps', interactiveMapLink: 'View on interactive map', backToHome: '← Back to Home', privacyPolicy: 'Privacy Policy', mapNav: 'Map' },
+  'zh-TW': { langName: '繁體中文', tipsTitle: '巡禮小提示', ctaButton: '在地圖上查看所有地點', googleMapsLink: '在Google地圖上查看', interactiveMapLink: '在互動地圖上查看', backToHome: '← 回到首頁', privacyPolicy: '隱私權政策', mapNav: '地圖' },
+  ko: { langName: '한국어', tipsTitle: '순례 팁', ctaButton: '지도에서 모든 스팟 보기', googleMapsLink: 'Google 지도에서 보기', interactiveMapLink: '인터랙티브 지도에서 보기', backToHome: '← 홈으로 돌아가기', privacyPolicy: '개인정보처리방침', mapNav: '지도' },
+  th: { langName: 'ไทย', tipsTitle: 'เคล็ดลับการตามรอย', ctaButton: 'ดูทุกสถานที่บนแผนที่', googleMapsLink: 'ดูใน Google Maps', interactiveMapLink: 'ดูบนแผนที่แบบอินเทอร์แอกทีฟ', backToHome: '← กลับหน้าแรก', privacyPolicy: 'นโยบายความเป็นส่วนตัว', mapNav: 'แผนที่' },
+  fr: { langName: 'Français', tipsTitle: 'Conseils pour le pèlerinage', ctaButton: 'Voir tous les lieux sur la carte', googleMapsLink: 'Voir sur Google Maps', interactiveMapLink: 'Voir sur la carte interactive', backToHome: "← Retour à l'accueil", privacyPolicy: 'Politique de confidentialité', mapNav: 'Carte' },
+};
+
+// JA/EN-authored content falls back to English for the other 4 UI languages.
+function contentLang(lang) {
+  return lang === 'ja' ? 'ja' : 'en';
+}
+
 function spotCardHtml(spot, lang) {
-  const name = lang === 'ja' ? spot.name_ja : spot.name_en;
-  const desc = lang === 'ja' ? spot.desc_ja : spot.desc_en;
+  const cl = contentLang(lang);
+  const name = cl === 'ja' ? spot.name_ja : spot.name_en;
+  const desc = cl === 'ja' ? spot.desc_ja : spot.desc_en;
   const photoHtml = spot.photo ? `
         <img class="spot-photo" src="${spot.photo.url}" alt="${escapeHtml(name)}" loading="lazy">
         <p class="photo-credit">Photo: <a href="${spot.photo.sourceUrl}" target="_blank" rel="noopener">${spot.photo.author}</a> / ${spot.photo.license} (Wikimedia Commons)</p>` : '';
@@ -18,24 +39,24 @@ function spotCardHtml(spot, lang) {
         <h3>${escapeHtml(name)}</h3>
         <p class="spot-desc">${escapeHtml(desc)}</p>
         <div class="spot-links">
-          <a href="${mapsUrl(spot.mapsQuery)}" target="_blank" rel="noopener">${lang === 'ja' ? 'Googleマップで見る' : 'View on Google Maps'}</a>
-          <a href="../map-leaflet.html">${lang === 'ja' ? 'インタラクティブマップで見る' : 'View on interactive map'}</a>
+          <a href="${mapsUrl(spot.mapsQuery)}" target="_blank" rel="noopener">${UI_I18N[lang].googleMapsLink}</a>
+          <a href="../map-leaflet.html">${UI_I18N[lang].interactiveMapLink}</a>
         </div>
       </div>`;
 }
 
 function langBlockHtml(data, lang) {
+  const cl = contentLang(lang);
   const heroPhoto = data.spots.find(s => s.photo) ? data.spots.find(s => s.photo).photo : null;
-  const title = lang === 'ja' ? data.titleJa : data.titleEn;
-  const intro = lang === 'ja' ? data.introJa : data.introEn;
-  const tipsTitle = lang === 'ja' ? '巡礼のヒント' : 'Pilgrimage Tips';
-  const tips = lang === 'ja' ? data.tipsJa : data.tipsEn;
+  const title = cl === 'ja' ? data.titleJa : data.titleEn;
+  const intro = cl === 'ja' ? data.introJa : data.introEn;
+  const tips = cl === 'ja' ? data.tipsJa : data.tipsEn;
   const heroHtml = heroPhoto ? `
     <img id="hero-photo" src="${heroPhoto.url}" alt="${escapeHtml(title)}">
     <p class="photo-credit">Photo: <a href="${heroPhoto.sourceUrl}" target="_blank" rel="noopener">${heroPhoto.author}</a> / ${heroPhoto.license} (Wikimedia Commons)</p>` : '';
   const cards = data.spots.map(s => spotCardHtml(s, lang)).join('\n');
   return `
-  <div data-i18n="${lang}" lang="${lang}"${lang === 'en' ? ' hidden' : ''}>
+  <div data-i18n="${lang}" lang="${lang}"${lang === 'ja' ? '' : ' hidden'}>
     <h1 class="heading">${escapeHtml(title)}</h1>${heroHtml}
     <p class="intro">${escapeHtml(intro)}</p>
 
@@ -43,15 +64,15 @@ function langBlockHtml(data, lang) {
     </div>
 
     <div class="tips">
-      <h2>${escapeHtml(tipsTitle)}</h2>
+      <h2>${escapeHtml(UI_I18N[lang].tipsTitle)}</h2>
       <p>${escapeHtml(tips)}</p>
     </div>
 
     <div class="cta-row">
-      <a class="cta-button" href="../map-leaflet.html">${lang === 'ja' ? 'マップで全スポットを見る' : 'See all spots on the map'}</a>
+      <a class="cta-button" href="../map-leaflet.html">${escapeHtml(UI_I18N[lang].ctaButton)}</a>
     </div>
 
-    <p class="footnote"><a href="../homepage.html">${lang === 'ja' ? '← ホームに戻る' : '← Back to Home'}</a> / <a href="../privacy.html">${lang === 'ja' ? 'プライバシーポリシー' : 'Privacy Policy'}</a></p>
+    <p class="footnote"><a href="../homepage.html">${escapeHtml(UI_I18N[lang].backToHome)}</a> / <a href="../privacy.html">${escapeHtml(UI_I18N[lang].privacyPolicy)}</a></p>
   </div>`;
 }
 
@@ -135,6 +156,8 @@ function generateGuidePage(data) {
   .cta-button:hover{transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,0.2);}
 
   .footnote{font-size:13px; opacity:0.7;}
+
+  #lang-select{background:transparent; border:1px solid var(--color-navy); color:var(--color-navy); border-radius:999px; padding:6px 14px; font-size:13px; font-family:inherit; cursor:pointer;}
 </style>
 </head>
 <body>
@@ -142,38 +165,52 @@ function generateGuidePage(data) {
   <div class="header-inner">
     <a class="logo" href="../homepage.html">Anime Pilgrimage Japan</a>
     <div class="header-actions">
-      <a class="map-link" href="../map-leaflet.html">Map</a>
-      <button id="lang-toggle" type="button" aria-label="Language">English</button>
+      <a class="map-link" href="../map-leaflet.html">${escapeHtml(UI_I18N.ja.mapNav)}</a>
+      <select id="lang-select" aria-label="Language">
+        ${LANGS.map(l => `<option value="${l}">${escapeHtml(UI_I18N[l].langName)}</option>`).join('\n        ')}
+      </select>
     </div>
   </div>
 </header>
 
-<main>${langBlockHtml(data, 'ja')}
-${langBlockHtml(data, 'en')}
+<main>${LANGS.map(l => langBlockHtml(data, l)).join('\n')}
 </main>
 
 <script>
+const UI_I18N = ${JSON.stringify(UI_I18N)};
+
 function applyLang(lang) {
   document.documentElement.lang = lang;
   document.querySelectorAll('main > div[data-i18n]').forEach(el => {
     el.hidden = el.dataset.i18n !== lang;
   });
-  document.title = lang === 'ja'
-    ? '${escapeHtml(data.titleJa)} | Anime Pilgrimage Japan'
-    : '${escapeHtml(data.titleEn)} | Anime Pilgrimage Japan';
-  document.getElementById('lang-toggle').textContent = lang === 'ja' ? 'English' : '日本語';
+  const contentLang = lang === 'ja' ? 'ja' : 'en';
+  document.title = (contentLang === 'ja' ? '${escapeHtml(data.titleJa)}' : '${escapeHtml(data.titleEn)}') + ' | Anime Pilgrimage Japan';
+  document.getElementById('lang-select').value = lang;
+  document.querySelector('.map-link').textContent = UI_I18N[lang].mapNav;
 }
 
 let currentLang = 'ja';
-document.getElementById('lang-toggle').addEventListener('click', () => {
-  currentLang = currentLang === 'ja' ? 'en' : 'ja';
+document.getElementById('lang-select').addEventListener('change', (e) => {
+  currentLang = e.target.value;
   applyLang(currentLang);
 });
 
+// This site targets overseas visitors, so the default language is detected
+// from the browser rather than always starting in Japanese. Falls back to
+// English (rather than Japanese) for any language this site doesn't support,
+// matching prototype/map-leaflet.html's detectBrowserLang().
 function detectBrowserLang() {
+  const supported = ['ja', 'en', 'zh-TW', 'ko', 'th', 'fr'];
   const browserLangs = navigator.languages || [navigator.language || 'en'];
   for (const bl of browserLangs) {
-    if (bl.toLowerCase().startsWith('ja')) return 'ja';
+    const lower = bl.toLowerCase();
+    const exact = supported.find(s => s.toLowerCase() === lower);
+    if (exact) return exact;
+    const base = lower.split('-')[0];
+    if (base === 'zh') return 'zh-TW';
+    const baseMatch = supported.find(s => s.toLowerCase() === base);
+    if (baseMatch) return baseMatch;
   }
   return 'en';
 }

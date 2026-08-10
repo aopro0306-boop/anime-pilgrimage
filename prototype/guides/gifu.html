@@ -76,6 +76,8 @@
   .cta-button:hover{transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,0.2);}
 
   .footnote{font-size:13px; opacity:0.7;}
+
+  #lang-select{background:transparent; border:1px solid var(--color-navy); color:var(--color-navy); border-radius:999px; padding:6px 14px; font-size:13px; font-family:inherit; cursor:pointer;}
 </style>
 </head>
 <body>
@@ -83,8 +85,15 @@
   <div class="header-inner">
     <a class="logo" href="../homepage.html">Anime Pilgrimage Japan</a>
     <div class="header-actions">
-      <a class="map-link" href="../map-leaflet.html">Map</a>
-      <button id="lang-toggle" type="button" aria-label="Language">English</button>
+      <a class="map-link" href="../map-leaflet.html">マップ</a>
+      <select id="lang-select" aria-label="Language">
+        <option value="ja">日本語</option>
+        <option value="en">English</option>
+        <option value="zh-TW">繁體中文</option>
+        <option value="ko">한국어</option>
+        <option value="th">ไทย</option>
+        <option value="fr">Français</option>
+      </select>
     </div>
   </div>
 </header>
@@ -297,30 +306,459 @@
 
     <p class="footnote"><a href="../homepage.html">← Back to Home</a> / <a href="../privacy.html">Privacy Policy</a></p>
   </div>
+
+  <div data-i18n="zh-TW" lang="zh-TW" hidden>
+    <h1 class="heading">Gifu Prefecture Anime Pilgrimage Guide</h1>
+    <img id="hero-photo" src="https://upload.wikimedia.org/wikipedia/commons/c/c5/View_of_Hida-Furukawa_Station.JPG" alt="Gifu Prefecture Anime Pilgrimage Guide">
+    <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:View_of_Hida-Furukawa_Station.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+    <p class="intro">Gifu Prefecture, especially the historic town of Hida-Takayama, draws anime fans from around the world as the real-world model for Itomori, the fictional town in the film &quot;Your Name.&quot; The same streets of Takayama also appear in the TV anime &quot;Hyouka,&quot; so visitors can trace the scenery of two beloved series in a single trip, from old merchant houses to bridges over the Miya River.</p>
+
+    <div class="spot-grid">
+      <div class="spot-card">
+        <img class="spot-photo" src="https://upload.wikimedia.org/wikipedia/commons/c/c5/View_of_Hida-Furukawa_Station.JPG" alt="Hida-Furukawa Station" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:View_of_Hida-Furukawa_Station.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">君の名は。</span>
+        <h3>Hida-Furukawa Station</h3>
+        <p class="spot-desc">The gateway station to Hida City that inspired the fictional town of Itomori.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E9%A3%9B%E9%A8%A8%E5%8F%A4%E5%B7%9D%E9%A7%85" target="_blank" rel="noopener">在Google地圖上查看</a>
+          <a href="../map-leaflet.html">在互動地圖上查看</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://upload.wikimedia.org/wikipedia/commons/8/85/Keta_wakamiya.jpg" alt="Keta Wakamiya Shrine" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Keta_wakamiya.jpg" target="_blank" rel="noopener">Opqr</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">君の名は。</span>
+        <h3>Keta Wakamiya Shrine</h3>
+        <p class="spot-desc">The shrine that inspired the torii gate and grounds of Miyamizu Shrine in the film.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E6%B0%97%E5%A4%9A%E8%8B%A5%E5%AE%AE%E7%A5%9E%E7%A4%BE" target="_blank" rel="noopener">在Google地圖上查看</a>
+          <a href="../map-leaflet.html">在互動地圖上查看</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Takayama-Hie-jinja_torii.jpeg?width=400" alt="Hida Sanno-gu Hie Shrine" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Takayama-Hie-jinja_torii.jpeg" target="_blank" rel="noopener">nnh</a> / Public Domain (Wikimedia Commons)</p>
+        <span class="spot-tag">君の名は。</span>
+        <h3>Hida Sanno-gu Hie Shrine</h3>
+        <p class="spot-desc">An ancient shrine in Takayama said to be linked to the staircase and torii scenes in the film.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E9%A3%9B%E9%A8%A8%E5%B1%B1%E7%8E%8B%E5%AE%AE%20%E6%97%A5%E6%9E%9D%E7%A5%9E%E7%A4%BE" target="_blank" rel="noopener">在Google地圖上查看</a>
+          <a href="../map-leaflet.html">在互動地圖上查看</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Hida_City_Library_exterior_ac_(1).jpg?width=400" alt="Hida City Library" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Hida_City_Library_exterior_ac_(1).jpg" target="_blank" rel="noopener">Asturio Cantabrio</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">君の名は。</span>
+        <h3>Hida City Library</h3>
+        <p class="spot-desc">The library that inspired the scene where Taki and friends research the town of Itomori.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E9%A3%9B%E9%A8%A8%E5%B8%82%E5%9B%B3%E6%9B%B8%E9%A4%A8" target="_blank" rel="noopener">在Google地圖上查看</a>
+          <a href="../map-leaflet.html">在互動地圖上查看</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Kajibashi_Bridge_from_west_side_20150123.JPG?width=400" alt="Kajibashi Bridge" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Kajibashi_Bridge_from_west_side_20150123.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>Kajibashi Bridge</h3>
+        <p class="spot-desc">A bridge over the Miya River in Takayama that also appears in the opening sequence.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E9%8D%9B%E5%86%B6%E6%A9%8B%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">在Google地圖上查看</a>
+          <a href="../map-leaflet.html">在互動地圖上查看</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Yayoibashi_Bridge_from_Miyamaebashi_Bridge_in_front_of_Sakurayama_Hachiman_Shrine.JPG?width=400" alt="Yayoibashi Bridge" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Yayoibashi_Bridge_from_Miyamaebashi_Bridge_in_front_of_Sakurayama_Hachiman_Shrine.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>Yayoibashi Bridge</h3>
+        <p class="spot-desc">A bridge within Takayama City that appears in the series.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E5%BC%A5%E7%94%9F%E6%A9%8B%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">在Google地圖上查看</a>
+          <a href="../map-leaflet.html">在互動地圖上查看</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Hommachi_Street_Shopping_Area_in_Takayama_at_dusk_20150123.JPG?width=400" alt="Honmachi Street, by the Beckoning Cat Statue" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Hommachi_Street_Shopping_Area_in_Takayama_at_dusk_20150123.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>Honmachi Street, by the Beckoning Cat Statue</h3>
+        <p class="spot-desc">A shopping street with a beckoning-cat statue that appears at the start of the opening sequence.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E6%9C%AC%E7%94%BA%E9%80%9A%E3%82%8A%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">在Google地圖上查看</a>
+          <a href="../map-leaflet.html">在互動地圖上查看</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="tips">
+      <h2>巡禮小提示</h2>
+      <p>The Hida-Takayama area is compact and easy to explore on foot, bicycle, or public transit. Shrines and shopping streets are also part of daily local life, so please visit quietly and respectfully.</p>
+    </div>
+
+    <div class="cta-row">
+      <a class="cta-button" href="../map-leaflet.html">在地圖上查看所有地點</a>
+    </div>
+
+    <p class="footnote"><a href="../homepage.html">← 回到首頁</a> / <a href="../privacy.html">隱私權政策</a></p>
+  </div>
+
+  <div data-i18n="ko" lang="ko" hidden>
+    <h1 class="heading">Gifu Prefecture Anime Pilgrimage Guide</h1>
+    <img id="hero-photo" src="https://upload.wikimedia.org/wikipedia/commons/c/c5/View_of_Hida-Furukawa_Station.JPG" alt="Gifu Prefecture Anime Pilgrimage Guide">
+    <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:View_of_Hida-Furukawa_Station.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+    <p class="intro">Gifu Prefecture, especially the historic town of Hida-Takayama, draws anime fans from around the world as the real-world model for Itomori, the fictional town in the film &quot;Your Name.&quot; The same streets of Takayama also appear in the TV anime &quot;Hyouka,&quot; so visitors can trace the scenery of two beloved series in a single trip, from old merchant houses to bridges over the Miya River.</p>
+
+    <div class="spot-grid">
+      <div class="spot-card">
+        <img class="spot-photo" src="https://upload.wikimedia.org/wikipedia/commons/c/c5/View_of_Hida-Furukawa_Station.JPG" alt="Hida-Furukawa Station" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:View_of_Hida-Furukawa_Station.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">君の名は。</span>
+        <h3>Hida-Furukawa Station</h3>
+        <p class="spot-desc">The gateway station to Hida City that inspired the fictional town of Itomori.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E9%A3%9B%E9%A8%A8%E5%8F%A4%E5%B7%9D%E9%A7%85" target="_blank" rel="noopener">Google 지도에서 보기</a>
+          <a href="../map-leaflet.html">인터랙티브 지도에서 보기</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://upload.wikimedia.org/wikipedia/commons/8/85/Keta_wakamiya.jpg" alt="Keta Wakamiya Shrine" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Keta_wakamiya.jpg" target="_blank" rel="noopener">Opqr</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">君の名は。</span>
+        <h3>Keta Wakamiya Shrine</h3>
+        <p class="spot-desc">The shrine that inspired the torii gate and grounds of Miyamizu Shrine in the film.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E6%B0%97%E5%A4%9A%E8%8B%A5%E5%AE%AE%E7%A5%9E%E7%A4%BE" target="_blank" rel="noopener">Google 지도에서 보기</a>
+          <a href="../map-leaflet.html">인터랙티브 지도에서 보기</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Takayama-Hie-jinja_torii.jpeg?width=400" alt="Hida Sanno-gu Hie Shrine" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Takayama-Hie-jinja_torii.jpeg" target="_blank" rel="noopener">nnh</a> / Public Domain (Wikimedia Commons)</p>
+        <span class="spot-tag">君の名は。</span>
+        <h3>Hida Sanno-gu Hie Shrine</h3>
+        <p class="spot-desc">An ancient shrine in Takayama said to be linked to the staircase and torii scenes in the film.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E9%A3%9B%E9%A8%A8%E5%B1%B1%E7%8E%8B%E5%AE%AE%20%E6%97%A5%E6%9E%9D%E7%A5%9E%E7%A4%BE" target="_blank" rel="noopener">Google 지도에서 보기</a>
+          <a href="../map-leaflet.html">인터랙티브 지도에서 보기</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Hida_City_Library_exterior_ac_(1).jpg?width=400" alt="Hida City Library" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Hida_City_Library_exterior_ac_(1).jpg" target="_blank" rel="noopener">Asturio Cantabrio</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">君の名は。</span>
+        <h3>Hida City Library</h3>
+        <p class="spot-desc">The library that inspired the scene where Taki and friends research the town of Itomori.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E9%A3%9B%E9%A8%A8%E5%B8%82%E5%9B%B3%E6%9B%B8%E9%A4%A8" target="_blank" rel="noopener">Google 지도에서 보기</a>
+          <a href="../map-leaflet.html">인터랙티브 지도에서 보기</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Kajibashi_Bridge_from_west_side_20150123.JPG?width=400" alt="Kajibashi Bridge" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Kajibashi_Bridge_from_west_side_20150123.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>Kajibashi Bridge</h3>
+        <p class="spot-desc">A bridge over the Miya River in Takayama that also appears in the opening sequence.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E9%8D%9B%E5%86%B6%E6%A9%8B%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">Google 지도에서 보기</a>
+          <a href="../map-leaflet.html">인터랙티브 지도에서 보기</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Yayoibashi_Bridge_from_Miyamaebashi_Bridge_in_front_of_Sakurayama_Hachiman_Shrine.JPG?width=400" alt="Yayoibashi Bridge" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Yayoibashi_Bridge_from_Miyamaebashi_Bridge_in_front_of_Sakurayama_Hachiman_Shrine.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>Yayoibashi Bridge</h3>
+        <p class="spot-desc">A bridge within Takayama City that appears in the series.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E5%BC%A5%E7%94%9F%E6%A9%8B%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">Google 지도에서 보기</a>
+          <a href="../map-leaflet.html">인터랙티브 지도에서 보기</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Hommachi_Street_Shopping_Area_in_Takayama_at_dusk_20150123.JPG?width=400" alt="Honmachi Street, by the Beckoning Cat Statue" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Hommachi_Street_Shopping_Area_in_Takayama_at_dusk_20150123.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>Honmachi Street, by the Beckoning Cat Statue</h3>
+        <p class="spot-desc">A shopping street with a beckoning-cat statue that appears at the start of the opening sequence.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E6%9C%AC%E7%94%BA%E9%80%9A%E3%82%8A%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">Google 지도에서 보기</a>
+          <a href="../map-leaflet.html">인터랙티브 지도에서 보기</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="tips">
+      <h2>순례 팁</h2>
+      <p>The Hida-Takayama area is compact and easy to explore on foot, bicycle, or public transit. Shrines and shopping streets are also part of daily local life, so please visit quietly and respectfully.</p>
+    </div>
+
+    <div class="cta-row">
+      <a class="cta-button" href="../map-leaflet.html">지도에서 모든 스팟 보기</a>
+    </div>
+
+    <p class="footnote"><a href="../homepage.html">← 홈으로 돌아가기</a> / <a href="../privacy.html">개인정보처리방침</a></p>
+  </div>
+
+  <div data-i18n="th" lang="th" hidden>
+    <h1 class="heading">Gifu Prefecture Anime Pilgrimage Guide</h1>
+    <img id="hero-photo" src="https://upload.wikimedia.org/wikipedia/commons/c/c5/View_of_Hida-Furukawa_Station.JPG" alt="Gifu Prefecture Anime Pilgrimage Guide">
+    <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:View_of_Hida-Furukawa_Station.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+    <p class="intro">Gifu Prefecture, especially the historic town of Hida-Takayama, draws anime fans from around the world as the real-world model for Itomori, the fictional town in the film &quot;Your Name.&quot; The same streets of Takayama also appear in the TV anime &quot;Hyouka,&quot; so visitors can trace the scenery of two beloved series in a single trip, from old merchant houses to bridges over the Miya River.</p>
+
+    <div class="spot-grid">
+      <div class="spot-card">
+        <img class="spot-photo" src="https://upload.wikimedia.org/wikipedia/commons/c/c5/View_of_Hida-Furukawa_Station.JPG" alt="Hida-Furukawa Station" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:View_of_Hida-Furukawa_Station.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">君の名は。</span>
+        <h3>Hida-Furukawa Station</h3>
+        <p class="spot-desc">The gateway station to Hida City that inspired the fictional town of Itomori.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E9%A3%9B%E9%A8%A8%E5%8F%A4%E5%B7%9D%E9%A7%85" target="_blank" rel="noopener">ดูใน Google Maps</a>
+          <a href="../map-leaflet.html">ดูบนแผนที่แบบอินเทอร์แอกทีฟ</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://upload.wikimedia.org/wikipedia/commons/8/85/Keta_wakamiya.jpg" alt="Keta Wakamiya Shrine" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Keta_wakamiya.jpg" target="_blank" rel="noopener">Opqr</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">君の名は。</span>
+        <h3>Keta Wakamiya Shrine</h3>
+        <p class="spot-desc">The shrine that inspired the torii gate and grounds of Miyamizu Shrine in the film.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E6%B0%97%E5%A4%9A%E8%8B%A5%E5%AE%AE%E7%A5%9E%E7%A4%BE" target="_blank" rel="noopener">ดูใน Google Maps</a>
+          <a href="../map-leaflet.html">ดูบนแผนที่แบบอินเทอร์แอกทีฟ</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Takayama-Hie-jinja_torii.jpeg?width=400" alt="Hida Sanno-gu Hie Shrine" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Takayama-Hie-jinja_torii.jpeg" target="_blank" rel="noopener">nnh</a> / Public Domain (Wikimedia Commons)</p>
+        <span class="spot-tag">君の名は。</span>
+        <h3>Hida Sanno-gu Hie Shrine</h3>
+        <p class="spot-desc">An ancient shrine in Takayama said to be linked to the staircase and torii scenes in the film.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E9%A3%9B%E9%A8%A8%E5%B1%B1%E7%8E%8B%E5%AE%AE%20%E6%97%A5%E6%9E%9D%E7%A5%9E%E7%A4%BE" target="_blank" rel="noopener">ดูใน Google Maps</a>
+          <a href="../map-leaflet.html">ดูบนแผนที่แบบอินเทอร์แอกทีฟ</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Hida_City_Library_exterior_ac_(1).jpg?width=400" alt="Hida City Library" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Hida_City_Library_exterior_ac_(1).jpg" target="_blank" rel="noopener">Asturio Cantabrio</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">君の名は。</span>
+        <h3>Hida City Library</h3>
+        <p class="spot-desc">The library that inspired the scene where Taki and friends research the town of Itomori.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E9%A3%9B%E9%A8%A8%E5%B8%82%E5%9B%B3%E6%9B%B8%E9%A4%A8" target="_blank" rel="noopener">ดูใน Google Maps</a>
+          <a href="../map-leaflet.html">ดูบนแผนที่แบบอินเทอร์แอกทีฟ</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Kajibashi_Bridge_from_west_side_20150123.JPG?width=400" alt="Kajibashi Bridge" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Kajibashi_Bridge_from_west_side_20150123.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>Kajibashi Bridge</h3>
+        <p class="spot-desc">A bridge over the Miya River in Takayama that also appears in the opening sequence.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E9%8D%9B%E5%86%B6%E6%A9%8B%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">ดูใน Google Maps</a>
+          <a href="../map-leaflet.html">ดูบนแผนที่แบบอินเทอร์แอกทีฟ</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Yayoibashi_Bridge_from_Miyamaebashi_Bridge_in_front_of_Sakurayama_Hachiman_Shrine.JPG?width=400" alt="Yayoibashi Bridge" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Yayoibashi_Bridge_from_Miyamaebashi_Bridge_in_front_of_Sakurayama_Hachiman_Shrine.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>Yayoibashi Bridge</h3>
+        <p class="spot-desc">A bridge within Takayama City that appears in the series.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E5%BC%A5%E7%94%9F%E6%A9%8B%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">ดูใน Google Maps</a>
+          <a href="../map-leaflet.html">ดูบนแผนที่แบบอินเทอร์แอกทีฟ</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Hommachi_Street_Shopping_Area_in_Takayama_at_dusk_20150123.JPG?width=400" alt="Honmachi Street, by the Beckoning Cat Statue" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Hommachi_Street_Shopping_Area_in_Takayama_at_dusk_20150123.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>Honmachi Street, by the Beckoning Cat Statue</h3>
+        <p class="spot-desc">A shopping street with a beckoning-cat statue that appears at the start of the opening sequence.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E6%9C%AC%E7%94%BA%E9%80%9A%E3%82%8A%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">ดูใน Google Maps</a>
+          <a href="../map-leaflet.html">ดูบนแผนที่แบบอินเทอร์แอกทีฟ</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="tips">
+      <h2>เคล็ดลับการตามรอย</h2>
+      <p>The Hida-Takayama area is compact and easy to explore on foot, bicycle, or public transit. Shrines and shopping streets are also part of daily local life, so please visit quietly and respectfully.</p>
+    </div>
+
+    <div class="cta-row">
+      <a class="cta-button" href="../map-leaflet.html">ดูทุกสถานที่บนแผนที่</a>
+    </div>
+
+    <p class="footnote"><a href="../homepage.html">← กลับหน้าแรก</a> / <a href="../privacy.html">นโยบายความเป็นส่วนตัว</a></p>
+  </div>
+
+  <div data-i18n="fr" lang="fr" hidden>
+    <h1 class="heading">Gifu Prefecture Anime Pilgrimage Guide</h1>
+    <img id="hero-photo" src="https://upload.wikimedia.org/wikipedia/commons/c/c5/View_of_Hida-Furukawa_Station.JPG" alt="Gifu Prefecture Anime Pilgrimage Guide">
+    <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:View_of_Hida-Furukawa_Station.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+    <p class="intro">Gifu Prefecture, especially the historic town of Hida-Takayama, draws anime fans from around the world as the real-world model for Itomori, the fictional town in the film &quot;Your Name.&quot; The same streets of Takayama also appear in the TV anime &quot;Hyouka,&quot; so visitors can trace the scenery of two beloved series in a single trip, from old merchant houses to bridges over the Miya River.</p>
+
+    <div class="spot-grid">
+      <div class="spot-card">
+        <img class="spot-photo" src="https://upload.wikimedia.org/wikipedia/commons/c/c5/View_of_Hida-Furukawa_Station.JPG" alt="Hida-Furukawa Station" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:View_of_Hida-Furukawa_Station.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">君の名は。</span>
+        <h3>Hida-Furukawa Station</h3>
+        <p class="spot-desc">The gateway station to Hida City that inspired the fictional town of Itomori.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E9%A3%9B%E9%A8%A8%E5%8F%A4%E5%B7%9D%E9%A7%85" target="_blank" rel="noopener">Voir sur Google Maps</a>
+          <a href="../map-leaflet.html">Voir sur la carte interactive</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://upload.wikimedia.org/wikipedia/commons/8/85/Keta_wakamiya.jpg" alt="Keta Wakamiya Shrine" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Keta_wakamiya.jpg" target="_blank" rel="noopener">Opqr</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">君の名は。</span>
+        <h3>Keta Wakamiya Shrine</h3>
+        <p class="spot-desc">The shrine that inspired the torii gate and grounds of Miyamizu Shrine in the film.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E6%B0%97%E5%A4%9A%E8%8B%A5%E5%AE%AE%E7%A5%9E%E7%A4%BE" target="_blank" rel="noopener">Voir sur Google Maps</a>
+          <a href="../map-leaflet.html">Voir sur la carte interactive</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Takayama-Hie-jinja_torii.jpeg?width=400" alt="Hida Sanno-gu Hie Shrine" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Takayama-Hie-jinja_torii.jpeg" target="_blank" rel="noopener">nnh</a> / Public Domain (Wikimedia Commons)</p>
+        <span class="spot-tag">君の名は。</span>
+        <h3>Hida Sanno-gu Hie Shrine</h3>
+        <p class="spot-desc">An ancient shrine in Takayama said to be linked to the staircase and torii scenes in the film.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E9%A3%9B%E9%A8%A8%E5%B1%B1%E7%8E%8B%E5%AE%AE%20%E6%97%A5%E6%9E%9D%E7%A5%9E%E7%A4%BE" target="_blank" rel="noopener">Voir sur Google Maps</a>
+          <a href="../map-leaflet.html">Voir sur la carte interactive</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Hida_City_Library_exterior_ac_(1).jpg?width=400" alt="Hida City Library" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Hida_City_Library_exterior_ac_(1).jpg" target="_blank" rel="noopener">Asturio Cantabrio</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">君の名は。</span>
+        <h3>Hida City Library</h3>
+        <p class="spot-desc">The library that inspired the scene where Taki and friends research the town of Itomori.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E9%A3%9B%E9%A8%A8%E5%B8%82%E5%9B%B3%E6%9B%B8%E9%A4%A8" target="_blank" rel="noopener">Voir sur Google Maps</a>
+          <a href="../map-leaflet.html">Voir sur la carte interactive</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Kajibashi_Bridge_from_west_side_20150123.JPG?width=400" alt="Kajibashi Bridge" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Kajibashi_Bridge_from_west_side_20150123.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>Kajibashi Bridge</h3>
+        <p class="spot-desc">A bridge over the Miya River in Takayama that also appears in the opening sequence.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E9%8D%9B%E5%86%B6%E6%A9%8B%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">Voir sur Google Maps</a>
+          <a href="../map-leaflet.html">Voir sur la carte interactive</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Yayoibashi_Bridge_from_Miyamaebashi_Bridge_in_front_of_Sakurayama_Hachiman_Shrine.JPG?width=400" alt="Yayoibashi Bridge" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Yayoibashi_Bridge_from_Miyamaebashi_Bridge_in_front_of_Sakurayama_Hachiman_Shrine.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>Yayoibashi Bridge</h3>
+        <p class="spot-desc">A bridge within Takayama City that appears in the series.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E5%BC%A5%E7%94%9F%E6%A9%8B%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">Voir sur Google Maps</a>
+          <a href="../map-leaflet.html">Voir sur la carte interactive</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Hommachi_Street_Shopping_Area_in_Takayama_at_dusk_20150123.JPG?width=400" alt="Honmachi Street, by the Beckoning Cat Statue" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Hommachi_Street_Shopping_Area_in_Takayama_at_dusk_20150123.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>Honmachi Street, by the Beckoning Cat Statue</h3>
+        <p class="spot-desc">A shopping street with a beckoning-cat statue that appears at the start of the opening sequence.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E6%9C%AC%E7%94%BA%E9%80%9A%E3%82%8A%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">Voir sur Google Maps</a>
+          <a href="../map-leaflet.html">Voir sur la carte interactive</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="tips">
+      <h2>Conseils pour le pèlerinage</h2>
+      <p>The Hida-Takayama area is compact and easy to explore on foot, bicycle, or public transit. Shrines and shopping streets are also part of daily local life, so please visit quietly and respectfully.</p>
+    </div>
+
+    <div class="cta-row">
+      <a class="cta-button" href="../map-leaflet.html">Voir tous les lieux sur la carte</a>
+    </div>
+
+    <p class="footnote"><a href="../homepage.html">← Retour à l'accueil</a> / <a href="../privacy.html">Politique de confidentialité</a></p>
+  </div>
 </main>
 
 <script>
+const UI_I18N = {"ja":{"langName":"日本語","tipsTitle":"巡礼のヒント","ctaButton":"マップで全スポットを見る","googleMapsLink":"Googleマップで見る","interactiveMapLink":"インタラクティブマップで見る","backToHome":"← ホームに戻る","privacyPolicy":"プライバシーポリシー","mapNav":"マップ"},"en":{"langName":"English","tipsTitle":"Pilgrimage Tips","ctaButton":"See all spots on the map","googleMapsLink":"View on Google Maps","interactiveMapLink":"View on interactive map","backToHome":"← Back to Home","privacyPolicy":"Privacy Policy","mapNav":"Map"},"zh-TW":{"langName":"繁體中文","tipsTitle":"巡禮小提示","ctaButton":"在地圖上查看所有地點","googleMapsLink":"在Google地圖上查看","interactiveMapLink":"在互動地圖上查看","backToHome":"← 回到首頁","privacyPolicy":"隱私權政策","mapNav":"地圖"},"ko":{"langName":"한국어","tipsTitle":"순례 팁","ctaButton":"지도에서 모든 스팟 보기","googleMapsLink":"Google 지도에서 보기","interactiveMapLink":"인터랙티브 지도에서 보기","backToHome":"← 홈으로 돌아가기","privacyPolicy":"개인정보처리방침","mapNav":"지도"},"th":{"langName":"ไทย","tipsTitle":"เคล็ดลับการตามรอย","ctaButton":"ดูทุกสถานที่บนแผนที่","googleMapsLink":"ดูใน Google Maps","interactiveMapLink":"ดูบนแผนที่แบบอินเทอร์แอกทีฟ","backToHome":"← กลับหน้าแรก","privacyPolicy":"นโยบายความเป็นส่วนตัว","mapNav":"แผนที่"},"fr":{"langName":"Français","tipsTitle":"Conseils pour le pèlerinage","ctaButton":"Voir tous les lieux sur la carte","googleMapsLink":"Voir sur Google Maps","interactiveMapLink":"Voir sur la carte interactive","backToHome":"← Retour à l'accueil","privacyPolicy":"Politique de confidentialité","mapNav":"Carte"}};
+
 function applyLang(lang) {
   document.documentElement.lang = lang;
   document.querySelectorAll('main > div[data-i18n]').forEach(el => {
     el.hidden = el.dataset.i18n !== lang;
   });
-  document.title = lang === 'ja'
-    ? '岐阜県のアニメ聖地巡礼完全ガイド | Anime Pilgrimage Japan'
-    : 'Gifu Prefecture Anime Pilgrimage Guide | Anime Pilgrimage Japan';
-  document.getElementById('lang-toggle').textContent = lang === 'ja' ? 'English' : '日本語';
+  const contentLang = lang === 'ja' ? 'ja' : 'en';
+  document.title = (contentLang === 'ja' ? '岐阜県のアニメ聖地巡礼完全ガイド' : 'Gifu Prefecture Anime Pilgrimage Guide') + ' | Anime Pilgrimage Japan';
+  document.getElementById('lang-select').value = lang;
+  document.querySelector('.map-link').textContent = UI_I18N[lang].mapNav;
 }
 
 let currentLang = 'ja';
-document.getElementById('lang-toggle').addEventListener('click', () => {
-  currentLang = currentLang === 'ja' ? 'en' : 'ja';
+document.getElementById('lang-select').addEventListener('change', (e) => {
+  currentLang = e.target.value;
   applyLang(currentLang);
 });
 
+// This site targets overseas visitors, so the default language is detected
+// from the browser rather than always starting in Japanese. Falls back to
+// English (rather than Japanese) for any language this site doesn't support,
+// matching prototype/map-leaflet.html's detectBrowserLang().
 function detectBrowserLang() {
+  const supported = ['ja', 'en', 'zh-TW', 'ko', 'th', 'fr'];
   const browserLangs = navigator.languages || [navigator.language || 'en'];
   for (const bl of browserLangs) {
-    if (bl.toLowerCase().startsWith('ja')) return 'ja';
+    const lower = bl.toLowerCase();
+    const exact = supported.find(s => s.toLowerCase() === lower);
+    if (exact) return exact;
+    const base = lower.split('-')[0];
+    if (base === 'zh') return 'zh-TW';
+    const baseMatch = supported.find(s => s.toLowerCase() === base);
+    if (baseMatch) return baseMatch;
   }
   return 'en';
 }
