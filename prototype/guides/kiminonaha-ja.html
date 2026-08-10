@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>『君の名は。』聖地巡礼完全ガイド | Anime Pilgrimage Japan</title>
 <meta name="description" content="A photo guide to the real-world locations in Hida City, Gifu and Tokyo that inspired the film &quot;Your Name.&quot;">
-<link rel="canonical" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/kiminonaha.html">
+<link rel="canonical" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/kiminonaha-ja.html">
 <link rel="alternate" hreflang="ja" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/kiminonaha-ja.html">
 <link rel="alternate" hreflang="x-default" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/kiminonaha.html">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Anime Pilgrimage Japan">
-<meta property="og:url" content="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/kiminonaha.html">
+<meta property="og:url" content="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/kiminonaha-ja.html">
 <meta property="og:title" content="&quot;Your Name&quot; Anime Pilgrimage Guide | Anime Pilgrimage Japan">
 <meta property="og:description" content="A photo guide to the real-world locations in Hida City, Gifu and Tokyo that inspired the film &quot;Your Name.&quot;">
 <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/c/c5/View_of_Hida-Furukawa_Station.JPG">
@@ -22,7 +22,7 @@
 {"@context":"https://schema.org","@type":"ItemList","name":"\"Your Name\" Anime Pilgrimage Guide","description":"A photo guide to the real-world locations in Hida City, Gifu and Tokyo that inspired the film \"Your Name.\"","itemListElement":[{"@type":"ListItem","position":1,"item":{"@type":"TouristAttraction","name":"Hida-Furukawa Station","description":"The gateway station to Hida City that inspired the fictional town of Itomori.","image":"https://upload.wikimedia.org/wikipedia/commons/c/c5/View_of_Hida-Furukawa_Station.JPG","geo":{"@type":"GeoCoordinates","latitude":36.2368,"longitude":137.1897}}},{"@type":"ListItem","position":2,"item":{"@type":"TouristAttraction","name":"Keta Wakamiya Shrine","description":"The shrine that inspired the torii gate and grounds of Miyamizu Shrine in the film.","image":"https://upload.wikimedia.org/wikipedia/commons/8/85/Keta_wakamiya.jpg","geo":{"@type":"GeoCoordinates","latitude":36.2395,"longitude":137.1978}}},{"@type":"ListItem","position":3,"item":{"@type":"TouristAttraction","name":"Hida Sanno-gu Hie Shrine","description":"An ancient shrine in Takayama said to be linked to the staircase and torii scenes in the film.","image":"https://commons.wikimedia.org/wiki/Special:FilePath/Takayama-Hie-jinja_torii.jpeg?width=400","geo":{"@type":"GeoCoordinates","latitude":36.1332,"longitude":137.2614}}},{"@type":"ListItem","position":4,"item":{"@type":"TouristAttraction","name":"Hida City Library","description":"The library that inspired the scene where Taki and friends research the town of Itomori.","image":"https://commons.wikimedia.org/wiki/Special:FilePath/Hida_City_Library_exterior_ac_(1).jpg?width=400","geo":{"@type":"GeoCoordinates","latitude":36.238,"longitude":137.1861}}},{"@type":"ListItem","position":5,"item":{"@type":"TouristAttraction","name":"Shinanomachi Pedestrian Bridge","description":"The setting for the memorable scene where Taki tries to call Mitsuha.","geo":{"@type":"GeoCoordinates","latitude":35.6801,"longitude":139.7205}}},{"@type":"ListItem","position":6,"item":{"@type":"TouristAttraction","name":"KITTE Marunouchi Rooftop Garden","description":"A rooftop garden overlooking Tokyo Station, which appears in a scene where Taki and friends visit.","image":"https://commons.wikimedia.org/wiki/Special:FilePath/JP-Tower-01.jpg?width=400","geo":{"@type":"GeoCoordinates","latitude":35.6797,"longitude":139.7646}}}]}
 </script>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://aopro0306-boop.github.io/anime-pilgrimage/prototype/homepage.html"},{"@type":"ListItem","position":2,"name":"\"Your Name\" Anime Pilgrimage Guide","item":"https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/kiminonaha.html"}]}
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://aopro0306-boop.github.io/anime-pilgrimage/prototype/homepage.html"},{"@type":"ListItem","position":2,"name":"\"Your Name\" Anime Pilgrimage Guide","item":"https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/kiminonaha-ja.html"}]}
 </script>
 <!-- Google AdSense site-verification code -->
 <meta name="google-adsense-account" content="ca-pub-8374504931423627">
@@ -763,27 +763,11 @@ document.getElementById('lang-select').addEventListener('change', (e) => {
 });
 
 
-// This site targets overseas visitors, so the default language is detected
-// from the browser rather than always starting in Japanese. Falls back to
-// English (rather than Japanese) for any language this site doesn't support,
-// matching prototype/map-leaflet.html's detectBrowserLang().
-function detectBrowserLang() {
-  const supported = ['ja', 'en', 'zh-TW', 'ko', 'th', 'fr'];
-  const browserLangs = navigator.languages || [navigator.language || 'en'];
-  for (const bl of browserLangs) {
-    const lower = bl.toLowerCase();
-    const exact = supported.find(s => s.toLowerCase() === lower);
-    if (exact) return exact;
-    const base = lower.split('-')[0];
-    if (base === 'zh') return 'zh-TW';
-    const baseMatch = supported.find(s => s.toLowerCase() === base);
-    if (baseMatch) return baseMatch;
-  }
-  return 'en';
-}
-
-currentLang = detectBrowserLang();
-applyLang(currentLang);
+// This URL is the dedicated Japanese entry point (see hreflang tags above)
+// — always render Japanese regardless of browser language, unlike
+// kiminonaha.html's auto-detection below.
+currentLang = 'ja';
+applyLang('ja');
 </script>
 </body>
 </html>

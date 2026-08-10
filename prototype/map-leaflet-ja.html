@@ -5,15 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>アニメ聖地巡礼マップ（実地図版）</title>
 <meta name="description" content="Search and explore real-world anime pilgrimage locations across Japan on an interactive map, in 6 languages.">
-<link rel="canonical" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/map-leaflet.html">
+<link rel="canonical" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/map-leaflet-ja.html">
 <link rel="alternate" hreflang="ja" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/map-leaflet-ja.html">
 <link rel="alternate" hreflang="x-default" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/map-leaflet.html">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","name":"アニメ聖地巡礼マップ","url":"https://aopro0306-boop.github.io/anime-pilgrimage/prototype/map-leaflet.html","description":"Search and explore real-world anime pilgrimage locations across Japan on an interactive map, in 6 languages.","isPartOf":{"@type":"WebSite","name":"Anime Pilgrimage Japan","url":"https://aopro0306-boop.github.io/anime-pilgrimage/prototype/homepage.html"}}
+{"@context":"https://schema.org","@type":"WebPage","name":"アニメ聖地巡礼マップ","url":"https://aopro0306-boop.github.io/anime-pilgrimage/prototype/map-leaflet-ja.html","description":"Search and explore real-world anime pilgrimage locations across Japan on an interactive map, in 6 languages.","isPartOf":{"@type":"WebSite","name":"Anime Pilgrimage Japan","url":"https://aopro0306-boop.github.io/anime-pilgrimage/prototype/homepage.html"}}
 </script>
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Anime Pilgrimage Japan">
-<meta property="og:url" content="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/map-leaflet.html">
+<meta property="og:url" content="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/map-leaflet-ja.html">
 <meta property="og:title" content="アニメ聖地巡礼マップ | Anime Pilgrimage Japan">
 <meta property="og:description" content="Search and explore real-world anime pilgrimage locations across Japan on an interactive map, in 6 languages.">
 <meta property="og:image" content="https://commons.wikimedia.org/wiki/Special:FilePath/Kamakura_koukou_mae_Fumikiri.jpg?width=1200">
@@ -946,7 +946,7 @@ function detectBrowserLang() {
   return 'ja';
 }
 
-applyLanguage(detectBrowserLang());
+applyLanguage('ja'); // this URL is the dedicated Japanese entry point (see hreflang tags) — always render Japanese regardless of browser language, unlike map-leaflet.html's auto-detection
 </script>
 </body>
 </html>

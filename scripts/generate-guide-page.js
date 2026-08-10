@@ -84,14 +84,19 @@ function langBlockHtml(data, lang) {
   </div>`;
 }
 
+function pageUrlFor(slug, variant) {
+  return variant === 'ja'
+    ? `https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/${slug}-ja.html`
+    : `https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/${slug}.html`;
+}
+
 // Structured data (schema.org) so search engines can understand this page
 // as a list of tourist attractions, not just a generic article — this is
 // what enables rich results (map pins / list snippets) in Google Search,
 // separate from the OGP/Twitter tags above (which only affect social-share
 // link previews). Reuses the same spot data already on the page rather
 // than maintaining a second copy.
-function structuredDataJson(data) {
-  const pageUrl = `https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/${data.slug}.html`;
+function structuredDataJson(data, pageUrl) {
   const itemList = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
@@ -120,9 +125,11 @@ function structuredDataJson(data) {
   return [JSON.stringify(itemList), JSON.stringify(breadcrumb)];
 }
 
-function generateGuidePage(data) {
+function generateGuidePage(data, variant = 'main') {
   const ogImage = data.spots.find(s => s.photo) ? data.spots.find(s => s.photo).photo.url : '';
-  const pageUrl = `https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/${data.slug}.html`;
+  const pageUrl = pageUrlFor(data.slug, variant);
+  const mainUrl = pageUrlFor(data.slug, 'main');
+  const jaUrl = pageUrlFor(data.slug, 'ja');
   return `<!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -131,6 +138,8 @@ function generateGuidePage(data) {
 <title>${escapeHtml(data.titleJa)} | Anime Pilgrimage Japan</title>
 <meta name="description" content="${escapeHtml(data.metaDescEn)}">
 <link rel="canonical" href="${pageUrl}">
+<link rel="alternate" hreflang="ja" href="${jaUrl}">
+<link rel="alternate" hreflang="x-default" href="${mainUrl}">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Anime Pilgrimage Japan">
 <meta property="og:url" content="${pageUrl}">
@@ -141,7 +150,7 @@ function generateGuidePage(data) {
 <meta name="twitter:title" content="${escapeHtml(data.titleEn)} | Anime Pilgrimage Japan">
 <meta name="twitter:description" content="${escapeHtml(data.metaDescEn)}">
 <meta name="twitter:image" content="${ogImage}">
-${structuredDataJson(data).map(json => `<script type="application/ld+json">\n${json}\n</script>`).join('\n')}
+${structuredDataJson(data, pageUrl).map(json => `<script type="application/ld+json">\n${json}\n</script>`).join('\n')}
 <!-- Google AdSense site-verification code -->
 <meta name="google-adsense-account" content="ca-pub-8374504931423627">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8374504931423627" crossorigin="anonymous"></script>
@@ -294,6 +303,12 @@ document.getElementById('lang-select').addEventListener('change', (e) => {
   applyLang(currentLang);
 });
 
+${variant === 'ja' ? `
+// This URL is the dedicated Japanese entry point (see hreflang tags above)
+// — always render Japanese regardless of browser language, unlike
+// ${data.slug}.html's auto-detection below.
+currentLang = 'ja';
+applyLang('ja');` : `
 // This site targets overseas visitors, so the default language is detected
 // from the browser rather than always starting in Japanese. Falls back to
 // English (rather than Japanese) for any language this site doesn't support,
@@ -314,11 +329,15 @@ function detectBrowserLang() {
 }
 
 currentLang = detectBrowserLang();
-applyLang(currentLang);
+applyLang(currentLang);`}
 </script>
 </body>
 </html>
 `;
 }
 
-module.exports = { generateGuidePage };
+function generateGuidePageJa(data) {
+  return generateGuidePage(data, 'ja');
+}
+
+module.exports = { generateGuidePage, generateGuidePageJa };
