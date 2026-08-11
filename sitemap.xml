@@ -131,4 +131,52 @@
     <xhtml:link rel="alternate" hreflang="ja" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/yurucamp-ja.html"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/yurucamp.html"/>
   </url>
+  <url>
+    <loc>https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/summerwars.html</loc>
+    <lastmod>2026-08-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/summerwars-ja.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/summerwars.html"/>
+  </url>
+  <url>
+    <loc>https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/summerwars-ja.html</loc>
+    <lastmod>2026-08-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/summerwars-ja.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/summerwars.html"/>
+  </url>
+  <url>
+    <loc>https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/anohana.html</loc>
+    <lastmod>2026-08-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/anohana-ja.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/anohana.html"/>
+  </url>
+  <url>
+    <loc>https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/anohana-ja.html</loc>
+    <lastmod>2026-08-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/anohana-ja.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/anohana.html"/>
+  </url>
+  <url>
+    <loc>https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/hyouka.html</loc>
+    <lastmod>2026-08-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/hyouka-ja.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/hyouka.html"/>
+  </url>
+  <url>
+    <loc>https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/hyouka-ja.html</loc>
+    <lastmod>2026-08-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/hyouka-ja.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/hyouka.html"/>
+  </url>
 </urlset>

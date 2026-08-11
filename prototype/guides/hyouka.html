@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>『氷菓』聖地巡礼完全ガイド | Anime Pilgrimage Japan</title>
+<meta name="description" content="A photo guide to the &quot;Hyouka&quot; pilgrimage spots in Takayama, Gifu, including the beckoning-cat statue on Honmachi Street and the Kajibashi and Yayoibashi bridges.">
+<link rel="canonical" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/hyouka.html">
+<link rel="alternate" hreflang="ja" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/hyouka-ja.html">
+<link rel="alternate" hreflang="x-default" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/hyouka.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Anime Pilgrimage Japan">
+<meta property="og:url" content="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/hyouka.html">
+<meta property="og:title" content="&quot;Hyouka&quot; Anime Pilgrimage Guide | Anime Pilgrimage Japan">
+<meta property="og:description" content="A photo guide to the &quot;Hyouka&quot; pilgrimage spots in Takayama, Gifu, including the beckoning-cat statue on Honmachi Street and the Kajibashi and Yayoibashi bridges.">
+<meta property="og:image" content="https://commons.wikimedia.org/wiki/Special:FilePath/Kajibashi_Bridge_from_west_side_20150123.JPG?width=400">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="&quot;Hyouka&quot; Anime Pilgrimage Guide | Anime Pilgrimage Japan">
+<meta name="twitter:description" content="A photo guide to the &quot;Hyouka&quot; pilgrimage spots in Takayama, Gifu, including the beckoning-cat statue on Honmachi Street and the Kajibashi and Yayoibashi bridges.">
+<meta name="twitter:image" content="https://commons.wikimedia.org/wiki/Special:FilePath/Kajibashi_Bridge_from_west_side_20150123.JPG?width=400">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"ItemList","name":"\"Hyouka\" Anime Pilgrimage Guide","description":"A photo guide to the \"Hyouka\" pilgrimage spots in Takayama, Gifu, including the beckoning-cat statue on Honmachi Street and the Kajibashi and Yayoibashi bridges.","itemListElement":[{"@type":"ListItem","position":1,"item":{"@type":"TouristAttraction","name":"Kajibashi Bridge","description":"A bridge over the Miya River in Takayama that also appears in the opening sequence.","image":"https://commons.wikimedia.org/wiki/Special:FilePath/Kajibashi_Bridge_from_west_side_20150123.JPG?width=400","geo":{"@type":"GeoCoordinates","latitude":36.1425,"longitude":137.252}}},{"@type":"ListItem","position":2,"item":{"@type":"TouristAttraction","name":"Yayoibashi Bridge","description":"A bridge within Takayama City that appears in the series.","image":"https://commons.wikimedia.org/wiki/Special:FilePath/Yayoibashi_Bridge_from_Miyamaebashi_Bridge_in_front_of_Sakurayama_Hachiman_Shrine.JPG?width=400","geo":{"@type":"GeoCoordinates","latitude":36.144,"longitude":137.251}}},{"@type":"ListItem","position":3,"item":{"@type":"TouristAttraction","name":"Honmachi Street, by the Beckoning Cat Statue","description":"A shopping street with a beckoning-cat statue that appears at the start of the opening sequence.","image":"https://commons.wikimedia.org/wiki/Special:FilePath/Hommachi_Street_Shopping_Area_in_Takayama_at_dusk_20150123.JPG?width=400","geo":{"@type":"GeoCoordinates","latitude":36.141,"longitude":137.253}}}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://aopro0306-boop.github.io/anime-pilgrimage/prototype/homepage.html"},{"@type":"ListItem","position":2,"name":"\"Hyouka\" Anime Pilgrimage Guide","item":"https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/hyouka.html"}]}
+</script>
+<!-- Google AdSense site-verification code -->
+<meta name="google-adsense-account" content="ca-pub-8374504931423627">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8374504931423627" crossorigin="anonymous"></script>
+<!-- Google Analytics (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HQJNYMSM07"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-HQJNYMSM07');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css">
+<style>
+  :root{
+    --color-bg: #F6F0E4;
+    --color-navy: #1D3550;
+    --color-terracotta: #B5673A;
+    --color-text: #2B2621;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{font-family:'Zen Kaku Gothic New', sans-serif; background:var(--color-bg); color:var(--color-text); line-height:1.8;}
+  .heading{font-weight:600; text-wrap:balance;}
+  html[lang="ja"] .heading{font-family:'Shippori Mincho', serif;}
+  html[lang="en"] .heading{font-family:'Fraunces', serif;}
+  a{color:var(--color-navy);}
+
+  #site-header{position:sticky; top:0; z-index:50; background:rgba(246,240,228,0.92); -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); border-bottom:1px solid rgba(29,53,80,0.12);}
+  .header-inner{max-width:760px; margin:0 auto; padding:14px 24px; display:flex; align-items:center; justify-content:space-between;}
+  .logo{font-weight:700; color:var(--color-navy); letter-spacing:0.02em; text-decoration:none;}
+  .header-actions{display:flex; align-items:center; gap:16px;}
+  .map-link{font-size:13px; color:var(--color-navy); text-decoration:none; font-weight:600;}
+  #lang-toggle{background:transparent; border:1px solid var(--color-navy); color:var(--color-navy); border-radius:999px; padding:6px 16px; font-size:13px; font-family:inherit; cursor:pointer;}
+  #lang-toggle:hover{background:var(--color-navy); color:var(--color-bg);}
+
+  main{max-width:760px; margin:0 auto; padding:40px 24px 88px;}
+  h1.heading{font-size:clamp(24px,4vw,34px); margin:0 0 12px 0; color:var(--color-navy);}
+  #hero-photo{width:100%; max-height:360px; object-fit:cover; border-radius:16px; display:block;}
+  .photo-credit{margin:4px 0 0 0; font-size:10px; color:#999;}
+  .photo-credit a{color:#999;}
+  .intro{font-size:16px; margin:16px 0 32px 0;}
+
+  .spot-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:24px; margin:0 0 40px 0;}
+  .spot-card{background:#fff; border-radius:14px; padding:18px; box-shadow:0 4px 14px rgba(29,53,80,0.08);}
+  .spot-card .spot-photo{width:100%; height:150px; object-fit:cover; border-radius:10px; display:block;}
+  .spot-tag{display:inline-block; background:rgba(181,103,58,0.12); color:var(--color-terracotta); font-size:11px; font-weight:700; padding:3px 10px; border-radius:999px; margin-top:10px;}
+  .spot-card h3{margin:8px 0 6px 0; font-size:16px; color:var(--color-navy);}
+  .spot-card .spot-desc{font-size:13px; margin:0 0 10px 0;}
+  .spot-links{display:flex; flex-direction:column; gap:4px; font-size:12px;}
+
+  #mini-map{height:260px; border-radius:16px; margin:0 0 24px 0; position:relative; z-index:1; overflow:hidden;}
+
+  .tips{background:rgba(29,53,80,0.05); border-radius:14px; padding:20px 24px; margin:0 0 32px 0;}
+  .tips h2{margin:0 0 8px 0; font-size:16px; color:var(--color-navy);}
+  .tips p{margin:0; font-size:14px;}
+  .tips.duration{background:rgba(181,103,58,0.08); margin-bottom:12px;}
+
+  .cta-row{text-align:center; margin:0 0 40px 0;}
+  .cta-button{display:inline-block; background:var(--color-terracotta); color:#F6F0E4; text-decoration:none; padding:14px 36px; border-radius:999px; font-weight:700; font-size:15px;}
+  .cta-button:hover{transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,0.2);}
+
+  .footnote{font-size:13px; opacity:0.7;}
+
+  #lang-select{background:transparent; border:1px solid var(--color-navy); color:var(--color-navy); border-radius:999px; padding:6px 14px; font-size:13px; font-family:inherit; cursor:pointer;}
+</style>
+</head>
+<body>
+<header id="site-header">
+  <div class="header-inner">
+    <a class="logo" href="../homepage.html">Anime Pilgrimage Japan</a>
+    <div class="header-actions">
+      <a class="map-link" href="../map-leaflet.html">マップ</a>
+      <select id="lang-select" aria-label="Language">
+        <option value="ja">日本語</option>
+        <option value="en">English</option>
+        <option value="zh-TW">繁體中文</option>
+        <option value="ko">한국어</option>
+        <option value="th">ไทย</option>
+        <option value="fr">Français</option>
+      </select>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <div data-i18n="ja" lang="ja">
+    <h1 class="heading">『氷菓』聖地巡礼完全ガイド</h1>
+    <img id="hero-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Kajibashi_Bridge_from_west_side_20150123.JPG?width=400" alt="『氷菓』聖地巡礼完全ガイド">
+    <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Kajibashi_Bridge_from_west_side_20150123.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+    <p class="intro">京都アニメーション制作のテレビアニメ『氷菓』は、岐阜県高山市の町並みをモデルにした古典部の日常を描いた作品です。オープニング映像に登場する本町通りの招き猫像や、高山市内を流れる宮川に架かる鍛冶橋・弥生橋など、飛騨高山の風情ある街並みが随所に描かれています。</p>
+
+    <div class="spot-grid">
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Kajibashi_Bridge_from_west_side_20150123.JPG?width=400" alt="鍛冶橋" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Kajibashi_Bridge_from_west_side_20150123.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>鍛冶橋</h3>
+        <p class="spot-desc">OPにも登場する高山市の宮川に架かる橋。</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E9%8D%9B%E5%86%B6%E6%A9%8B%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">Googleマップで見る</a>
+          <a href="../map-leaflet.html">インタラクティブマップで見る</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Yayoibashi_Bridge_from_Miyamaebashi_Bridge_in_front_of_Sakurayama_Hachiman_Shrine.JPG?width=400" alt="弥生橋" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Yayoibashi_Bridge_from_Miyamaebashi_Bridge_in_front_of_Sakurayama_Hachiman_Shrine.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>弥生橋</h3>
+        <p class="spot-desc">作中に登場する高山市内の橋。</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E5%BC%A5%E7%94%9F%E6%A9%8B%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">Googleマップで見る</a>
+          <a href="../map-leaflet.html">インタラクティブマップで見る</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Hommachi_Street_Shopping_Area_in_Takayama_at_dusk_20150123.JPG?width=400" alt="本町通り 招き猫像前" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Hommachi_Street_Shopping_Area_in_Takayama_at_dusk_20150123.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>本町通り 招き猫像前</h3>
+        <p class="spot-desc">OP冒頭に登場する招き猫の像がある商店街通り。</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E6%9C%AC%E7%94%BA%E9%80%9A%E3%82%8A%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">Googleマップで見る</a>
+          <a href="../map-leaflet.html">インタラクティブマップで見る</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mini-map-slot" data-mini-map-slot="ja"></div>
+
+    <div class="tips duration">
+      <h2>所要時間の目安</h2>
+      <p>高山の旧市街に集中しているため、徒歩で半日程度で回れます。</p>
+    </div>
+
+    <div class="tips">
+      <h2>巡礼のヒント</h2>
+      <p>高山の古い町並みは徒歩で十分に巡れる範囲にまとまっています。本町通りは地元の商店街でもあるため、静かに見学しましょう。</p>
+    </div>
+
+    <div class="cta-row">
+      <a class="cta-button" href="../map-leaflet.html">マップで全スポットを見る</a>
+    </div>
+
+    <p class="footnote"><a href="../homepage.html">← ホームに戻る</a> / <a href="../privacy.html">プライバシーポリシー</a></p>
+  </div>
+
+  <div data-i18n="en" lang="en" hidden>
+    <h1 class="heading">&quot;Hyouka&quot; Anime Pilgrimage Guide</h1>
+    <img id="hero-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Kajibashi_Bridge_from_west_side_20150123.JPG?width=400" alt="&quot;Hyouka&quot; Anime Pilgrimage Guide">
+    <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Kajibashi_Bridge_from_west_side_20150123.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+    <p class="intro">Produced by Kyoto Animation, the TV anime &quot;Hyouka&quot; depicts the everyday life of the Classic Literature Club in a town modeled on Takayama, Gifu Prefecture. The beckoning-cat statue on Honmachi Street from the opening sequence, and the Kajibashi and Yayoibashi bridges over the Miya River running through Takayama, bring the atmospheric streets of Hida-Takayama to life throughout the series.</p>
+
+    <div class="spot-grid">
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Kajibashi_Bridge_from_west_side_20150123.JPG?width=400" alt="Kajibashi Bridge" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Kajibashi_Bridge_from_west_side_20150123.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>Kajibashi Bridge</h3>
+        <p class="spot-desc">A bridge over the Miya River in Takayama that also appears in the opening sequence.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E9%8D%9B%E5%86%B6%E6%A9%8B%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">View on Google Maps</a>
+          <a href="../map-leaflet.html">View on interactive map</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Yayoibashi_Bridge_from_Miyamaebashi_Bridge_in_front_of_Sakurayama_Hachiman_Shrine.JPG?width=400" alt="Yayoibashi Bridge" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Yayoibashi_Bridge_from_Miyamaebashi_Bridge_in_front_of_Sakurayama_Hachiman_Shrine.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>Yayoibashi Bridge</h3>
+        <p class="spot-desc">A bridge within Takayama City that appears in the series.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E5%BC%A5%E7%94%9F%E6%A9%8B%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">View on Google Maps</a>
+          <a href="../map-leaflet.html">View on interactive map</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Hommachi_Street_Shopping_Area_in_Takayama_at_dusk_20150123.JPG?width=400" alt="Honmachi Street, by the Beckoning Cat Statue" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Hommachi_Street_Shopping_Area_in_Takayama_at_dusk_20150123.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>Honmachi Street, by the Beckoning Cat Statue</h3>
+        <p class="spot-desc">A shopping street with a beckoning-cat statue that appears at the start of the opening sequence.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E6%9C%AC%E7%94%BA%E9%80%9A%E3%82%8A%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">View on Google Maps</a>
+          <a href="../map-leaflet.html">View on interactive map</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mini-map-slot" data-mini-map-slot="en"></div>
+
+    <div class="tips duration">
+      <h2>Estimated Time Needed</h2>
+      <p>Since the spots are concentrated in Takayama's old town, about half a day on foot is enough.</p>
+    </div>
+
+    <div class="tips">
+      <h2>Pilgrimage Tips</h2>
+      <p>Takayama's historic streets are compact enough to explore entirely on foot. Honmachi Street is also a local shopping street, so please visit quietly and respectfully.</p>
+    </div>
+
+    <div class="cta-row">
+      <a class="cta-button" href="../map-leaflet.html">See all spots on the map</a>
+    </div>
+
+    <p class="footnote"><a href="../homepage.html">← Back to Home</a> / <a href="../privacy.html">Privacy Policy</a></p>
+  </div>
+
+  <div data-i18n="zh-TW" lang="zh-TW" hidden>
+    <h1 class="heading">&quot;Hyouka&quot; Anime Pilgrimage Guide</h1>
+    <img id="hero-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Kajibashi_Bridge_from_west_side_20150123.JPG?width=400" alt="&quot;Hyouka&quot; Anime Pilgrimage Guide">
+    <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Kajibashi_Bridge_from_west_side_20150123.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+    <p class="intro">Produced by Kyoto Animation, the TV anime &quot;Hyouka&quot; depicts the everyday life of the Classic Literature Club in a town modeled on Takayama, Gifu Prefecture. The beckoning-cat statue on Honmachi Street from the opening sequence, and the Kajibashi and Yayoibashi bridges over the Miya River running through Takayama, bring the atmospheric streets of Hida-Takayama to life throughout the series.</p>
+
+    <div class="spot-grid">
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Kajibashi_Bridge_from_west_side_20150123.JPG?width=400" alt="Kajibashi Bridge" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Kajibashi_Bridge_from_west_side_20150123.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>Kajibashi Bridge</h3>
+        <p class="spot-desc">A bridge over the Miya River in Takayama that also appears in the opening sequence.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E9%8D%9B%E5%86%B6%E6%A9%8B%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">在Google地圖上查看</a>
+          <a href="../map-leaflet.html">在互動地圖上查看</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Yayoibashi_Bridge_from_Miyamaebashi_Bridge_in_front_of_Sakurayama_Hachiman_Shrine.JPG?width=400" alt="Yayoibashi Bridge" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Yayoibashi_Bridge_from_Miyamaebashi_Bridge_in_front_of_Sakurayama_Hachiman_Shrine.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>Yayoibashi Bridge</h3>
+        <p class="spot-desc">A bridge within Takayama City that appears in the series.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E5%BC%A5%E7%94%9F%E6%A9%8B%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">在Google地圖上查看</a>
+          <a href="../map-leaflet.html">在互動地圖上查看</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Hommachi_Street_Shopping_Area_in_Takayama_at_dusk_20150123.JPG?width=400" alt="Honmachi Street, by the Beckoning Cat Statue" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Hommachi_Street_Shopping_Area_in_Takayama_at_dusk_20150123.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>Honmachi Street, by the Beckoning Cat Statue</h3>
+        <p class="spot-desc">A shopping street with a beckoning-cat statue that appears at the start of the opening sequence.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E6%9C%AC%E7%94%BA%E9%80%9A%E3%82%8A%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">在Google地圖上查看</a>
+          <a href="../map-leaflet.html">在互動地圖上查看</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mini-map-slot" data-mini-map-slot="zh-TW"></div>
+
+    <div class="tips duration">
+      <h2>所需時間參考</h2>
+      <p>Since the spots are concentrated in Takayama's old town, about half a day on foot is enough.</p>
+    </div>
+
+    <div class="tips">
+      <h2>巡禮小提示</h2>
+      <p>Takayama's historic streets are compact enough to explore entirely on foot. Honmachi Street is also a local shopping street, so please visit quietly and respectfully.</p>
+    </div>
+
+    <div class="cta-row">
+      <a class="cta-button" href="../map-leaflet.html">在地圖上查看所有地點</a>
+    </div>
+
+    <p class="footnote"><a href="../homepage.html">← 回到首頁</a> / <a href="../privacy.html">隱私權政策</a></p>
+  </div>
+
+  <div data-i18n="ko" lang="ko" hidden>
+    <h1 class="heading">&quot;Hyouka&quot; Anime Pilgrimage Guide</h1>
+    <img id="hero-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Kajibashi_Bridge_from_west_side_20150123.JPG?width=400" alt="&quot;Hyouka&quot; Anime Pilgrimage Guide">
+    <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Kajibashi_Bridge_from_west_side_20150123.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+    <p class="intro">Produced by Kyoto Animation, the TV anime &quot;Hyouka&quot; depicts the everyday life of the Classic Literature Club in a town modeled on Takayama, Gifu Prefecture. The beckoning-cat statue on Honmachi Street from the opening sequence, and the Kajibashi and Yayoibashi bridges over the Miya River running through Takayama, bring the atmospheric streets of Hida-Takayama to life throughout the series.</p>
+
+    <div class="spot-grid">
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Kajibashi_Bridge_from_west_side_20150123.JPG?width=400" alt="Kajibashi Bridge" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Kajibashi_Bridge_from_west_side_20150123.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>Kajibashi Bridge</h3>
+        <p class="spot-desc">A bridge over the Miya River in Takayama that also appears in the opening sequence.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E9%8D%9B%E5%86%B6%E6%A9%8B%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">Google 지도에서 보기</a>
+          <a href="../map-leaflet.html">인터랙티브 지도에서 보기</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Yayoibashi_Bridge_from_Miyamaebashi_Bridge_in_front_of_Sakurayama_Hachiman_Shrine.JPG?width=400" alt="Yayoibashi Bridge" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Yayoibashi_Bridge_from_Miyamaebashi_Bridge_in_front_of_Sakurayama_Hachiman_Shrine.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>Yayoibashi Bridge</h3>
+        <p class="spot-desc">A bridge within Takayama City that appears in the series.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E5%BC%A5%E7%94%9F%E6%A9%8B%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">Google 지도에서 보기</a>
+          <a href="../map-leaflet.html">인터랙티브 지도에서 보기</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Hommachi_Street_Shopping_Area_in_Takayama_at_dusk_20150123.JPG?width=400" alt="Honmachi Street, by the Beckoning Cat Statue" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Hommachi_Street_Shopping_Area_in_Takayama_at_dusk_20150123.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>Honmachi Street, by the Beckoning Cat Statue</h3>
+        <p class="spot-desc">A shopping street with a beckoning-cat statue that appears at the start of the opening sequence.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E6%9C%AC%E7%94%BA%E9%80%9A%E3%82%8A%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">Google 지도에서 보기</a>
+          <a href="../map-leaflet.html">인터랙티브 지도에서 보기</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mini-map-slot" data-mini-map-slot="ko"></div>
+
+    <div class="tips duration">
+      <h2>예상 소요 시간</h2>
+      <p>Since the spots are concentrated in Takayama's old town, about half a day on foot is enough.</p>
+    </div>
+
+    <div class="tips">
+      <h2>순례 팁</h2>
+      <p>Takayama's historic streets are compact enough to explore entirely on foot. Honmachi Street is also a local shopping street, so please visit quietly and respectfully.</p>
+    </div>
+
+    <div class="cta-row">
+      <a class="cta-button" href="../map-leaflet.html">지도에서 모든 스팟 보기</a>
+    </div>
+
+    <p class="footnote"><a href="../homepage.html">← 홈으로 돌아가기</a> / <a href="../privacy.html">개인정보처리방침</a></p>
+  </div>
+
+  <div data-i18n="th" lang="th" hidden>
+    <h1 class="heading">&quot;Hyouka&quot; Anime Pilgrimage Guide</h1>
+    <img id="hero-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Kajibashi_Bridge_from_west_side_20150123.JPG?width=400" alt="&quot;Hyouka&quot; Anime Pilgrimage Guide">
+    <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Kajibashi_Bridge_from_west_side_20150123.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+    <p class="intro">Produced by Kyoto Animation, the TV anime &quot;Hyouka&quot; depicts the everyday life of the Classic Literature Club in a town modeled on Takayama, Gifu Prefecture. The beckoning-cat statue on Honmachi Street from the opening sequence, and the Kajibashi and Yayoibashi bridges over the Miya River running through Takayama, bring the atmospheric streets of Hida-Takayama to life throughout the series.</p>
+
+    <div class="spot-grid">
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Kajibashi_Bridge_from_west_side_20150123.JPG?width=400" alt="Kajibashi Bridge" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Kajibashi_Bridge_from_west_side_20150123.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>Kajibashi Bridge</h3>
+        <p class="spot-desc">A bridge over the Miya River in Takayama that also appears in the opening sequence.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E9%8D%9B%E5%86%B6%E6%A9%8B%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">ดูใน Google Maps</a>
+          <a href="../map-leaflet.html">ดูบนแผนที่แบบอินเทอร์แอกทีฟ</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Yayoibashi_Bridge_from_Miyamaebashi_Bridge_in_front_of_Sakurayama_Hachiman_Shrine.JPG?width=400" alt="Yayoibashi Bridge" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Yayoibashi_Bridge_from_Miyamaebashi_Bridge_in_front_of_Sakurayama_Hachiman_Shrine.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>Yayoibashi Bridge</h3>
+        <p class="spot-desc">A bridge within Takayama City that appears in the series.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E5%BC%A5%E7%94%9F%E6%A9%8B%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">ดูใน Google Maps</a>
+          <a href="../map-leaflet.html">ดูบนแผนที่แบบอินเทอร์แอกทีฟ</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Hommachi_Street_Shopping_Area_in_Takayama_at_dusk_20150123.JPG?width=400" alt="Honmachi Street, by the Beckoning Cat Statue" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Hommachi_Street_Shopping_Area_in_Takayama_at_dusk_20150123.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>Honmachi Street, by the Beckoning Cat Statue</h3>
+        <p class="spot-desc">A shopping street with a beckoning-cat statue that appears at the start of the opening sequence.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E6%9C%AC%E7%94%BA%E9%80%9A%E3%82%8A%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">ดูใน Google Maps</a>
+          <a href="../map-leaflet.html">ดูบนแผนที่แบบอินเทอร์แอกทีฟ</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mini-map-slot" data-mini-map-slot="th"></div>
+
+    <div class="tips duration">
+      <h2>ระยะเวลาโดยประมาณ</h2>
+      <p>Since the spots are concentrated in Takayama's old town, about half a day on foot is enough.</p>
+    </div>
+
+    <div class="tips">
+      <h2>เคล็ดลับการตามรอย</h2>
+      <p>Takayama's historic streets are compact enough to explore entirely on foot. Honmachi Street is also a local shopping street, so please visit quietly and respectfully.</p>
+    </div>
+
+    <div class="cta-row">
+      <a class="cta-button" href="../map-leaflet.html">ดูทุกสถานที่บนแผนที่</a>
+    </div>
+
+    <p class="footnote"><a href="../homepage.html">← กลับหน้าแรก</a> / <a href="../privacy.html">นโยบายความเป็นส่วนตัว</a></p>
+  </div>
+
+  <div data-i18n="fr" lang="fr" hidden>
+    <h1 class="heading">&quot;Hyouka&quot; Anime Pilgrimage Guide</h1>
+    <img id="hero-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Kajibashi_Bridge_from_west_side_20150123.JPG?width=400" alt="&quot;Hyouka&quot; Anime Pilgrimage Guide">
+    <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Kajibashi_Bridge_from_west_side_20150123.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+    <p class="intro">Produced by Kyoto Animation, the TV anime &quot;Hyouka&quot; depicts the everyday life of the Classic Literature Club in a town modeled on Takayama, Gifu Prefecture. The beckoning-cat statue on Honmachi Street from the opening sequence, and the Kajibashi and Yayoibashi bridges over the Miya River running through Takayama, bring the atmospheric streets of Hida-Takayama to life throughout the series.</p>
+
+    <div class="spot-grid">
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Kajibashi_Bridge_from_west_side_20150123.JPG?width=400" alt="Kajibashi Bridge" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Kajibashi_Bridge_from_west_side_20150123.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>Kajibashi Bridge</h3>
+        <p class="spot-desc">A bridge over the Miya River in Takayama that also appears in the opening sequence.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E9%8D%9B%E5%86%B6%E6%A9%8B%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">Voir sur Google Maps</a>
+          <a href="../map-leaflet.html">Voir sur la carte interactive</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Yayoibashi_Bridge_from_Miyamaebashi_Bridge_in_front_of_Sakurayama_Hachiman_Shrine.JPG?width=400" alt="Yayoibashi Bridge" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Yayoibashi_Bridge_from_Miyamaebashi_Bridge_in_front_of_Sakurayama_Hachiman_Shrine.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>Yayoibashi Bridge</h3>
+        <p class="spot-desc">A bridge within Takayama City that appears in the series.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E5%BC%A5%E7%94%9F%E6%A9%8B%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">Voir sur Google Maps</a>
+          <a href="../map-leaflet.html">Voir sur la carte interactive</a>
+        </div>
+      </div>
+
+      <div class="spot-card">
+        <img class="spot-photo" src="https://commons.wikimedia.org/wiki/Special:FilePath/Hommachi_Street_Shopping_Area_in_Takayama_at_dusk_20150123.JPG?width=400" alt="Honmachi Street, by the Beckoning Cat Statue" loading="lazy">
+        <p class="photo-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Hommachi_Street_Shopping_Area_in_Takayama_at_dusk_20150123.JPG" target="_blank" rel="noopener">そらみみ</a> / CC BY-SA 4.0 (Wikimedia Commons)</p>
+        <span class="spot-tag">氷菓</span>
+        <h3>Honmachi Street, by the Beckoning Cat Statue</h3>
+        <p class="spot-desc">A shopping street with a beckoning-cat statue that appears at the start of the opening sequence.</p>
+        <div class="spot-links">
+          <a href="https://www.google.com/maps/search/?api=1&query=%E6%9C%AC%E7%94%BA%E9%80%9A%E3%82%8A%20%E9%AB%98%E5%B1%B1%E5%B8%82" target="_blank" rel="noopener">Voir sur Google Maps</a>
+          <a href="../map-leaflet.html">Voir sur la carte interactive</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mini-map-slot" data-mini-map-slot="fr"></div>
+
+    <div class="tips duration">
+      <h2>Durée estimée</h2>
+      <p>Since the spots are concentrated in Takayama's old town, about half a day on foot is enough.</p>
+    </div>
+
+    <div class="tips">
+      <h2>Conseils pour le pèlerinage</h2>
+      <p>Takayama's historic streets are compact enough to explore entirely on foot. Honmachi Street is also a local shopping street, so please visit quietly and respectfully.</p>
+    </div>
+
+    <div class="cta-row">
+      <a class="cta-button" href="../map-leaflet.html">Voir tous les lieux sur la carte</a>
+    </div>
+
+    <p class="footnote"><a href="../homepage.html">← Retour à l'accueil</a> / <a href="../privacy.html">Politique de confidentialité</a></p>
+  </div>
+</main>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js"></script>
+<script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet/leaflet-maplibre-gl.js"></script>
+<script>
+const UI_I18N = {"ja":{"langName":"日本語","tipsTitle":"巡礼のヒント","durationTitle":"所要時間の目安","ctaButton":"マップで全スポットを見る","googleMapsLink":"Googleマップで見る","interactiveMapLink":"インタラクティブマップで見る","backToHome":"← ホームに戻る","privacyPolicy":"プライバシーポリシー","mapNav":"マップ"},"en":{"langName":"English","tipsTitle":"Pilgrimage Tips","durationTitle":"Estimated Time Needed","ctaButton":"See all spots on the map","googleMapsLink":"View on Google Maps","interactiveMapLink":"View on interactive map","backToHome":"← Back to Home","privacyPolicy":"Privacy Policy","mapNav":"Map"},"zh-TW":{"langName":"繁體中文","tipsTitle":"巡禮小提示","durationTitle":"所需時間參考","ctaButton":"在地圖上查看所有地點","googleMapsLink":"在Google地圖上查看","interactiveMapLink":"在互動地圖上查看","backToHome":"← 回到首頁","privacyPolicy":"隱私權政策","mapNav":"地圖"},"ko":{"langName":"한국어","tipsTitle":"순례 팁","durationTitle":"예상 소요 시간","ctaButton":"지도에서 모든 스팟 보기","googleMapsLink":"Google 지도에서 보기","interactiveMapLink":"인터랙티브 지도에서 보기","backToHome":"← 홈으로 돌아가기","privacyPolicy":"개인정보처리방침","mapNav":"지도"},"th":{"langName":"ไทย","tipsTitle":"เคล็ดลับการตามรอย","durationTitle":"ระยะเวลาโดยประมาณ","ctaButton":"ดูทุกสถานที่บนแผนที่","googleMapsLink":"ดูใน Google Maps","interactiveMapLink":"ดูบนแผนที่แบบอินเทอร์แอกทีฟ","backToHome":"← กลับหน้าแรก","privacyPolicy":"นโยบายความเป็นส่วนตัว","mapNav":"แผนที่"},"fr":{"langName":"Français","tipsTitle":"Conseils pour le pèlerinage","durationTitle":"Durée estimée","ctaButton":"Voir tous les lieux sur la carte","googleMapsLink":"Voir sur Google Maps","interactiveMapLink":"Voir sur la carte interactive","backToHome":"← Retour à l'accueil","privacyPolicy":"Politique de confidentialité","mapNav":"Carte"}};
+
+// Small locator map for this page's spots (English names only — this
+// preview map isn't re-translated on language switch, unlike the full
+// interactive map at ../map-leaflet.html which this links out to). Only
+// one Leaflet instance is created; since each language's content lives in
+// its own hidden/visible <div> (see langBlockHtml), the single map element
+// is physically moved into the currently visible language block's
+// .mini-map-slot on every language switch (see placeMiniMap below) rather
+// than duplicating a live map per language.
+let miniMap = null;
+let miniMapEl = null;
+
+function initMiniMap() {
+  const spots = [{"name":"Kajibashi Bridge","lat":36.1425,"lng":137.252},{"name":"Yayoibashi Bridge","lat":36.144,"lng":137.251},{"name":"Honmachi Street, by the Beckoning Cat Statue","lat":36.141,"lng":137.253}];
+  miniMapEl = document.createElement('div');
+  miniMapEl.id = 'mini-map';
+  // The element must already be attached to the DOM (with real, non-zero
+  // dimensions) before L.map()/fitBounds() run — Leaflet computes the
+  // initial view from the container's current size, and a detached element
+  // has 0x0, which produces a wrong zoom/center that invalidateSize() alone
+  // cannot fix later (it only recalculates rendering, not the prior fit).
+  document.querySelector('.mini-map-slot[data-mini-map-slot="ja"]').appendChild(miniMapEl);
+  miniMap = L.map(miniMapEl, { zoomControl: true, scrollWheelZoom: false, minZoom: 1, maxZoom: 19 });
+  L.maplibreGL({ style: 'https://tiles.openfreemap.org/styles/liberty' }).addTo(miniMap);
+  const markers = spots.map(s => L.circleMarker([s.lat, s.lng], { radius: 8, color: '#fff', weight: 2, fillColor: '#B5673A', fillOpacity: 1 }).bindPopup(s.name).addTo(miniMap));
+  if (markers.length === 1) {
+    miniMap.setView([spots[0].lat, spots[0].lng], 13);
+  } else {
+    miniMap.fitBounds(L.featureGroup(markers).getBounds(), { padding: [24, 24] });
+  }
+}
+
+function placeMiniMap(lang) {
+  if (!miniMapEl) return;
+  const slot = document.querySelector('.mini-map-slot[data-mini-map-slot="' + lang + '"]');
+  if (!slot) return;
+  slot.appendChild(miniMapEl);
+  if (miniMap) setTimeout(() => miniMap.invalidateSize(), 0);
+}
+
+initMiniMap();
+
+function applyLang(lang) {
+  document.documentElement.lang = lang;
+  document.querySelectorAll('main > div[data-i18n]').forEach(el => {
+    el.hidden = el.dataset.i18n !== lang;
+  });
+  placeMiniMap(lang);
+  const contentLang = lang === 'ja' ? 'ja' : 'en';
+  document.title = (contentLang === 'ja' ? '『氷菓』聖地巡礼完全ガイド' : '&quot;Hyouka&quot; Anime Pilgrimage Guide') + ' | Anime Pilgrimage Japan';
+  document.getElementById('lang-select').value = lang;
+  document.querySelector('.map-link').textContent = UI_I18N[lang].mapNav;
+}
+
+let currentLang = 'ja';
+document.getElementById('lang-select').addEventListener('change', (e) => {
+  currentLang = e.target.value;
+  applyLang(currentLang);
+});
+
+
+// This site targets overseas visitors, so the default language is detected
+// from the browser rather than always starting in Japanese. Falls back to
+// English (rather than Japanese) for any language this site doesn't support,
+// matching prototype/map-leaflet.html's detectBrowserLang().
+function detectBrowserLang() {
+  const supported = ['ja', 'en', 'zh-TW', 'ko', 'th', 'fr'];
+  const browserLangs = navigator.languages || [navigator.language || 'en'];
+  for (const bl of browserLangs) {
+    const lower = bl.toLowerCase();
+    const exact = supported.find(s => s.toLowerCase() === lower);
+    if (exact) return exact;
+    const base = lower.split('-')[0];
+    if (base === 'zh') return 'zh-TW';
+    const baseMatch = supported.find(s => s.toLowerCase() === base);
+    if (baseMatch) return baseMatch;
+  }
+  return 'en';
+}
+
+currentLang = detectBrowserLang();
+applyLang(currentLang);
+</script>
+</body>
+</html>
