@@ -93,6 +93,7 @@
   #gallery h2{text-align:center; margin:0 0 40px 0; font-size:clamp(22px,3vw,32px); color:var(--color-navy);}
   .gallery-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:24px;}
   .gallery-item{border-radius:16px; overflow:hidden; background:#fff; box-shadow:0 4px 16px rgba(29,53,80,0.08);}
+  .gallery-item > a{display:block;}
   .gallery-item img{width:100%; height:220px; object-fit:cover; display:block;}
   .gallery-caption{padding:14px 16px;}
   .gallery-caption .spot-name{font-weight:700; color:var(--color-navy); font-size:14px;}
@@ -340,7 +341,9 @@ function buildGallery() {
     const caption = fullWidthParens ? `${name}（${animeLink}）` : `${name} (${animeLink})`;
     return `
     <div class="gallery-item">
-      <img src="${toThumbnailUrl(spot.photo.url, 400)}" alt="${name}" loading="lazy">
+      <a href="map-leaflet.html?spot=${spot.id}" aria-label="${name}">
+        <img src="${toThumbnailUrl(spot.photo.url, 400)}" alt="${name}" loading="lazy">
+      </a>
       <div class="gallery-caption">
         <div class="spot-name">${caption}</div>
         <p class="spot-desc">${description}</p>
