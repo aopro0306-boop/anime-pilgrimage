@@ -1598,7 +1598,7 @@ function buildPopupHtml(spot) {
       <p>${translateAnime(spot.anime)}${currentLang === 'en' ? ' | ' : '｜'}${translatePrefecture(spot.prefecture)}</p>
       ${photoHtml}
       <p class="desc">${translateDescription(spot)}</p>
-      <a class="gmaps-btn" href="${mapsUrl}" target="_blank" rel="noopener">${I18N[currentLang].openInGoogleMaps}</a>
+      <a class="gmaps-btn" href="${mapsUrl}" target="_blank" rel="noopener" data-spot-id="${spot.id}">${I18N[currentLang].openInGoogleMaps}</a>
     </div>
   `;
 }
@@ -1635,10 +1635,23 @@ function wirePopupHeartButton(el) {
   });
 }
 
+// Tracked as a GA4 key event candidate: clicking through to Google Maps is
+// the clearest signal a visitor found a spot worth actually going to.
+function wireGmapsButton(el) {
+  const btn = el.querySelector('.gmaps-btn');
+  if (!btn) return;
+  btn.addEventListener('click', () => {
+    if (typeof gtag === 'function') {
+      gtag('event', 'open_google_maps', { spot_id: btn.dataset.spotId });
+    }
+  });
+}
+
 map.on('popupopen', (e) => {
   const el = e.popup.getElement();
   if (!el) return;
   wirePopupHeartButton(el);
+  wireGmapsButton(el);
 });
 
 // A popup left open while the user switches language would otherwise keep
@@ -1650,7 +1663,7 @@ function refreshOpenPopup() {
     if (marker && marker.isPopupOpen()) {
       marker.setPopupContent(buildPopupHtml(spot));
       const el = marker.getPopup().getElement();
-      if (el) wirePopupHeartButton(el);
+      if (el) { wirePopupHeartButton(el); wireGmapsButton(el); }
       break;
     }
   }
@@ -1865,6 +1878,9 @@ function openRouteInGoogleMaps() {
   let url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}`;
   if (waypoints) url += `&waypoints=${encodeURIComponent(waypoints)}`;
   window.open(url, '_blank', 'noopener');
+  if (typeof gtag === 'function') {
+    gtag('event', 'open_google_maps_route', { spot_count: spots.length });
+  }
 }
 
 document.getElementById('view-route-btn').addEventListener('click', viewRouteOnMap);
