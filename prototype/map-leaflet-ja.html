@@ -1551,9 +1551,7 @@ map.addLayer(clusterGroup);
 // opens a popup (see marker.bindPopup(() => buildPopupHtml(spot)) above),
 // so the heart button's click listener must be re-attached on every open
 // rather than once at page load.
-map.on('popupopen', (e) => {
-  const el = e.popup.getElement();
-  if (!el) return;
+function wirePopupHeartButton(el) {
   const btn = el.querySelector('.favorite-heart');
   if (!btn) return;
   btn.addEventListener('click', () => {
@@ -1561,7 +1559,28 @@ map.on('popupopen', (e) => {
     toggleFavorite(id);
     btn.textContent = favorites.has(id) ? '♥' : '♡';
   });
+}
+
+map.on('popupopen', (e) => {
+  const el = e.popup.getElement();
+  if (!el) return;
+  wirePopupHeartButton(el);
 });
+
+// A popup left open while the user switches language would otherwise keep
+// showing its stale content forever, since bindPopup's content function
+// only re-runs on the next open/close cycle. Called from applyLanguage().
+function refreshOpenPopup() {
+  for (const spot of SPOTS) {
+    const marker = markersById[spot.id];
+    if (marker && marker.isPopupOpen()) {
+      marker.setPopupContent(buildPopupHtml(spot));
+      const el = marker.getPopup().getElement();
+      if (el) wirePopupHeartButton(el);
+      break;
+    }
+  }
+}
 
 const filterState = {
   // Empty = no restriction (show every anime). Checking a box narrows the
@@ -1777,9 +1796,11 @@ function openRouteInGoogleMaps() {
 document.getElementById('view-route-btn').addEventListener('click', viewRouteOnMap);
 document.getElementById('open-route-gmaps-btn').addEventListener('click', openRouteInGoogleMaps);
 
-// Updates the static filter-panel/pref-nav chrome. Already-open or
-// future popups pick up the new language on their own since buildPopupHtml
-// reads currentLang live each time Leaflet calls it.
+// Updates the static filter-panel/pref-nav chrome. Future popups pick up
+// the new language on their own since buildPopupHtml reads currentLang
+// live each time Leaflet calls it; an already-open popup needs an explicit
+// refresh (see refreshOpenPopup()) since bindPopup only re-invokes its
+// content function on the next open/close cycle.
 function applyLanguage(lang) {
   currentLang = lang;
   document.title = I18N[lang].title;
@@ -1799,6 +1820,7 @@ function applyLanguage(lang) {
   buildAnimeFilter();
   buildPrefNav();
   buildFavoritesTab();
+  refreshOpenPopup();
 }
 
 document.querySelectorAll('.panel-tab').forEach(tab => {
