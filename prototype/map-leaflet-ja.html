@@ -104,15 +104,34 @@
   #view-route-btn:hover{background:#e8395a;border-color:#e8395a;}
   #open-route-gmaps-btn{background:#fff;color:#FF4D6D;}
   #open-route-gmaps-btn:hover{background:#ffe3ea;}
+  .panel-header{display:none;}
+  .panel-close-btn{background:none;border:none;font-size:20px;line-height:1;cursor:pointer;color:#999;padding:0;}
+  .panel-close-btn:hover{color:#e8395a;}
+  .mobile-toggle-btn{display:none;}
   @media (max-width: 640px) {
-    #filter-panel, #pref-nav { width: calc(50vw - 24px); max-width: none; box-sizing: border-box; }
+    #filter-panel, #pref-nav { width: calc(100vw - 24px); max-width: none; box-sizing: border-box; max-height: 65vh; }
+    #filter-panel:not(.open), #pref-nav:not(.open) { display: none; }
+    .panel-header{display:flex;justify-content:flex-end;margin-bottom:6px;}
+    .mobile-toggle-btn{
+      display:flex;align-items:center;gap:6px;
+      position:absolute;top:12px;z-index:690;
+      padding:10px 16px;border-radius:999px;border:none;
+      background:rgba(255,255,255,0.97);box-shadow:0 6px 20px rgba(47,128,255,0.18);
+      font-size:13px;font-weight:700;font-family:inherit;color:#333;cursor:pointer;
+    }
+    #filter-toggle-btn{left:12px;}
+    #pref-toggle-btn{right:12px;}
+    .mobile-toggle-btn.hidden{display:none;}
   }
   #privacy-link{position:absolute;bottom:8px;left:8px;z-index:690;font-size:11px;background:rgba(255,255,255,0.85);padding:3px 8px;border-radius:8px;color:#555;text-decoration:none;}
   #privacy-link:hover{background:#fff;color:#1a5fc4;}
 </style>
 </head>
 <body>
+<button id="filter-toggle-btn" class="mobile-toggle-btn" type="button" aria-label="Filters"></button>
+<button id="pref-toggle-btn" class="mobile-toggle-btn" type="button" aria-label="Prefectures"></button>
 <div id="filter-panel">
+  <div class="panel-header"><button class="panel-close-btn" type="button" aria-label="Close">✕</button></div>
   <div id="lang-switcher">
     <select id="lang-select" aria-label="Language">
       <option value="ja">日本語</option>
@@ -148,6 +167,7 @@
   </div>
 </div>
 <div id="pref-nav">
+  <div class="panel-header"><button class="panel-close-btn" type="button" aria-label="Close">✕</button></div>
   <h4>都道府県から探す</h4>
   <div id="pref-nav-list"></div>
 </div>
@@ -264,7 +284,9 @@ const I18N = {
     moveUp: '上へ移動',
     moveDown: '下へ移動',
     viewRouteOnMap: 'ルートを地図で見る',
-    openRouteInGoogleMaps: 'Googleマップでルートを開く'
+    openRouteInGoogleMaps: 'Googleマップでルートを開く',
+    filterToggle: '🔍 絞り込み',
+    prefToggle: '📍 都道府県'
   },
   en: {
     title: 'Anime Pilgrimage Map',
@@ -281,7 +303,9 @@ const I18N = {
     moveUp: 'Move up',
     moveDown: 'Move down',
     viewRouteOnMap: 'View route on map',
-    openRouteInGoogleMaps: 'Open route in Google Maps'
+    openRouteInGoogleMaps: 'Open route in Google Maps',
+    filterToggle: '🔍 Filters',
+    prefToggle: '📍 Prefectures'
   },
   'zh-TW': {
     title: '動畫聖地巡禮地圖',
@@ -298,7 +322,9 @@ const I18N = {
     moveUp: '上移',
     moveDown: '下移',
     viewRouteOnMap: '在地圖上查看路線',
-    openRouteInGoogleMaps: '在Google地圖開啟路線'
+    openRouteInGoogleMaps: '在Google地圖開啟路線',
+    filterToggle: '🔍 篩選',
+    prefToggle: '📍 都道府縣'
   },
   ko: {
     title: '애니메이션 성지순례 지도',
@@ -315,7 +341,9 @@ const I18N = {
     moveUp: '위로 이동',
     moveDown: '아래로 이동',
     viewRouteOnMap: '지도에서 경로 보기',
-    openRouteInGoogleMaps: 'Google 지도에서 경로 열기'
+    openRouteInGoogleMaps: 'Google 지도에서 경로 열기',
+    filterToggle: '🔍 필터',
+    prefToggle: '📍 지역'
   },
   th: {
     title: 'แผนที่ตามรอยอนิเมะ',
@@ -332,7 +360,9 @@ const I18N = {
     moveUp: 'เลื่อนขึ้น',
     moveDown: 'เลื่อนลง',
     viewRouteOnMap: 'ดูเส้นทางบนแผนที่',
-    openRouteInGoogleMaps: 'เปิดเส้นทางใน Google Maps'
+    openRouteInGoogleMaps: 'เปิดเส้นทางใน Google Maps',
+    filterToggle: '🔍 ตัวกรอง',
+    prefToggle: '📍 จังหวัด'
   },
   fr: {
     title: 'Carte des lieux de pèlerinage anime',
@@ -349,7 +379,9 @@ const I18N = {
     moveUp: 'Monter',
     moveDown: 'Descendre',
     viewRouteOnMap: "Voir l'itinéraire sur la carte",
-    openRouteInGoogleMaps: "Ouvrir l'itinéraire dans Google Maps"
+    openRouteInGoogleMaps: "Ouvrir l'itinéraire dans Google Maps",
+    filterToggle: '🔍 Filtres',
+    prefToggle: '📍 Préfectures'
   }
 };
 
@@ -905,6 +937,8 @@ function applyLanguage(lang) {
   document.querySelector('.panel-tab[data-tab="favorites"]').textContent = '♡ ' + I18N[lang].favoritesTab;
   document.getElementById('view-route-btn').textContent = I18N[lang].viewRouteOnMap;
   document.getElementById('open-route-gmaps-btn').textContent = I18N[lang].openRouteInGoogleMaps;
+  document.getElementById('filter-toggle-btn').textContent = I18N[lang].filterToggle;
+  document.getElementById('pref-toggle-btn').textContent = I18N[lang].prefToggle;
   buildAnimeFilter();
   buildPrefNav();
   buildFavoritesTab();
@@ -921,6 +955,32 @@ document.querySelectorAll('.panel-tab').forEach(tab => {
 
 document.getElementById('lang-select').addEventListener('change', (e) => {
   applyLanguage(e.target.value);
+});
+
+// Mobile-only: filter-panel/pref-nav are collapsed by default on narrow
+// screens (see the max-width:640px block above) so they don't cover the
+// whole map. These toggles show one panel at a time; the close button
+// inside each panel (added via .panel-header) hides it again.
+const filterToggleBtn = document.getElementById('filter-toggle-btn');
+const prefToggleBtn = document.getElementById('pref-toggle-btn');
+const filterPanelEl = document.getElementById('filter-panel');
+const prefNavEl = document.getElementById('pref-nav');
+
+filterToggleBtn.addEventListener('click', () => {
+  filterPanelEl.classList.add('open');
+  filterToggleBtn.classList.add('hidden');
+});
+prefToggleBtn.addEventListener('click', () => {
+  prefNavEl.classList.add('open');
+  prefToggleBtn.classList.add('hidden');
+});
+document.querySelectorAll('.panel-close-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const panel = btn.closest('#filter-panel, #pref-nav');
+    panel.classList.remove('open');
+    if (panel === filterPanelEl) filterToggleBtn.classList.remove('hidden');
+    if (panel === prefNavEl) prefToggleBtn.classList.remove('hidden');
+  });
 });
 
 // This site targets overseas visitors, so the default language is detected
