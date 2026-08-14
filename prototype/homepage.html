@@ -159,6 +159,10 @@
         <svg viewBox="0 0 24 24"><path d="M12 3l1.8 5.4L19 10l-5.2 1.6L12 17l-1.8-5.4L5 10l5.2-1.6z"/></svg>
         <span data-i18n="navFeatures">特徴</span>
       </a>
+      <a class="nav-item" href="#seasonal">
+        <svg viewBox="0 0 24 24"><path d="M12 2l2.4 6.8L21 11l-6.6 2.2L12 20l-2.4-6.8L3 11l6.6-2.2z"/></svg>
+        <span data-i18n="navSeasonal">人気・シーズン作</span>
+      </a>
       <a class="nav-item" href="#gallery">
         <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1.5"/><circle cx="8.5" cy="10" r="1.5"/><path d="M3 16l5-4 4 3 3-3 6 5"/></svg>
         <span data-i18n="navGallery">スポット紹介</span>
@@ -239,6 +243,11 @@
       <p data-i18n="feature4Body">掲載写真はすべてライセンスを確認済みで、出典を明記しています。</p>
     </div>
   </div>
+</section>
+
+<section id="seasonal">
+  <h2 class="heading" data-i18n="seasonalHeading">人気・シーズン作</h2>
+  <div class="gallery-grid" id="seasonal-grid"></div>
 </section>
 
 <section id="gallery">
@@ -372,6 +381,24 @@ const GALLERY_SPOTS = [
   {"id":"jjk-shibuya-crossing","name":{"ja":"渋谷スクランブル交差点","en":"Shibuya Scramble Crossing","zh-TW":"澀谷十字路口","ko":"시부야 스크램블 교차로","th":"ทางแยกชิบูย่าสแครมเบิล","fr":"Carrefour de Shibuya"},"anime":{"ja":"呪術廻戦","en":"Jujutsu Kaisen","zh-TW":"咒術迴戰","ko":"주술회전","th":"จูจุตสึไคเซ็น","fr":"Jujutsu Kaisen"},"officialUrl":"https://jujutsukaisen.jp/","description":{"ja":"物語最大の転換点となった「渋谷事変」の舞台。世界一の混雑で知られる交差点。","en":"The setting of the story's biggest turning point, the \"Shibuya Incident\" arc, often called the world's busiest pedestrian crossing.","zh-TW":"故事最大轉捩點「澀谷事變」篇的舞台，號稱世界上最繁忙的行人穿越道。","ko":"이야기 최대의 전환점인 '시부야 사변' 편의 무대. 세계에서 가장 혼잡한 횡단보도로 유명하다.","th":"ฉากของจุดเปลี่ยนครั้งใหญ่ที่สุดในเรื่อง ตอน \"เหตุการณ์ชิบูย่า\" ทางแยกที่ได้ชื่อว่าคนพลุกพล่านที่สุดในโลก","fr":"Le décor du plus grand tournant de l'histoire, l'arc de « l'incident de Shibuya », souvent considéré comme le carrefour piéton le plus fréquenté au monde."},"photo":{"url":"https://commons.wikimedia.org/wiki/Special:FilePath/Shibuya_Crossing,_Tokyo_(13001951595).jpg?width=400","author":"William J Sisti","license":"CC BY-SA 2.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Shibuya_Crossing,_Tokyo_(13001951595).jpg"}}
 ];
 
+// Currently-airing/recent anime, shown in the "人気・シーズン作" section so
+// new pilgrimage spots are reachable from crawlable homepage text right
+// away, ahead of getting their own dedicated guide pages.
+const SEASONAL_SPOTS = [
+  {"id":"nigejouzu-kenchoji",
+    "name":{"ja":"建長寺","en":"Kenchoji Temple","zh-TW":"建長寺","ko":"겐초지","th":"วัดเคนโจจิ","fr":"Temple Kenchō-ji"},
+    "anime":{"ja":"逃げ上手の若君","en":"The Elusive Samurai","zh-TW":"善逃的若君","ko":"도망의 명수 와카기미","th":"เจ้าชายผู้เชี่ยวชาญการหลบหนี","fr":"Le Samouraï insaisissable"},
+    "officialUrl":"https://nigewaka.run/",
+    "description":{"ja":"鎌倉五山第一位の禅寺。南北朝時代の鎌倉を舞台にした物語で、主人公ゆかりの地として描かれる。","en":"The top-ranked temple among Kamakura's Five Great Zen Temples, depicted in the story as a place connected to the protagonist during the Nanboku-cho era.","zh-TW":"鎌倉五山之首的禪寺。以南北朝時代的鎌倉為舞台的故事中，被描繪為與主角有淵源之地。","ko":"가마쿠라 오산 제일위의 선종 사찰. 남북조 시대의 가마쿠라를 무대로 한 이야기에서 주인공과 인연이 있는 곳으로 그려진다.","th":"วัดเซนอันดับหนึ่งในห้าวัดใหญ่แห่งคามาคุระ ปรากฏในเรื่องราวที่มีฉากหลังเป็นคามาคุระยุคนัมโบกุโจในฐานะสถานที่ที่เกี่ยวข้องกับตัวเอก","fr":"Le temple zen classé premier parmi les cinq grands temples de Kamakura, présenté dans l'histoire comme un lieu lié au protagoniste durant l'ère Nanboku-chō."},
+    "photo":{"url":"https://commons.wikimedia.org/wiki/Special:FilePath/Kenchoji_Sanmon_2009.jpg?width=400","author":"Wiiii","license":"CC BY-SA 3.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Kenchoji_Sanmon_2009.jpg"}},
+  {"id":"akane-suehirotei",
+    "name":{"ja":"新宿末廣亭","en":"Shinjuku Suehirotei","zh-TW":"新宿末廣亭","ko":"신주쿠 스에히로테이","th":"ชินจูกุ สึเอฮิโรเทย์","fr":"Shinjuku Suehirotei"},
+    "anime":{"ja":"あかね噺","en":"Akane-banashi","zh-TW":"茜的落語","ko":"아카네바나시","th":"อากาเนะบานาชิ","fr":"Akane-banashi"},
+    "officialUrl":"https://akane-banashi.com/",
+    "description":{"ja":"東京四大寄席の一つ。作中のオープニング映像にも登場する、実在の老舗寄席。","en":"One of Tokyo's four major yose theaters for rakugo storytelling, a real historic venue that appears in the series' opening.","zh-TW":"東京四大寄席之一，作中片頭動畫也曾出現的實際存在的老字號寄席。","ko":"도쿄 4대 요세(라쿠고 공연장) 중 하나. 작중 오프닝 영상에도 등장하는 실제 노포 요세.","th":"หนึ่งในสี่โรงละครราคุโกะที่มีชื่อเสียงที่สุดของโตเกียว โรงละครเก่าแก่ที่มีอยู่จริงซึ่งปรากฏในฉากเปิดเรื่องของอนิเมะ","fr":"L'un des quatre grands théâtres de rakugo de Tokyo, un lieu historique bien réel qui apparaît dans le générique de la série."},
+    "photo":{"url":"https://commons.wikimedia.org/wiki/Special:FilePath/Shinjuku_Suehirotei-1.jpg?width=400","author":"江戸村のとくぞう","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Shinjuku_Suehirotei-1.jpg"}}
+];
+
 function toThumbnailUrl(url, width) {
   // Convert a Wikimedia Commons direct upload.wikimedia.org URL into a
   // sized Special:FilePath thumbnail URL. Leaves already-sized
@@ -386,9 +413,11 @@ function toThumbnailUrl(url, width) {
 
 // Re-run whenever the language changes (see applyLanguage()) so spot/anime
 // names switch between the Japanese name and its English localized title.
-function buildGallery() {
-  const container = document.getElementById('gallery-grid');
-  container.innerHTML = GALLERY_SPOTS.map(spot => {
+// Shared by buildGallery() and buildSeasonal() since both sections render
+// the same spot-card shape from a different data source.
+function renderSpotGrid(containerId, spots) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = spots.map(spot => {
     const name = spot.name[currentLang] || spot.name.ja;
     const anime = spot.anime[currentLang] || spot.anime.ja;
     const description = spot.description[currentLang] || spot.description.ja;
@@ -408,6 +437,14 @@ function buildGallery() {
     </div>
   `;
   }).join('');
+}
+
+function buildGallery() {
+  renderSpotGrid('gallery-grid', GALLERY_SPOTS);
+}
+
+function buildSeasonal() {
+  renderSpotGrid('seasonal-grid', SEASONAL_SPOTS);
 }
 
 // Hero slideshow reuses the same GALLERY_SPOTS photos (already
@@ -446,6 +483,8 @@ const I18N = {
     navConcept: 'コンセプト',
     navFeatures: '特徴',
     navGallery: 'スポット紹介',
+    navSeasonal: '人気・シーズン作',
+    seasonalHeading: '人気・シーズン作',
     navGuides: 'ガイド',
     navFavorites: 'お気に入り',
     favoritesEmptyNav: 'まだお気に入りがありません',
@@ -483,6 +522,8 @@ const I18N = {
     navConcept: 'Concept',
     navFeatures: 'Features',
     navGallery: 'Locations',
+    navSeasonal: 'Popular & Seasonal',
+    seasonalHeading: 'Popular & Seasonal Titles',
     navGuides: 'Guides',
     navFavorites: 'Favorites',
     favoritesEmptyNav: 'No favorites yet',
@@ -520,6 +561,8 @@ const I18N = {
     navConcept: '概念',
     navFeatures: '特色',
     navGallery: '精選地點',
+    navSeasonal: '人氣・當季作品',
+    seasonalHeading: '人氣・當季作品',
     navGuides: '指南',
     navFavorites: '收藏',
     favoritesEmptyNav: '尚無收藏的地點',
@@ -557,6 +600,8 @@ const I18N = {
     navConcept: '컨셉',
     navFeatures: '특징',
     navGallery: '스팟 소개',
+    navSeasonal: '인기・시즌 작품',
+    seasonalHeading: '인기・시즌 작품',
     navGuides: '가이드',
     navFavorites: '즐겨찾기',
     favoritesEmptyNav: '아직 즐겨찾기가 없습니다',
@@ -594,6 +639,8 @@ const I18N = {
     navConcept: 'แนวคิด',
     navFeatures: 'จุดเด่น',
     navGallery: 'สถานที่แนะนำ',
+    navSeasonal: 'ยอดนิยม・ซีซันนี้',
+    seasonalHeading: 'ยอดนิยม・ซีซันนี้',
     navGuides: 'คู่มือ',
     navFavorites: 'รายการโปรด',
     favoritesEmptyNav: 'ยังไม่มีรายการโปรด',
@@ -631,6 +678,8 @@ const I18N = {
     navConcept: 'Concept',
     navFeatures: 'Points forts',
     navGallery: 'Lieux',
+    navSeasonal: 'Populaire & Saison',
+    seasonalHeading: 'Titres populaires et de la saison',
     navGuides: 'Guides',
     navFavorites: 'Favoris',
     favoritesEmptyNav: 'Aucun favori pour le moment',
@@ -685,6 +734,7 @@ function applyLanguage(lang) {
   document.documentElement.lang = lang;
   document.title = I18N[lang].pageTitle;
   buildGallery();
+  buildSeasonal();
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.dataset.i18n;
     if (I18N[lang][key] !== undefined) {
