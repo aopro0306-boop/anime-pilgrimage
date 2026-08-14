@@ -65,6 +65,27 @@
   .nav-dropdown.open{display:block;}
   .nav-dropdown a{display:block; padding:8px 12px; font-size:13px; color:var(--color-navy); text-decoration:none; border-radius:8px; white-space:nowrap;}
   .nav-dropdown a:hover{background:#f5f2ea; color:var(--color-terracotta);}
+  .favorites-badge{display:inline-flex; align-items:center; justify-content:center; min-width:16px; height:16px; padding:0 4px; border-radius:999px; background:var(--color-terracotta); color:#fff; font-size:10px; font-weight:700; line-height:16px;}
+  .favorites-badge.hidden{display:none;}
+  #favorites-dropdown{padding:14px 16px; min-width:200px;}
+  .favorites-empty-nav{margin:0; font-size:13px; color:var(--color-text); opacity:0.75;}
+  .favorites-count-text{margin:0 0 10px 0; font-size:13px; color:var(--color-navy);}
+  .favorites-view-link{display:block; text-align:center; background:var(--color-terracotta); color:#fff; text-decoration:none; padding:8px 0; border-radius:999px; font-size:13px; font-weight:700;}
+  .favorites-view-link:hover{background:#9C542C;}
+
+  #contact{max-width:560px; margin:0 auto; padding:0 24px 88px; text-align:center;}
+  #contact h2{margin:0 0 16px 0; font-size:clamp(22px,3vw,32px); color:var(--color-navy);}
+  #contact > p{margin:0 0 32px 0; font-size:15px; opacity:0.85;}
+  #contact-form{display:flex; flex-direction:column; gap:18px; text-align:left;}
+  #contact-form label{display:flex; flex-direction:column; gap:6px; font-size:13px; color:var(--color-navy); font-weight:700;}
+  #contact-form input[type="text"], #contact-form input[type="email"], #contact-form textarea{font-family:inherit; font-size:14px; padding:10px 14px; border:1px solid rgba(29,53,80,0.22); border-radius:10px; background:#fff; color:var(--color-text); resize:vertical;}
+  #contact-form input:focus, #contact-form textarea:focus{outline:none; border-color:var(--color-terracotta);}
+  #contact-form button{align-self:center; border:none; cursor:pointer; font-family:inherit; margin-top:6px;}
+  #contact-form button:disabled{opacity:0.6; cursor:default;}
+  .contact-status{margin:0; font-size:13px; text-align:center;}
+  .contact-status.hidden{display:none;}
+  .contact-status.success{color:var(--color-moss);}
+  .contact-status.error{color:var(--color-terracotta);}
   @media (max-width: 900px) {
     .header-nav{display:none;}
   }
@@ -159,6 +180,16 @@
           <a href="guides/hyouka.html" data-guide="hyouka">Hyouka</a>
         </div>
       </div>
+      <div class="nav-item-wrapper">
+        <button class="nav-item" type="button" id="nav-favorites-toggle" aria-expanded="false" aria-haspopup="true">
+          <svg viewBox="0 0 24 24"><path d="M12 20s-7-4.35-9.5-8.5C1 8 2.5 4.5 6 4.5c2 0 3.5 1.2 4.2 2.8h1.6C12.5 5.7 14 4.5 16 4.5c3.5 0 5 3.5 3.5 7-2.5 4.15-9.5 8.5-9.5 8.5z"/></svg>
+          <span data-i18n="navFavorites">お気に入り</span>
+          <span id="favorites-count-badge" class="favorites-badge hidden">0</span>
+        </button>
+        <div class="nav-dropdown" id="favorites-dropdown">
+          <div id="favorites-dropdown-content"></div>
+        </div>
+      </div>
       <a class="nav-item" href="map-leaflet.html">
         <svg viewBox="0 0 24 24"><path d="M12 21s-7-6.5-7-11.5A7 7 0 0119 9.5C19 14.5 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></svg>
         <span data-i18n="heroCta">マップを見る</span>
@@ -235,9 +266,32 @@
   </ul>
 </div>
 
+<section id="contact">
+  <h2 class="heading" data-i18n="contactHeading">お問い合わせ</h2>
+  <p data-i18n="contactIntro">ご質問・ご要望・掲載情報の修正依頼などがあれば、お気軽にご連絡ください。</p>
+  <form id="contact-form" action="https://formspree.io/f/mljrllok" method="POST">
+    <label>
+      <span data-i18n="contactNameLabel">お名前</span>
+      <input type="text" name="name" autocomplete="name">
+    </label>
+    <label>
+      <span data-i18n="contactEmailLabel">メールアドレス</span>
+      <input type="email" name="email" required autocomplete="email">
+    </label>
+    <label>
+      <span data-i18n="contactMessageLabel">メッセージ</span>
+      <textarea name="message" required rows="5"></textarea>
+    </label>
+    <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+    <input type="hidden" name="_subject" value="Anime Pilgrimage Japan - Contact">
+    <button type="submit" class="cta-button" data-i18n="contactSubmit">送信する</button>
+    <p id="contact-status" class="contact-status hidden"></p>
+  </form>
+</section>
+
 <footer>
   <p data-i18n="footerCredit">写真提供: Wikimedia Commons（詳細は各写真のクレジット参照）</p>
-  <p><a data-i18n="privacyLink" href="privacy.html">プライバシーポリシー</a></p>
+  <p><a data-i18n="privacyLink" href="privacy.html">プライバシーポリシー</a> ・ <a data-i18n="contactLink" href="#contact">お問い合わせ</a></p>
 </footer>
 
 <script>
@@ -393,6 +447,10 @@ const I18N = {
     navFeatures: '特徴',
     navGallery: 'スポット紹介',
     navGuides: 'ガイド',
+    navFavorites: 'お気に入り',
+    favoritesEmptyNav: 'まだお気に入りがありません',
+    favoritesCountText: '{n}件のお気に入りがあります',
+    favoritesViewOnMap: 'マップで見る',
     conceptText: 'アニメに描かれたあの景色は、日本のどこかに実在する。世界中のファンを、その本物の舞台へ。',
     featuresHeading: 'アプリの特徴',
     feature1Title: '実地図で探す',
@@ -407,7 +465,16 @@ const I18N = {
     closingHeading: 'さあ、地図を開いて聖地を巡ろう',
     footerCredit: '写真提供: Wikimedia Commons（詳細は各写真のクレジット参照）',
     privacyLink: 'プライバシーポリシー',
-    guidesHeading: '作品別ガイド'
+    guidesHeading: '作品別ガイド',
+    contactHeading: 'お問い合わせ',
+    contactIntro: 'ご質問・ご要望・掲載情報の修正依頼などがあれば、お気軽にご連絡ください。',
+    contactNameLabel: 'お名前',
+    contactEmailLabel: 'メールアドレス',
+    contactMessageLabel: 'メッセージ',
+    contactSubmit: '送信する',
+    contactLink: 'お問い合わせ',
+    contactSuccess: '送信しました。ご連絡ありがとうございます。',
+    contactError: '送信に失敗しました。時間をおいて再度お試しください。'
   },
   en: {
     pageTitle: 'Anime Pilgrimage Japan',
@@ -417,6 +484,10 @@ const I18N = {
     navFeatures: 'Features',
     navGallery: 'Locations',
     navGuides: 'Guides',
+    navFavorites: 'Favorites',
+    favoritesEmptyNav: 'No favorites yet',
+    favoritesCountText: '{n} favorites saved',
+    favoritesViewOnMap: 'View on Map',
     conceptText: 'The scenery you saw in anime is real — somewhere in Japan. Connecting fans across the world to the real places behind the stories.',
     featuresHeading: 'What Makes This Different',
     feature1Title: 'Explore on a Real Map',
@@ -431,7 +502,16 @@ const I18N = {
     closingHeading: 'Ready to Start Your Pilgrimage?',
     footerCredit: 'Photos via Wikimedia Commons (see individual credits above).',
     privacyLink: 'Privacy Policy',
-    guidesHeading: 'Guides by Anime'
+    guidesHeading: 'Guides by Anime',
+    contactHeading: 'Contact Us',
+    contactIntro: "Questions, suggestions, or a correction to report? We'd love to hear from you.",
+    contactNameLabel: 'Name',
+    contactEmailLabel: 'Email',
+    contactMessageLabel: 'Message',
+    contactSubmit: 'Send',
+    contactLink: 'Contact',
+    contactSuccess: "Message sent — thank you for reaching out.",
+    contactError: 'Something went wrong. Please try again in a moment.'
   },
   'zh-TW': {
     pageTitle: '動畫聖地巡禮 | Anime Pilgrimage Japan',
@@ -441,6 +521,10 @@ const I18N = {
     navFeatures: '特色',
     navGallery: '精選地點',
     navGuides: '指南',
+    navFavorites: '收藏',
+    favoritesEmptyNav: '尚無收藏的地點',
+    favoritesCountText: '已收藏 {n} 個景點',
+    favoritesViewOnMap: '在地圖上查看',
     conceptText: '動畫中描繪的那片風景，其實就存在於日本的某個角落。將世界各地的粉絲，帶往那真實的舞台。',
     featuresHeading: '應用特色',
     feature1Title: '透過實際地圖尋找',
@@ -455,7 +539,16 @@ const I18N = {
     closingHeading: '現在就打開地圖，展開你的聖地巡禮吧',
     footerCredit: '照片提供：Wikimedia Commons（詳細出處請見各張照片說明）',
     privacyLink: '隱私權政策',
-    guidesHeading: '依作品分類的指南'
+    guidesHeading: '依作品分類的指南',
+    contactHeading: '聯絡我們',
+    contactIntro: '如有任何問題、建議，或需要更正頁面資訊，歡迎與我們聯繫。',
+    contactNameLabel: '姓名',
+    contactEmailLabel: '電子郵件',
+    contactMessageLabel: '訊息內容',
+    contactSubmit: '送出',
+    contactLink: '聯絡我們',
+    contactSuccess: '已送出，感謝您的聯繫。',
+    contactError: '送出失敗，請稍後再試一次。'
   },
   ko: {
     pageTitle: '애니메이션 성지순례 | Anime Pilgrimage Japan',
@@ -465,6 +558,10 @@ const I18N = {
     navFeatures: '특징',
     navGallery: '스팟 소개',
     navGuides: '가이드',
+    navFavorites: '즐겨찾기',
+    favoritesEmptyNav: '아직 즐겨찾기가 없습니다',
+    favoritesCountText: '즐겨찾기 {n}개',
+    favoritesViewOnMap: '지도에서 보기',
     conceptText: '애니메이션에 그려진 그 풍경은, 일본 어딘가에 실제로 존재합니다. 전 세계의 팬들을 그 진짜 무대로 연결합니다.',
     featuresHeading: '앱의 특징',
     feature1Title: '실제 지도에서 찾기',
@@ -479,7 +576,16 @@ const I18N = {
     closingHeading: '자, 지도를 열고 성지순례를 떠나볼까요',
     footerCredit: '사진 제공: Wikimedia Commons(자세한 출처는 각 사진의 크레딧 참조)',
     privacyLink: '개인정보처리방침',
-    guidesHeading: '작품별 가이드'
+    guidesHeading: '작품별 가이드',
+    contactHeading: '문의하기',
+    contactIntro: '질문이나 제안, 게재 정보 수정 요청 등이 있으시면 언제든지 연락해 주세요.',
+    contactNameLabel: '이름',
+    contactEmailLabel: '이메일',
+    contactMessageLabel: '메시지',
+    contactSubmit: '보내기',
+    contactLink: '문의하기',
+    contactSuccess: '전송되었습니다. 연락해 주셔서 감사합니다.',
+    contactError: '전송에 실패했습니다. 잠시 후 다시 시도해 주세요.'
   },
   th: {
     pageTitle: 'ตามรอยอนิเมะ | Anime Pilgrimage Japan',
@@ -489,6 +595,10 @@ const I18N = {
     navFeatures: 'จุดเด่น',
     navGallery: 'สถานที่แนะนำ',
     navGuides: 'คู่มือ',
+    navFavorites: 'รายการโปรด',
+    favoritesEmptyNav: 'ยังไม่มีรายการโปรด',
+    favoritesCountText: 'มีรายการโปรด {n} แห่ง',
+    favoritesViewOnMap: 'ดูบนแผนที่',
     conceptText: 'ทิวทัศน์ที่ปรากฏในอนิเมะนั้นมีอยู่จริงที่ไหนสักแห่งในญี่ปุ่น เชื่อมโยงแฟนๆ ทั่วโลกไปยังสถานที่จริงเบื้องหลังเรื่องราวเหล่านั้น',
     featuresHeading: 'จุดเด่นของแอป',
     feature1Title: 'ค้นหาบนแผนที่จริง',
@@ -503,7 +613,16 @@ const I18N = {
     closingHeading: 'มาเปิดแผนที่แล้วออกเดินทางตามรอยกันเถอะ',
     footerCredit: 'ภาพถ่ายจาก Wikimedia Commons (ดูรายละเอียดแหล่งที่มาของแต่ละภาพด้านบน)',
     privacyLink: 'นโยบายความเป็นส่วนตัว',
-    guidesHeading: 'คู่มือแยกตามผลงาน'
+    guidesHeading: 'คู่มือแยกตามผลงาน',
+    contactHeading: 'ติดต่อเรา',
+    contactIntro: 'หากมีคำถาม ข้อเสนอแนะ หรือต้องการแจ้งแก้ไขข้อมูล สามารถติดต่อเราได้ตลอดเวลา',
+    contactNameLabel: 'ชื่อ',
+    contactEmailLabel: 'อีเมล',
+    contactMessageLabel: 'ข้อความ',
+    contactSubmit: 'ส่ง',
+    contactLink: 'ติดต่อเรา',
+    contactSuccess: 'ส่งข้อความเรียบร้อยแล้ว ขอบคุณที่ติดต่อเรา',
+    contactError: 'ส่งไม่สำเร็จ กรุณาลองใหม่อีกครั้งในภายหลัง'
   },
   fr: {
     pageTitle: 'Pèlerinage Anime | Anime Pilgrimage Japan',
@@ -513,6 +632,10 @@ const I18N = {
     navFeatures: 'Points forts',
     navGallery: 'Lieux',
     navGuides: 'Guides',
+    navFavorites: 'Favoris',
+    favoritesEmptyNav: 'Aucun favori pour le moment',
+    favoritesCountText: '{n} favoris enregistrés',
+    favoritesViewOnMap: 'Voir sur la carte',
     conceptText: "Le décor que vous avez vu dans un anime existe vraiment, quelque part au Japon. Nous relions les fans du monde entier à ces lieux authentiques.",
     featuresHeading: 'Ce qui nous distingue',
     feature1Title: 'Explorez sur une vraie carte',
@@ -527,7 +650,16 @@ const I18N = {
     closingHeading: 'Ouvrez la carte et commencez votre pèlerinage',
     footerCredit: 'Photos via Wikimedia Commons (voir les crédits de chaque photo ci-dessus).',
     privacyLink: 'Politique de confidentialité',
-    guidesHeading: 'Guides par anime'
+    guidesHeading: 'Guides par anime',
+    contactHeading: 'Nous contacter',
+    contactIntro: "Une question, une suggestion, ou une correction à signaler ? N'hésitez pas à nous écrire.",
+    contactNameLabel: 'Nom',
+    contactEmailLabel: 'E-mail',
+    contactMessageLabel: 'Message',
+    contactSubmit: 'Envoyer',
+    contactLink: 'Contact',
+    contactSuccess: 'Message envoyé — merci de nous avoir contactés.',
+    contactError: "Une erreur s'est produite. Veuillez réessayer dans un instant."
   }
 };
 
@@ -566,6 +698,30 @@ function applyLanguage(lang) {
     if (labels) el.textContent = labels[lang] || labels.en;
   });
   document.getElementById('lang-select').value = lang;
+  updateFavoritesNav();
+}
+
+// Favorites are set on map-leaflet.html (localStorage key 'pilgrimage-favorites',
+// shared across pages on this origin/path). The homepage doesn't carry the
+// full SPOTS dataset needed to render individual favorite names/photos, so
+// this just surfaces a count and links through to the map's own favorites
+// tab rather than duplicating that data here.
+function updateFavoritesNav() {
+  let ids = [];
+  try { ids = JSON.parse(localStorage.getItem('pilgrimage-favorites') || '[]'); } catch (e) {}
+  const badge = document.getElementById('favorites-count-badge');
+  badge.textContent = String(ids.length);
+  badge.classList.toggle('hidden', ids.length === 0);
+  const content = document.getElementById('favorites-dropdown-content');
+  if (ids.length === 0) {
+    content.innerHTML = `<p class="favorites-empty-nav">${I18N[currentLang].favoritesEmptyNav}</p>`;
+  } else {
+    const countText = I18N[currentLang].favoritesCountText.replace('{n}', ids.length);
+    content.innerHTML = `
+      <p class="favorites-count-text">${countText}</p>
+      <a class="favorites-view-link" href="map-leaflet.html">${I18N[currentLang].favoritesViewOnMap}</a>
+    `;
+  }
 }
 
 document.getElementById('lang-select').addEventListener('change', (e) => {
@@ -606,6 +762,52 @@ document.addEventListener('click', (e) => {
   if (guidesDropdown.classList.contains('open') && !guidesDropdown.contains(e.target) && e.target !== guidesToggle) {
     guidesDropdown.classList.remove('open');
     guidesToggle.setAttribute('aria-expanded', 'false');
+  }
+});
+
+const favoritesToggle = document.getElementById('nav-favorites-toggle');
+const favoritesDropdown = document.getElementById('favorites-dropdown');
+favoritesToggle.addEventListener('click', (e) => {
+  e.stopPropagation();
+  const isOpen = favoritesDropdown.classList.toggle('open');
+  favoritesToggle.setAttribute('aria-expanded', String(isOpen));
+});
+document.addEventListener('click', (e) => {
+  if (favoritesDropdown.classList.contains('open') && !favoritesDropdown.contains(e.target) && e.target !== favoritesToggle) {
+    favoritesDropdown.classList.remove('open');
+    favoritesToggle.setAttribute('aria-expanded', 'false');
+  }
+});
+
+// Submitted via fetch (rather than a plain form POST) so visitors stay on
+// the page and get an inline success/error message instead of being
+// redirected to Formspree's own confirmation page.
+const contactForm = document.getElementById('contact-form');
+contactForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const status = document.getElementById('contact-status');
+  const submitBtn = contactForm.querySelector('button[type="submit"]');
+  submitBtn.disabled = true;
+  status.classList.remove('hidden', 'success', 'error');
+  try {
+    const res = await fetch(contactForm.action, {
+      method: 'POST',
+      body: new FormData(contactForm),
+      headers: { 'Accept': 'application/json' }
+    });
+    if (res.ok) {
+      status.textContent = I18N[currentLang].contactSuccess;
+      status.classList.add('success');
+      contactForm.reset();
+    } else {
+      status.textContent = I18N[currentLang].contactError;
+      status.classList.add('error');
+    }
+  } catch (err) {
+    status.textContent = I18N[currentLang].contactError;
+    status.classList.add('error');
+  } finally {
+    submitBtn.disabled = false;
   }
 });
 
