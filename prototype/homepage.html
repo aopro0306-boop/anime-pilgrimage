@@ -159,10 +159,16 @@
         <svg viewBox="0 0 24 24"><path d="M12 3l1.8 5.4L19 10l-5.2 1.6L12 17l-1.8-5.4L5 10l5.2-1.6z"/></svg>
         <span data-i18n="navFeatures">特徴</span>
       </a>
-      <a class="nav-item" href="#seasonal">
-        <svg viewBox="0 0 24 24"><path d="M12 2l2.4 6.8L21 11l-6.6 2.2L12 20l-2.4-6.8L3 11l6.6-2.2z"/></svg>
-        <span data-i18n="navSeasonal">人気・シーズン作</span>
-      </a>
+      <div class="nav-item-wrapper">
+        <button class="nav-item" type="button" id="nav-seasonal-toggle" aria-expanded="false" aria-haspopup="true">
+          <svg viewBox="0 0 24 24"><path d="M12 2l2.4 6.8L21 11l-6.6 2.2L12 20l-2.4-6.8L3 11l6.6-2.2z"/></svg>
+          <span data-i18n="navSeasonal">人気・シーズン作</span>
+        </button>
+        <div class="nav-dropdown" id="seasonal-dropdown">
+          <a href="guides/nigejouzu.html" data-guide="nigejouzu">The Elusive Samurai</a>
+          <a href="guides/akane.html" data-guide="akane">Akane-banashi</a>
+        </div>
+      </div>
       <a class="nav-item" href="#gallery">
         <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1.5"/><circle cx="8.5" cy="10" r="1.5"/><path d="M3 16l5-4 4 3 3-3 6 5"/></svg>
         <span data-i18n="navGallery">スポット紹介</span>
@@ -818,6 +824,20 @@ document.addEventListener('click', (e) => {
   if (guidesDropdown.classList.contains('open') && !guidesDropdown.contains(e.target) && e.target !== guidesToggle) {
     guidesDropdown.classList.remove('open');
     guidesToggle.setAttribute('aria-expanded', 'false');
+  }
+});
+
+const seasonalToggle = document.getElementById('nav-seasonal-toggle');
+const seasonalDropdown = document.getElementById('seasonal-dropdown');
+seasonalToggle.addEventListener('click', (e) => {
+  e.stopPropagation();
+  const isOpen = seasonalDropdown.classList.toggle('open');
+  seasonalToggle.setAttribute('aria-expanded', String(isOpen));
+});
+document.addEventListener('click', (e) => {
+  if (seasonalDropdown.classList.contains('open') && !seasonalDropdown.contains(e.target) && e.target !== seasonalToggle) {
+    seasonalDropdown.classList.remove('open');
+    seasonalToggle.setAttribute('aria-expanded', 'false');
   }
 });
 
