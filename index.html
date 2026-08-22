@@ -120,6 +120,8 @@
   .gallery-caption{padding:14px 16px;}
   .gallery-caption .spot-name{font-weight:700; color:var(--color-navy); font-size:14px;}
   .gallery-caption .spot-name a{color:var(--color-terracotta); text-decoration:underline; text-underline-offset:2px;}
+  .official-badge{display:inline-block; margin-top:6px; padding:2px 10px; border-radius:999px; background:#FFF4E0; color:#8A5A00; font-size:11px; font-weight:700; text-decoration:none; border:1px solid #F0D9A0;}
+  .official-badge:hover{background:#FFEBC2;}
   .gallery-caption .spot-desc{margin:6px 0 0 0; font-size:13px; color:var(--color-text); opacity:0.85; line-height:1.6;}
   .gallery-caption .photo-credit{margin-top:8px; font-size:11px; color:var(--color-text); opacity:0.75;}
   .gallery-caption .photo-credit a{color:inherit;}
@@ -409,6 +411,7 @@ const SEASONAL_SPOTS = [
     "description":{"ja":"東京四大寄席の一つ。作中のオープニング映像にも登場する、実在の老舗寄席。","en":"One of Tokyo's four major yose theaters for rakugo storytelling, a real historic venue that appears in the series' opening.","zh-TW":"東京四大寄席之一，作中片頭動畫也曾出現的實際存在的老字號寄席。","ko":"도쿄 4대 요세(라쿠고 공연장) 중 하나. 작중 오프닝 영상에도 등장하는 실제 노포 요세.","th":"หนึ่งในสี่โรงละครราคุโกะที่มีชื่อเสียงที่สุดของโตเกียว โรงละครเก่าแก่ที่มีอยู่จริงซึ่งปรากฏในฉากเปิดเรื่องของอนิเมะ","fr":"L'un des quatre grands théâtres de rakugo de Tokyo, un lieu historique bien réel qui apparaît dans le générique de la série."},
     "photo":{"url":"https://commons.wikimedia.org/wiki/Special:FilePath/Shinjuku_Suehirotei-1.jpg?width=400","author":"江戸村のとくぞう","license":"CC BY-SA 4.0","sourceUrl":"https://commons.wikimedia.org/wiki/File:Shinjuku_Suehirotei-1.jpg"}}
 ];
+const OFFICIAL_SELECTION_IDS = new Set(['washinomiya-jinja','ueda-castle-summerwars','summerwars-besshosen-marumado','summerwars-toishi-yoneyama-castle','summerwars-unnomachi-shopping','haruhi-koyoen-station','haruhi-nishinomiyakitaguchi','mizuki-shigeru-road','steinsgate-akihabara-radiokaikan','hanasakuiroha-yuwaku-inari','tamayura-saihoji-fumeikaku','ookami-shomyodaki','lovelive-kanda-myojin','lovelive-sunshine-byuo','lovelive-sunshine-awashima','hyouka-kajibashi','hyouka-yayoibashi','hyouka-honmachi-maneki','initiald-haruna-pass','initiald-harunako','initiald-manhole','initiald-dz-garage','initiald-usui-meganebashi','initiald-myogisan','initiald-ikaho-ishidan','natsume-hitoyoshi','yurucamp-fuefukigawa-park','yurucamp-shibireko-suimeiso','yurucamp-utsubuna-station','yurucamp-takabocchi-kogen']);
 
 function toThumbnailUrl(url, width) {
   // Convert a Wikimedia Commons direct upload.wikimedia.org URL into a
@@ -435,6 +438,9 @@ function renderSpotGrid(containerId, spots) {
     const animeLink = `<a href="${spot.officialUrl}" target="_blank" rel="noopener">${anime}</a>`;
     const fullWidthParens = currentLang === 'ja' || currentLang === 'zh-TW';
     const caption = fullWidthParens ? `${name}（${animeLink}）` : `${name} (${animeLink})`;
+    const officialBadgeHtml = OFFICIAL_SELECTION_IDS.has(spot.id)
+      ? `<a class="official-badge" href="https://animetourism88.com/" target="_blank" rel="noopener" title="${I18N[currentLang].officialBadgeTitle}">${I18N[currentLang].officialBadgeLabel}</a>`
+      : '';
     return `
     <div class="gallery-item">
       <a href="prototype/map-leaflet.html?spot=${spot.id}" aria-label="${name}">
@@ -442,6 +448,7 @@ function renderSpotGrid(containerId, spots) {
       </a>
       <div class="gallery-caption">
         <div class="spot-name">${caption}</div>
+        ${officialBadgeHtml}
         <p class="spot-desc">${description}</p>
         <p class="photo-credit">Photo: <a href="${spot.photo.sourceUrl}" target="_blank" rel="noopener">${spot.photo.author}</a> / ${spot.photo.license} (Wikimedia Commons)</p>
       </div>
@@ -524,7 +531,9 @@ const I18N = {
     contactSubmit: '送信する',
     contactLink: 'お問い合わせ',
     contactSuccess: '送信しました。ご連絡ありがとうございます。',
-    contactError: '送信に失敗しました。時間をおいて再度お試しください。'
+    contactError: '送信に失敗しました。時間をおいて再度お試しください。',
+    officialBadgeLabel: '🏆「アニメ聖地88」選出作品',
+    officialBadgeTitle: '一般社団法人アニメツーリズム協会「訪れてみたい日本のアニメ聖地88」選定作品'
   },
   en: {
     pageTitle: 'Anime Pilgrimage Japan',
@@ -563,7 +572,9 @@ const I18N = {
     contactSubmit: 'Send',
     contactLink: 'Contact',
     contactSuccess: "Message sent — thank you for reaching out.",
-    contactError: 'Something went wrong. Please try again in a moment.'
+    contactError: 'Something went wrong. Please try again in a moment.',
+    officialBadgeLabel: '🏆 Anime Pilgrimage 88',
+    officialBadgeTitle: 'Featured in the Anime Tourism Association\'s "88 Anime Pilgrimage Sites to Visit in Japan"'
   },
   'zh-TW': {
     pageTitle: '動畫聖地巡禮 | Anime Pilgrimage Japan',
@@ -602,7 +613,9 @@ const I18N = {
     contactSubmit: '送出',
     contactLink: '聯絡我們',
     contactSuccess: '已送出，感謝您的聯繫。',
-    contactError: '送出失敗，請稍後再試一次。'
+    contactError: '送出失敗，請稍後再試一次。',
+    officialBadgeLabel: '🏆「動畫聖地88」入選作品',
+    officialBadgeTitle: '入選日本動畫觀光協會「想去的日本動畫聖地88」'
   },
   ko: {
     pageTitle: '애니메이션 성지순례 | Anime Pilgrimage Japan',
@@ -641,7 +654,9 @@ const I18N = {
     contactSubmit: '보내기',
     contactLink: '문의하기',
     contactSuccess: '전송되었습니다. 연락해 주셔서 감사합니다.',
-    contactError: '전송에 실패했습니다. 잠시 후 다시 시도해 주세요.'
+    contactError: '전송에 실패했습니다. 잠시 후 다시 시도해 주세요.',
+    officialBadgeLabel: '🏆 애니메 성지88 선정작',
+    officialBadgeTitle: '일반사단법인 애니메 투어리즘 협회 「가보고 싶은 일본의 애니메 성지 88」 선정작'
   },
   th: {
     pageTitle: 'ตามรอยอนิเมะ | Anime Pilgrimage Japan',
@@ -680,7 +695,9 @@ const I18N = {
     contactSubmit: 'ส่ง',
     contactLink: 'ติดต่อเรา',
     contactSuccess: 'ส่งข้อความเรียบร้อยแล้ว ขอบคุณที่ติดต่อเรา',
-    contactError: 'ส่งไม่สำเร็จ กรุณาลองใหม่อีกครั้งในภายหลัง'
+    contactError: 'ส่งไม่สำเร็จ กรุณาลองใหม่อีกครั้งในภายหลัง',
+    officialBadgeLabel: '🏆 ติดอันดับ "อนิเมะ88"',
+    officialBadgeTitle: 'ได้รับคัดเลือกจากสมาคมการท่องเที่ยวอนิเมะ ในรายชื่อ "88 สถานที่ตามรอยอนิเมะที่อยากไปเยือนในญี่ปุ่น"'
   },
   fr: {
     pageTitle: 'Pèlerinage Anime | Anime Pilgrimage Japan',
@@ -719,7 +736,9 @@ const I18N = {
     contactSubmit: 'Envoyer',
     contactLink: 'Contact',
     contactSuccess: 'Message envoyé — merci de nous avoir contactés.',
-    contactError: "Une erreur s'est produite. Veuillez réessayer dans un instant."
+    contactError: "Une erreur s'est produite. Veuillez réessayer dans un instant.",
+    officialBadgeLabel: '🏆 Sélection "Anime 88"',
+    officialBadgeTitle: 'Sélectionné par l\'Association du tourisme anime dans les « 88 lieux de pèlerinage anime à visiter au Japon »'
   }
 };
 
