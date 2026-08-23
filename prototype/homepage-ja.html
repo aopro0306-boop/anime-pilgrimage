@@ -82,6 +82,21 @@
   .favorites-view-link{display:block; text-align:center; background:var(--color-terracotta); color:#fff; text-decoration:none; padding:8px 0; border-radius:999px; font-size:13px; font-weight:700;}
   .favorites-view-link:hover{background:#9C542C;}
 
+  #board{max-width:640px; margin:0 auto; padding:0 24px 88px; text-align:center;}
+  #board h2{margin:0 0 16px 0; font-size:clamp(22px,3vw,32px); color:var(--color-navy);}
+  #board > p{margin:0 0 32px 0; font-size:15px; opacity:0.85;}
+  #board-form{display:flex; flex-direction:column; gap:18px; text-align:left; margin-bottom:40px;}
+  #board-form label{display:flex; flex-direction:column; gap:6px; font-size:13px; color:var(--color-navy); font-weight:700;}
+  #board-form input[type="text"], #board-form textarea{font-family:inherit; font-size:14px; padding:10px 14px; border:1px solid rgba(29,53,80,0.22); border-radius:10px; background:#fff; color:var(--color-text); resize:vertical;}
+  #board-form input:focus, #board-form textarea:focus{outline:none; border-color:var(--color-terracotta);}
+  #board-form button{align-self:center; border:none; cursor:pointer; font-family:inherit;}
+  #board-form button:disabled{opacity:0.6; cursor:default;}
+  .honeypot-field{position:absolute; left:-9999px; width:1px; height:1px; opacity:0;}
+  #board-list{text-align:left; display:flex; flex-direction:column; gap:14px;}
+  .board-post{background:#fff; border-radius:14px; padding:16px 18px; box-shadow:0 4px 16px rgba(29,53,80,0.06);}
+  .board-post .board-post-name{font-weight:700; color:var(--color-terracotta); font-size:13px; display:block; margin-bottom:4px;}
+  .board-post .board-post-message{margin:0; font-size:14px; color:var(--color-text); line-height:1.7; word-break:break-word;}
+  .board-empty{font-size:14px; opacity:0.7;}
   #contact{max-width:560px; margin:0 auto; padding:0 24px 88px; text-align:center;}
   #contact h2{margin:0 0 16px 0; font-size:clamp(22px,3vw,32px); color:var(--color-navy);}
   #contact > p{margin:0 0 32px 0; font-size:15px; opacity:0.85;}
@@ -174,6 +189,47 @@
 </style>
 </head>
 <body>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCOHzUTjYPtL1GOzWIvB0RUIdOL2TWIT_0",
+  authDomain: "anime-pilgrimage-729da.firebaseapp.com",
+  projectId: "anime-pilgrimage-729da",
+  storageBucket: "anime-pilgrimage-729da.firebasestorage.app",
+  messagingSenderId: "725181284483",
+  appId: "1:725181284483:web:be4acc204f92e991779bb6"
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
+
+// Exposed on window so the site's existing classic (non-module) scripts
+// can call these without themselves becoming modules.
+window.firebaseComments = {
+  async addSpotComment(spotId, name, message) {
+    await addDoc(collection(db, 'spotComments'), {
+      spotId, name: name || '', message, createdAt: serverTimestamp()
+    });
+  },
+  async getSpotComments(spotId) {
+    const q = query(collection(db, 'spotComments'), where('spotId', '==', spotId));
+    const snap = await getDocs(q);
+    return snap.docs.map(d => d.data());
+  },
+  async addBoardPost(name, message) {
+    await addDoc(collection(db, 'boardPosts'), {
+      name: name || '', message, createdAt: serverTimestamp()
+    });
+  },
+  async getBoardPosts() {
+    const q = query(collection(db, 'boardPosts'), orderBy('createdAt', 'desc'), limit(30));
+    const snap = await getDocs(q);
+    return snap.docs.map(d => d.data());
+  }
+};
+</script>
 <header id="site-header">
   <div class="header-inner">
     <a class="logo-block" href="#hero">
@@ -317,6 +373,25 @@
     <li><a href="guides/akane.html" data-guide="akane">Akane-banashi</a></li>
   </ul>
 </div>
+
+<section id="board">
+  <h2 class="heading" data-i18n="boardHeading">みんなの掲示板</h2>
+  <p data-i18n="boardIntro">巡礼の思い出や旅のヒントなど、自由に投稿してください。</p>
+  <form id="board-form">
+    <label>
+      <span data-i18n="boardNameLabel">ニックネーム（任意）</span>
+      <input type="text" id="board-name-input" maxlength="30">
+    </label>
+    <label>
+      <span data-i18n="boardMessageLabel">メッセージ</span>
+      <textarea id="board-message-input" maxlength="300" required rows="4"></textarea>
+    </label>
+    <input type="text" id="board-honeypot" class="honeypot-field" tabindex="-1" autocomplete="off">
+    <button type="submit" class="cta-button" data-i18n="boardSubmit">投稿する</button>
+    <p id="board-status" class="contact-status hidden"></p>
+  </form>
+  <div id="board-list"><p class="board-empty" data-i18n="boardLoading">読み込み中...</p></div>
+</section>
 
 <section id="contact">
   <h2 class="heading" data-i18n="contactHeading">お問い合わせ</h2>
@@ -572,7 +647,17 @@ const I18N = {
     contactSuccess: '送信しました。ご連絡ありがとうございます。',
     contactError: '送信に失敗しました。時間をおいて再度お試しください。',
     officialBadgeLabel: '🏆「アニメ聖地88」選出作品',
-    officialBadgeTitle: '一般社団法人アニメツーリズム協会「訪れてみたい日本のアニメ聖地88」選定作品'
+    officialBadgeTitle: '一般社団法人アニメツーリズム協会「訪れてみたい日本のアニメ聖地88」選定作品',
+    boardHeading: 'みんなの掲示板',
+    boardIntro: '巡礼の思い出や旅のヒントなど、自由に投稿してください。',
+    boardNameLabel: 'ニックネーム（任意）',
+    boardMessageLabel: 'メッセージ',
+    boardSubmit: '投稿する',
+    boardLoading: '読み込み中...',
+    boardEmpty: 'まだ投稿がありません。最初の投稿をしてみませんか？',
+    boardAnonymous: '名無しさん',
+    boardPosted: '投稿しました！ご参加ありがとうございます。',
+    boardError: '投稿に失敗しました。時間をおいて再度お試しください。'
   },
   en: {
     pageTitle: 'Anime Pilgrimage Japan',
@@ -614,7 +699,17 @@ const I18N = {
     contactSuccess: "Message sent — thank you for reaching out.",
     contactError: 'Something went wrong. Please try again in a moment.',
     officialBadgeLabel: '🏆 Anime Pilgrimage 88',
-    officialBadgeTitle: 'Featured in the Anime Tourism Association\'s "88 Anime Pilgrimage Sites to Visit in Japan"'
+    officialBadgeTitle: 'Featured in the Anime Tourism Association\'s "88 Anime Pilgrimage Sites to Visit in Japan"',
+    boardHeading: 'Community Board',
+    boardIntro: 'Share your pilgrimage memories, tips, or anything else — everyone is welcome to post.',
+    boardNameLabel: 'Nickname (optional)',
+    boardMessageLabel: 'Message',
+    boardSubmit: 'Post',
+    boardLoading: 'Loading...',
+    boardEmpty: 'No posts yet. Be the first to share!',
+    boardAnonymous: 'Anonymous',
+    boardPosted: 'Posted! Thanks for joining in.',
+    boardError: 'Something went wrong. Please try again in a moment.'
   },
   'zh-TW': {
     pageTitle: '動畫聖地巡禮 | Anime Pilgrimage Japan',
@@ -656,7 +751,17 @@ const I18N = {
     contactSuccess: '已送出，感謝您的聯繫。',
     contactError: '送出失敗，請稍後再試一次。',
     officialBadgeLabel: '🏆「動畫聖地88」入選作品',
-    officialBadgeTitle: '入選日本動畫觀光協會「想去的日本動畫聖地88」'
+    officialBadgeTitle: '入選日本動畫觀光協會「想去的日本動畫聖地88」',
+    boardHeading: '大家的留言板',
+    boardIntro: '歡迎自由分享您的巡禮回憶、旅遊小技巧等等。',
+    boardNameLabel: '暱稱（選填）',
+    boardMessageLabel: '訊息',
+    boardSubmit: '送出留言',
+    boardLoading: '載入中...',
+    boardEmpty: '目前還沒有留言，來搶頭香吧！',
+    boardAnonymous: '匿名',
+    boardPosted: '已送出！感謝您的參與。',
+    boardError: '送出失敗，請稍後再試一次。'
   },
   ko: {
     pageTitle: '애니메이션 성지순례 | Anime Pilgrimage Japan',
@@ -698,7 +803,17 @@ const I18N = {
     contactSuccess: '전송되었습니다. 연락해 주셔서 감사합니다.',
     contactError: '전송에 실패했습니다. 잠시 후 다시 시도해 주세요.',
     officialBadgeLabel: '🏆 애니메 성지88 선정작',
-    officialBadgeTitle: '일반사단법인 애니메 투어리즘 협회 「가보고 싶은 일본의 애니메 성지 88」 선정작'
+    officialBadgeTitle: '일반사단법인 애니메 투어리즘 협회 「가보고 싶은 일본의 애니메 성지 88」 선정작',
+    boardHeading: '모두의 게시판',
+    boardIntro: '순례 추억이나 여행 팁 등, 자유롭게 남겨주세요.',
+    boardNameLabel: '닉네임（선택）',
+    boardMessageLabel: '메시지',
+    boardSubmit: '등록',
+    boardLoading: '불러오는 중...',
+    boardEmpty: '아직 게시글이 없습니다. 첫 게시글을 남겨보세요!',
+    boardAnonymous: '익명',
+    boardPosted: '등록되었습니다! 참여해 주셔서 감사합니다.',
+    boardError: '오류가 발생했습니다. 잠시 후 다시 시도해 주세요.'
   },
   th: {
     pageTitle: 'ตามรอยอนิเมะ | Anime Pilgrimage Japan',
@@ -740,7 +855,17 @@ const I18N = {
     contactSuccess: 'ส่งข้อความเรียบร้อยแล้ว ขอบคุณที่ติดต่อเรา',
     contactError: 'ส่งไม่สำเร็จ กรุณาลองใหม่อีกครั้งในภายหลัง',
     officialBadgeLabel: '🏆 ติดอันดับ "อนิเมะ88"',
-    officialBadgeTitle: 'ได้รับคัดเลือกจากสมาคมการท่องเที่ยวอนิเมะ ในรายชื่อ "88 สถานที่ตามรอยอนิเมะที่อยากไปเยือนในญี่ปุ่น"'
+    officialBadgeTitle: 'ได้รับคัดเลือกจากสมาคมการท่องเที่ยวอนิเมะ ในรายชื่อ "88 สถานที่ตามรอยอนิเมะที่อยากไปเยือนในญี่ปุ่น"',
+    boardHeading: 'กระดานพูดคุย',
+    boardIntro: 'แบ่งปันความทรงจำการตามรอย เคล็ดลับการเดินทาง หรืออะไรก็ได้ ทุกคนยินดีต้อนรับ',
+    boardNameLabel: 'ชื่อเล่น (ไม่บังคับ)',
+    boardMessageLabel: 'ข้อความ',
+    boardSubmit: 'โพสต์',
+    boardLoading: 'กำลังโหลด...',
+    boardEmpty: 'ยังไม่มีโพสต์ มาเป็นคนแรกกันเถอะ!',
+    boardAnonymous: 'ไม่ระบุชื่อ',
+    boardPosted: 'โพสต์แล้ว! ขอบคุณที่เข้าร่วม',
+    boardError: 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้งในภายหลัง'
   },
   fr: {
     pageTitle: 'Pèlerinage Anime | Anime Pilgrimage Japan',
@@ -782,7 +907,17 @@ const I18N = {
     contactSuccess: 'Message envoyé — merci de nous avoir contactés.',
     contactError: "Une erreur s'est produite. Veuillez réessayer dans un instant.",
     officialBadgeLabel: '🏆 Sélection "Anime 88"',
-    officialBadgeTitle: 'Sélectionné par l\'Association du tourisme anime dans les « 88 lieux de pèlerinage anime à visiter au Japon »'
+    officialBadgeTitle: 'Sélectionné par l\'Association du tourisme anime dans les « 88 lieux de pèlerinage anime à visiter au Japon »',
+    boardHeading: 'Espace communautaire',
+    boardIntro: 'Partagez vos souvenirs de pèlerinage, vos conseils, ou autre chose — tout le monde est bienvenu.',
+    boardNameLabel: 'Pseudo (facultatif)',
+    boardMessageLabel: 'Message',
+    boardSubmit: 'Publier',
+    boardLoading: 'Chargement...',
+    boardEmpty: 'Aucun message pour le moment. Soyez le premier !',
+    boardAnonymous: 'Anonyme',
+    boardPosted: 'Publié ! Merci de votre participation.',
+    boardError: "Une erreur s'est produite. Veuillez réessayer dans un instant."
   }
 };
 
@@ -825,6 +960,7 @@ function applyLanguage(lang) {
   });
   document.getElementById('lang-select').value = lang;
   updateFavoritesNav();
+  renderBoardPosts(boardPostsCache);
 }
 
 // Favorites are set on map-leaflet.html (localStorage key 'pilgrimage-favorites',
@@ -976,6 +1112,75 @@ contactForm.addEventListener('submit', async (e) => {
     submitBtn.disabled = false;
   }
 });
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+let boardPostsCache = [];
+
+function renderBoardPosts(posts) {
+  const listEl = document.getElementById('board-list');
+  if (posts.length === 0) {
+    listEl.innerHTML = `<p class="board-empty">${I18N[currentLang].boardEmpty}</p>`;
+    return;
+  }
+  listEl.innerHTML = posts.map(p => `
+    <div class="board-post">
+      <span class="board-post-name">${escapeHtml(p.name || I18N[currentLang].boardAnonymous)}</span>
+      <p class="board-post-message">${escapeHtml(p.message)}</p>
+    </div>
+  `).join('');
+}
+
+// The bulletin board's posts live in Firestore (see window.firebaseComments,
+// set up by the module <script> right after <body>) rather than in this
+// page's own data, so both the initial list and post-submit refresh are
+// async network calls.
+async function buildBoard() {
+  const listEl = document.getElementById('board-list');
+  if (!window.firebaseComments) return;
+  try {
+    const posts = await window.firebaseComments.getBoardPosts();
+    boardPostsCache = posts;
+    renderBoardPosts(posts);
+  } catch (e) {
+    listEl.innerHTML = `<p class="board-empty">${I18N[currentLang].boardError}</p>`;
+  }
+}
+
+const boardForm = document.getElementById('board-form');
+boardForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (document.getElementById('board-honeypot').value) return;
+  const messageInput = document.getElementById('board-message-input');
+  const message = messageInput.value.trim();
+  if (!message) return;
+  const name = document.getElementById('board-name-input').value.trim();
+  const status = document.getElementById('board-status');
+  const submitBtn = boardForm.querySelector('button[type="submit"]');
+  submitBtn.disabled = true;
+  status.classList.remove('hidden', 'success', 'error');
+  try {
+    await window.firebaseComments.addBoardPost(name, message);
+    messageInput.value = '';
+    status.textContent = I18N[currentLang].boardPosted;
+    status.classList.add('success');
+    await buildBoard();
+    if (typeof gtag === 'function') {
+      gtag('event', 'post_board_comment');
+    }
+  } catch (err) {
+    status.textContent = I18N[currentLang].boardError;
+    status.classList.add('error');
+  } finally {
+    submitBtn.disabled = false;
+  }
+});
+
+buildBoard();
 
 applyLanguage('ja'); // this URL is the dedicated Japanese entry point (see hreflang tags) — always render Japanese regardless of browser language, unlike homepage.html's auto-detection
 setInterval(advanceHeroSlide, 5000);

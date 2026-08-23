@@ -87,6 +87,22 @@
   .popup-share .share-x{background:#000;}
   .popup-share .share-line{background:#06C755;}
   .popup-share svg{width:14px;height:14px;fill:#fff;}
+  .popup-comments{margin-top:10px;padding-top:10px;border-top:1px solid #eee;}
+  .popup-comments h4{margin:0 0 6px 0;font-size:12px;font-weight:800;color:#333;}
+  .comments-list{max-height:120px;overflow-y:auto;margin-bottom:8px;}
+  .comment-item{padding:6px 0;border-bottom:1px solid #f5f2ea;font-size:12px;}
+  .comment-item:last-child{border-bottom:none;}
+  .comment-item .comment-name{font-weight:700;color:#1a5fc4;display:block;font-size:11px;}
+  .comment-item .comment-message{margin:2px 0 0 0;color:#333;word-break:break-word;}
+  .comments-empty, .comments-loading, .comments-error{font-size:11px;color:#888;}
+  .comment-form{display:flex;flex-direction:column;gap:6px;}
+  .comment-form input[type="text"], .comment-form textarea{font-family:inherit;font-size:12px;padding:6px 8px;border:1px solid #e2ddd0;border-radius:8px;resize:vertical;}
+  .comment-form textarea{min-height:50px;}
+  .comment-form button{align-self:flex-start;background:#FF4D6D;color:#fff;border:none;border-radius:999px;padding:6px 16px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .comment-form button:hover{background:#e8395a;}
+  .comment-status{font-size:11px;margin:2px 0 0 0;}
+  .comment-status.hidden{display:none;}
+  .comment-honeypot{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;}
   .spot-popup .photo{width:100%;max-width:240px;height:auto;border-radius:12px;display:block;margin-top:4px;}
   .spot-popup .photo-credit{margin-top:2px;font-size:10px;color:#999;}
   .spot-popup .photo-credit a{margin-top:0;font-size:10px;}
@@ -151,6 +167,47 @@
 </style>
 </head>
 <body>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCOHzUTjYPtL1GOzWIvB0RUIdOL2TWIT_0",
+  authDomain: "anime-pilgrimage-729da.firebaseapp.com",
+  projectId: "anime-pilgrimage-729da",
+  storageBucket: "anime-pilgrimage-729da.firebasestorage.app",
+  messagingSenderId: "725181284483",
+  appId: "1:725181284483:web:be4acc204f92e991779bb6"
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
+
+// Exposed on window so the site's existing classic (non-module) scripts
+// can call these without themselves becoming modules.
+window.firebaseComments = {
+  async addSpotComment(spotId, name, message) {
+    await addDoc(collection(db, 'spotComments'), {
+      spotId, name: name || '', message, createdAt: serverTimestamp()
+    });
+  },
+  async getSpotComments(spotId) {
+    const q = query(collection(db, 'spotComments'), where('spotId', '==', spotId));
+    const snap = await getDocs(q);
+    return snap.docs.map(d => d.data());
+  },
+  async addBoardPost(name, message) {
+    await addDoc(collection(db, 'boardPosts'), {
+      name: name || '', message, createdAt: serverTimestamp()
+    });
+  },
+  async getBoardPosts() {
+    const q = query(collection(db, 'boardPosts'), orderBy('createdAt', 'desc'), limit(30));
+    const snap = await getDocs(q);
+    return snap.docs.map(d => d.data());
+  }
+};
+</script>
 <button id="filter-toggle-btn" class="mobile-toggle-btn" type="button" aria-label="Filters"></button>
 <div id="filter-panel">
   <div class="panel-header"><button class="panel-close-btn" type="button" aria-label="Close">✕</button></div>
@@ -345,7 +402,17 @@ const I18N = {
     nearbyHotelsLabel: '🏨 周辺のホテル',
     nearbyRestaurantsLabel: '🍜 周辺の飲食店',
     hotelSearchQuery: 'ホテル',
-    restaurantSearchQuery: '飲食店'
+    restaurantSearchQuery: '飲食店',
+    commentsHeading: '口コミ',
+    commentsLoading: '読み込み中...',
+    commentsEmpty: 'まだ口コミがありません。最初の投稿をしてみませんか？',
+    commentsError: '口コミを読み込めませんでした。',
+    commentNamePlaceholder: 'ニックネーム（任意）',
+    commentMessagePlaceholder: '感想やアクセスのコツなど、自由にどうぞ',
+    commentSubmit: '投稿する',
+    commentPosted: '投稿しました！',
+    commentError: '投稿に失敗しました。もう一度お試しください。',
+    commentAnonymous: '名無しさん'
   },
   en: {
     title: 'Anime Pilgrimage Map',
@@ -379,7 +446,17 @@ const I18N = {
     nearbyHotelsLabel: '🏨 Hotels Nearby',
     nearbyRestaurantsLabel: '🍜 Restaurants Nearby',
     hotelSearchQuery: 'hotels',
-    restaurantSearchQuery: 'restaurants'
+    restaurantSearchQuery: 'restaurants',
+    commentsHeading: 'Comments',
+    commentsLoading: 'Loading...',
+    commentsEmpty: 'No comments yet. Be the first to share!',
+    commentsError: 'Could not load comments.',
+    commentNamePlaceholder: 'Nickname (optional)',
+    commentMessagePlaceholder: 'Share your thoughts or tips for visiting...',
+    commentSubmit: 'Post',
+    commentPosted: 'Posted!',
+    commentError: 'Failed to post. Please try again.',
+    commentAnonymous: 'Anonymous'
   },
   'zh-TW': {
     title: '動畫聖地巡禮地圖',
@@ -413,7 +490,17 @@ const I18N = {
     nearbyHotelsLabel: '🏨 附近的飯店',
     nearbyRestaurantsLabel: '🍜 附近的餐廳',
     hotelSearchQuery: '飯店',
-    restaurantSearchQuery: '餐廳'
+    restaurantSearchQuery: '餐廳',
+    commentsHeading: '留言',
+    commentsLoading: '載入中...',
+    commentsEmpty: '目前還沒有留言，來搶頭香吧！',
+    commentsError: '無法載入留言。',
+    commentNamePlaceholder: '暱稱（選填）',
+    commentMessagePlaceholder: '分享您的感想或造訪小技巧...',
+    commentSubmit: '送出留言',
+    commentPosted: '已送出！',
+    commentError: '送出失敗，請再試一次。',
+    commentAnonymous: '匿名'
   },
   ko: {
     title: '애니메이션 성지순례 지도',
@@ -447,7 +534,17 @@ const I18N = {
     nearbyHotelsLabel: '🏨 주변 호텔',
     nearbyRestaurantsLabel: '🍜 주변 음식점',
     hotelSearchQuery: '호텔',
-    restaurantSearchQuery: '음식점'
+    restaurantSearchQuery: '음식점',
+    commentsHeading: '댓글',
+    commentsLoading: '불러오는 중...',
+    commentsEmpty: '아직 댓글이 없습니다. 첫 댓글을 남겨보세요!',
+    commentsError: '댓글을 불러올 수 없습니다.',
+    commentNamePlaceholder: '닉네임（선택）',
+    commentMessagePlaceholder: '방문 팁이나 감상을 자유롭게 남겨주세요',
+    commentSubmit: '등록',
+    commentPosted: '등록되었습니다!',
+    commentError: '등록에 실패했습니다. 다시 시도해 주세요.',
+    commentAnonymous: '익명'
   },
   th: {
     title: 'แผนที่ตามรอยอนิเมะ',
@@ -481,7 +578,17 @@ const I18N = {
     nearbyHotelsLabel: '🏨 โรงแรมใกล้เคียง',
     nearbyRestaurantsLabel: '🍜 ร้านอาหารใกล้เคียง',
     hotelSearchQuery: 'โรงแรม',
-    restaurantSearchQuery: 'ร้านอาหาร'
+    restaurantSearchQuery: 'ร้านอาหาร',
+    commentsHeading: 'ความคิดเห็น',
+    commentsLoading: 'กำลังโหลด...',
+    commentsEmpty: 'ยังไม่มีความคิดเห็น มาเป็นคนแรกกันเถอะ!',
+    commentsError: 'ไม่สามารถโหลดความคิดเห็นได้',
+    commentNamePlaceholder: 'ชื่อเล่น (ไม่บังคับ)',
+    commentMessagePlaceholder: 'แบ่งปันความรู้สึกหรือเคล็ดลับการมาเที่ยว...',
+    commentSubmit: 'โพสต์',
+    commentPosted: 'โพสต์แล้ว!',
+    commentError: 'โพสต์ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง',
+    commentAnonymous: 'ไม่ระบุชื่อ'
   },
   fr: {
     title: 'Carte des lieux de pèlerinage anime',
@@ -515,7 +622,17 @@ const I18N = {
     nearbyHotelsLabel: '🏨 Hôtels à proximité',
     nearbyRestaurantsLabel: '🍜 Restaurants à proximité',
     hotelSearchQuery: 'hôtels',
-    restaurantSearchQuery: 'restaurants'
+    restaurantSearchQuery: 'restaurants',
+    commentsHeading: 'Commentaires',
+    commentsLoading: 'Chargement...',
+    commentsEmpty: 'Aucun commentaire pour le moment. Soyez le premier !',
+    commentsError: 'Impossible de charger les commentaires.',
+    commentNamePlaceholder: 'Pseudo (facultatif)',
+    commentMessagePlaceholder: 'Partagez vos impressions ou vos conseils...',
+    commentSubmit: 'Publier',
+    commentPosted: 'Publié !',
+    commentError: "Échec de l'envoi. Veuillez réessayer.",
+    commentAnonymous: 'Anonyme'
   }
 };
 
@@ -1897,8 +2014,88 @@ function buildPopupHtml(spot) {
         <a class="share-x" href="${twitterShareUrl}" target="_blank" rel="noopener" aria-label="X" data-spot-id="${spot.id}" data-action="share_x"><svg viewBox="0 0 24 24"><path d="M4 4l16 16M20 4L4 20" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg></a>
         <a class="share-line" href="${lineShareUrl}" target="_blank" rel="noopener" aria-label="LINE" data-spot-id="${spot.id}" data-action="share_line"><svg viewBox="0 0 24 24"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.4 2.5 6.3 6.1 7.5-.3.9-1 3-1.1 3.4 0 0-.1.4.2.5s.6-.1.6-.1c.8-.5 3.4-2.3 4.1-2.7.7.1 1.4.1 2.1.1 5.5 0 10-3.6 10-8s-4.5-8-10-8z"/></svg></a>
       </div>
+      <div class="popup-comments" data-spot-id="${spot.id}">
+        <h4>${I18N[currentLang].commentsHeading}</h4>
+        <div class="comments-list comments-loading">${I18N[currentLang].commentsLoading}</div>
+        <form class="comment-form">
+          <input type="text" class="comment-name" placeholder="${I18N[currentLang].commentNamePlaceholder}" maxlength="30">
+          <textarea class="comment-message" placeholder="${I18N[currentLang].commentMessagePlaceholder}" maxlength="300" required></textarea>
+          <input type="text" class="comment-honeypot" tabindex="-1" autocomplete="off">
+          <button type="submit">${I18N[currentLang].commentSubmit}</button>
+          <p class="comment-status hidden"></p>
+        </form>
+      </div>
     </div>
   `;
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function renderComments(listEl, comments) {
+  if (comments.length === 0) {
+    listEl.textContent = I18N[currentLang].commentsEmpty;
+    listEl.className = 'comments-list comments-empty';
+    return;
+  }
+  listEl.className = 'comments-list';
+  listEl.innerHTML = comments.slice(0, 10).map(c => `
+    <div class="comment-item">
+      <span class="comment-name">${escapeHtml(c.name || I18N[currentLang].commentAnonymous)}</span>
+      <p class="comment-message">${escapeHtml(c.message)}</p>
+    </div>
+  `).join('');
+}
+
+// Comments live in Firestore (see window.firebaseComments, set up by the
+// module <script> near the top of <body>), not in this page's own data.
+// Each popup fetches and renders its spot's comments fresh on open, since
+// buildPopupHtml() itself is synchronous and can't wait on the network.
+async function wireCommentsSection(el) {
+  const container = el.querySelector('.popup-comments');
+  if (!container || !window.firebaseComments) return;
+  const spotId = container.dataset.spotId;
+  const listEl = container.querySelector('.comments-list');
+  const form = container.querySelector('.comment-form');
+
+  try {
+    const comments = await window.firebaseComments.getSpotComments(spotId);
+    comments.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+    renderComments(listEl, comments);
+  } catch (e) {
+    listEl.textContent = I18N[currentLang].commentsError;
+    listEl.className = 'comments-list comments-error';
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (form.querySelector('.comment-honeypot').value) return;
+    const message = form.querySelector('.comment-message').value.trim();
+    if (!message) return;
+    const name = form.querySelector('.comment-name').value.trim();
+    const statusEl = form.querySelector('.comment-status');
+    const submitBtn = form.querySelector('button');
+    submitBtn.disabled = true;
+    try {
+      await window.firebaseComments.addSpotComment(spotId, name, message);
+      form.querySelector('.comment-message').value = '';
+      statusEl.textContent = I18N[currentLang].commentPosted;
+      statusEl.className = 'comment-status';
+      const comments = await window.firebaseComments.getSpotComments(spotId);
+      comments.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+      renderComments(listEl, comments);
+      if (typeof gtag === 'function') {
+        gtag('event', 'post_spot_comment', { spot_id: spotId });
+      }
+    } catch (err) {
+      statusEl.textContent = I18N[currentLang].commentError;
+      statusEl.className = 'comment-status';
+    }
+    submitBtn.disabled = false;
+  });
 }
 
 for (const spot of SPOTS) {
@@ -1963,6 +2160,7 @@ map.on('popupopen', (e) => {
   wirePopupHeartButton(el);
   wireGmapsButton(el);
   wirePopupActionLinks(el);
+  wireCommentsSection(el);
 });
 
 // A popup left open while the user switches language would otherwise keep
@@ -1974,7 +2172,7 @@ function refreshOpenPopup() {
     if (marker && marker.isPopupOpen()) {
       marker.setPopupContent(buildPopupHtml(spot));
       const el = marker.getPopup().getElement();
-      if (el) { wirePopupHeartButton(el); wireGmapsButton(el); wirePopupActionLinks(el); }
+      if (el) { wirePopupHeartButton(el); wireGmapsButton(el); wirePopupActionLinks(el); wireCommentsSection(el); }
       break;
     }
   }
