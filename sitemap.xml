@@ -36,6 +36,11 @@
     <priority>0.3</priority>
   </url>
   <url>
+    <loc>https://aopro0306-boop.github.io/anime-pilgrimage/prototype/about.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
     <loc>https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/chihiro.html</loc>
     <lastmod>2026-08-10</lastmod>
     <changefreq>monthly</changefreq>
