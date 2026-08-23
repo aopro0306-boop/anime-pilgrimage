@@ -97,6 +97,14 @@
   .board-post .board-post-name{font-weight:700; color:var(--color-terracotta); font-size:13px; display:block; margin-bottom:4px;}
   .board-post .board-post-message{margin:0; font-size:14px; color:var(--color-text); line-height:1.7; word-break:break-word;}
   .board-empty{font-size:14px; opacity:0.7;}
+  .auth-signin-btn{background:var(--color-navy); color:#fff; border:none; border-radius:999px; padding:10px 24px; font-size:14px; font-weight:700; cursor:pointer; font-family:inherit;}
+  .auth-signin-btn:hover{background:#132741;}
+  .auth-status{margin:0 0 12px 0; font-size:13px; color:var(--color-text); opacity:0.75;}
+  .auth-signout-btn{background:none; border:none; color:var(--color-terracotta); font-size:13px; font-weight:700; cursor:pointer; padding:0; font-family:inherit; text-decoration:underline;}
+  .board-post-owner-actions{display:flex; gap:12px; margin-top:8px;}
+  .board-edit-btn, .board-delete-btn, .board-save-btn, .board-cancel-btn{background:none; border:none; font-size:12px; font-weight:700; cursor:pointer; padding:0; font-family:inherit; color:var(--color-navy); text-decoration:underline;}
+  .board-delete-btn{color:var(--color-terracotta);}
+  .board-edit-textarea{width:100%; font-family:inherit; font-size:14px; padding:8px 10px; border:1px solid rgba(29,53,80,0.22); border-radius:10px; resize:vertical; min-height:60px; box-sizing:border-box;}
   #contact{max-width:560px; margin:0 auto; padding:0 24px 88px; text-align:center;}
   #contact h2{margin:0 0 16px 0; font-size:clamp(22px,3vw,32px); color:var(--color-navy);}
   #contact > p{margin:0 0 32px 0; font-size:15px; opacity:0.85;}
@@ -191,7 +199,8 @@
 <body>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, where, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCOHzUTjYPtL1GOzWIvB0RUIdOL2TWIT_0",
@@ -204,31 +213,68 @@ const firebaseConfig = {
 
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
+const auth = getAuth(firebaseApp);
+const googleProvider = new GoogleAuthProvider();
 
 // Exposed on window so the site's existing classic (non-module) scripts
-// can call these without themselves becoming modules.
+// can call these without themselves becoming modules. Posting requires
+// being signed in (see window.firebaseAuth); edit/delete are further
+// restricted server-side by Firestore security rules to the comment's
+// own ownerId, so the checks here are for UX only, not the real guard.
+window.firebaseAuth = {
+  signInWithGoogle: () => signInWithPopup(auth, googleProvider),
+  signOutUser: () => signOut(auth),
+  getCurrentUser: () => auth.currentUser,
+  onAuthChange: (cb) => onAuthStateChanged(auth, cb)
+};
+
 window.firebaseComments = {
   async addSpotComment(spotId, name, message) {
+    const user = auth.currentUser;
+    if (!user) throw new Error('not-signed-in');
     await addDoc(collection(db, 'spotComments'), {
-      spotId, name: name || '', message, createdAt: serverTimestamp()
+      spotId, name: name || '', message, createdAt: serverTimestamp(), ownerId: user.uid
     });
   },
   async getSpotComments(spotId) {
     const q = query(collection(db, 'spotComments'), where('spotId', '==', spotId));
     const snap = await getDocs(q);
-    return snap.docs.map(d => d.data());
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  },
+  async updateSpotComment(commentId, message) {
+    await updateDoc(doc(db, 'spotComments', commentId), { message });
+  },
+  async deleteSpotComment(commentId) {
+    await deleteDoc(doc(db, 'spotComments', commentId));
   },
   async addBoardPost(name, message) {
+    const user = auth.currentUser;
+    if (!user) throw new Error('not-signed-in');
     await addDoc(collection(db, 'boardPosts'), {
-      name: name || '', message, createdAt: serverTimestamp()
+      name: name || '', message, createdAt: serverTimestamp(), ownerId: user.uid
     });
   },
   async getBoardPosts() {
     const q = query(collection(db, 'boardPosts'), orderBy('createdAt', 'desc'), limit(30));
     const snap = await getDocs(q);
-    return snap.docs.map(d => d.data());
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  },
+  async updateBoardPost(postId, message) {
+    await updateDoc(doc(db, 'boardPosts', postId), { message });
+  },
+  async deleteBoardPost(postId) {
+    await deleteDoc(doc(db, 'boardPosts', postId));
   }
 };
+
+// This module script is deferred (like a script with the `defer`
+// attribute), so it runs *after* the page's own classic inline <script>
+// has already executed during parsing — window.firebaseComments/firebaseAuth
+// are not yet defined at that point. Anything that needs them at page-load
+// time (rather than in response to a later click, well after load) must
+// wait for this event instead of calling them directly.
+window.__firebaseReady = true;
+window.dispatchEvent(new Event('firebase-ready'));
 </script>
 <header id="site-header">
   <div class="header-inner">
@@ -278,6 +324,10 @@ window.firebaseComments = {
           <a href="guides/akane.html" data-guide="akane">Akane-banashi</a>
         </div>
       </div>
+      <a class="nav-item" href="#board">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16v12H8l-4 4z"/></svg>
+        <span data-i18n="navBoard">掲示板</span>
+      </a>
       <div class="nav-item-wrapper">
         <button class="nav-item" type="button" id="nav-favorites-toggle" aria-expanded="false" aria-haspopup="true">
           <svg viewBox="0 0 24 24"><path d="M12 20s-7-4.35-9.5-8.5C1 8 2.5 4.5 6 4.5c2 0 3.5 1.2 4.2 2.8h1.6C12.5 5.7 14 4.5 16 4.5c3.5 0 5 3.5 3.5 7-2.5 4.15-9.5 8.5-9.5 8.5z"/></svg>
@@ -377,19 +427,7 @@ window.firebaseComments = {
 <section id="board">
   <h2 class="heading" data-i18n="boardHeading">みんなの掲示板</h2>
   <p data-i18n="boardIntro">巡礼の思い出や旅のヒントなど、自由に投稿してください。</p>
-  <form id="board-form">
-    <label>
-      <span data-i18n="boardNameLabel">ニックネーム（任意）</span>
-      <input type="text" id="board-name-input" maxlength="30">
-    </label>
-    <label>
-      <span data-i18n="boardMessageLabel">メッセージ</span>
-      <textarea id="board-message-input" maxlength="300" required rows="4"></textarea>
-    </label>
-    <input type="text" id="board-honeypot" class="honeypot-field" tabindex="-1" autocomplete="off">
-    <button type="submit" class="cta-button" data-i18n="boardSubmit">投稿する</button>
-    <p id="board-status" class="contact-status hidden"></p>
-  </form>
+  <div id="board-post-area"></div>
   <div id="board-list"><p class="board-empty" data-i18n="boardLoading">読み込み中...</p></div>
 </section>
 
@@ -617,6 +655,7 @@ const I18N = {
     navSeasonal: '人気・シーズン作',
     seasonalHeading: '人気・シーズン作',
     navGuides: 'ガイド',
+    navBoard: '掲示板',
     navFavorites: 'お気に入り',
     favoritesEmptyNav: 'まだお気に入りがありません',
     favoritesCountText: '{n}件のお気に入りがあります',
@@ -657,7 +696,16 @@ const I18N = {
     boardEmpty: 'まだ投稿がありません。最初の投稿をしてみませんか？',
     boardAnonymous: '名無しさん',
     boardPosted: '投稿しました！ご参加ありがとうございます。',
-    boardError: '投稿に失敗しました。時間をおいて再度お試しください。'
+    boardError: '投稿に失敗しました。時間をおいて再度お試しください。',
+    authSignIn: 'Googleでログイン',
+    authSignedInAs: '{name} としてログイン中',
+    authSignOut: 'ログアウト',
+    authError: 'ログインに失敗しました。もう一度お試しください。',
+    editLabel: '編集',
+    deleteLabel: '削除',
+    saveLabel: '保存',
+    cancelLabel: 'キャンセル',
+    deleteConfirm: 'この投稿を削除しますか？'
   },
   en: {
     pageTitle: 'Anime Pilgrimage Japan',
@@ -669,6 +717,7 @@ const I18N = {
     navSeasonal: 'Popular & Seasonal',
     seasonalHeading: 'Popular & Seasonal Titles',
     navGuides: 'Guides',
+    navBoard: 'Board',
     navFavorites: 'Favorites',
     favoritesEmptyNav: 'No favorites yet',
     favoritesCountText: '{n} favorites saved',
@@ -709,7 +758,16 @@ const I18N = {
     boardEmpty: 'No posts yet. Be the first to share!',
     boardAnonymous: 'Anonymous',
     boardPosted: 'Posted! Thanks for joining in.',
-    boardError: 'Something went wrong. Please try again in a moment.'
+    boardError: 'Something went wrong. Please try again in a moment.',
+    authSignIn: 'Sign in with Google',
+    authSignedInAs: 'Signed in as {name}',
+    authSignOut: 'Sign out',
+    authError: 'Sign-in failed. Please try again.',
+    editLabel: 'Edit',
+    deleteLabel: 'Delete',
+    saveLabel: 'Save',
+    cancelLabel: 'Cancel',
+    deleteConfirm: 'Delete this post?'
   },
   'zh-TW': {
     pageTitle: '動畫聖地巡禮 | Anime Pilgrimage Japan',
@@ -721,6 +779,7 @@ const I18N = {
     navSeasonal: '人氣・當季作品',
     seasonalHeading: '人氣・當季作品',
     navGuides: '指南',
+    navBoard: '留言板',
     navFavorites: '收藏',
     favoritesEmptyNav: '尚無收藏的地點',
     favoritesCountText: '已收藏 {n} 個景點',
@@ -761,7 +820,16 @@ const I18N = {
     boardEmpty: '目前還沒有留言，來搶頭香吧！',
     boardAnonymous: '匿名',
     boardPosted: '已送出！感謝您的參與。',
-    boardError: '送出失敗，請稍後再試一次。'
+    boardError: '送出失敗，請稍後再試一次。',
+    authSignIn: '使用Google登入',
+    authSignedInAs: '目前登入為 {name}',
+    authSignOut: '登出',
+    authError: '登入失敗，請再試一次。',
+    editLabel: '編輯',
+    deleteLabel: '刪除',
+    saveLabel: '儲存',
+    cancelLabel: '取消',
+    deleteConfirm: '確定要刪除這則貼文嗎？'
   },
   ko: {
     pageTitle: '애니메이션 성지순례 | Anime Pilgrimage Japan',
@@ -773,6 +841,7 @@ const I18N = {
     navSeasonal: '인기・시즌 작품',
     seasonalHeading: '인기・시즌 작품',
     navGuides: '가이드',
+    navBoard: '게시판',
     navFavorites: '즐겨찾기',
     favoritesEmptyNav: '아직 즐겨찾기가 없습니다',
     favoritesCountText: '즐겨찾기 {n}개',
@@ -813,7 +882,16 @@ const I18N = {
     boardEmpty: '아직 게시글이 없습니다. 첫 게시글을 남겨보세요!',
     boardAnonymous: '익명',
     boardPosted: '등록되었습니다! 참여해 주셔서 감사합니다.',
-    boardError: '오류가 발생했습니다. 잠시 후 다시 시도해 주세요.'
+    boardError: '오류가 발생했습니다. 잠시 후 다시 시도해 주세요.',
+    authSignIn: 'Google로 로그인',
+    authSignedInAs: '{name}(으)로 로그인됨',
+    authSignOut: '로그아웃',
+    authError: '로그인에 실패했습니다. 다시 시도해 주세요.',
+    editLabel: '수정',
+    deleteLabel: '삭제',
+    saveLabel: '저장',
+    cancelLabel: '취소',
+    deleteConfirm: '이 게시글을 삭제하시겠습니까?'
   },
   th: {
     pageTitle: 'ตามรอยอนิเมะ | Anime Pilgrimage Japan',
@@ -825,6 +903,7 @@ const I18N = {
     navSeasonal: 'ยอดนิยม・ซีซันนี้',
     seasonalHeading: 'ยอดนิยม・ซีซันนี้',
     navGuides: 'คู่มือ',
+    navBoard: 'กระดาน',
     navFavorites: 'รายการโปรด',
     favoritesEmptyNav: 'ยังไม่มีรายการโปรด',
     favoritesCountText: 'มีรายการโปรด {n} แห่ง',
@@ -865,7 +944,16 @@ const I18N = {
     boardEmpty: 'ยังไม่มีโพสต์ มาเป็นคนแรกกันเถอะ!',
     boardAnonymous: 'ไม่ระบุชื่อ',
     boardPosted: 'โพสต์แล้ว! ขอบคุณที่เข้าร่วม',
-    boardError: 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้งในภายหลัง'
+    boardError: 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้งในภายหลัง',
+    authSignIn: 'เข้าสู่ระบบด้วย Google',
+    authSignedInAs: 'เข้าสู่ระบบในชื่อ {name}',
+    authSignOut: 'ออกจากระบบ',
+    authError: 'เข้าสู่ระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง',
+    editLabel: 'แก้ไข',
+    deleteLabel: 'ลบ',
+    saveLabel: 'บันทึก',
+    cancelLabel: 'ยกเลิก',
+    deleteConfirm: 'ต้องการลบโพสต์นี้หรือไม่?'
   },
   fr: {
     pageTitle: 'Pèlerinage Anime | Anime Pilgrimage Japan',
@@ -877,6 +965,7 @@ const I18N = {
     navSeasonal: 'Populaire & Saison',
     seasonalHeading: 'Titres populaires et de la saison',
     navGuides: 'Guides',
+    navBoard: 'Forum',
     navFavorites: 'Favoris',
     favoritesEmptyNav: 'Aucun favori pour le moment',
     favoritesCountText: '{n} favoris enregistrés',
@@ -917,7 +1006,16 @@ const I18N = {
     boardEmpty: 'Aucun message pour le moment. Soyez le premier !',
     boardAnonymous: 'Anonyme',
     boardPosted: 'Publié ! Merci de votre participation.',
-    boardError: "Une erreur s'est produite. Veuillez réessayer dans un instant."
+    boardError: "Une erreur s'est produite. Veuillez réessayer dans un instant.",
+    authSignIn: 'Se connecter avec Google',
+    authSignedInAs: 'Connecté en tant que {name}',
+    authSignOut: 'Se déconnecter',
+    authError: "Échec de la connexion. Veuillez réessayer.",
+    editLabel: 'Modifier',
+    deleteLabel: 'Supprimer',
+    saveLabel: 'Enregistrer',
+    cancelLabel: 'Annuler',
+    deleteConfirm: 'Supprimer ce message ?'
   }
 };
 
@@ -960,7 +1058,8 @@ function applyLanguage(lang) {
   });
   document.getElementById('lang-select').value = lang;
   updateFavoritesNav();
-  renderBoardPosts(boardPostsCache);
+  renderBoardPosts(boardPostsCache, window.firebaseAuth?.getCurrentUser()?.uid);
+  if (document.getElementById('board-post-area')) renderBoardPostArea();
 }
 
 // Favorites are set on map-leaflet.html (localStorage key 'pilgrimage-favorites',
@@ -1121,66 +1220,168 @@ function escapeHtml(str) {
 
 let boardPostsCache = [];
 
-function renderBoardPosts(posts) {
+function renderBoardPosts(posts, currentUserId) {
   const listEl = document.getElementById('board-list');
   if (posts.length === 0) {
     listEl.innerHTML = `<p class="board-empty">${I18N[currentLang].boardEmpty}</p>`;
     return;
   }
-  listEl.innerHTML = posts.map(p => `
-    <div class="board-post">
+  listEl.innerHTML = posts.map(p => {
+    const isOwner = currentUserId && p.ownerId === currentUserId;
+    const ownerActions = isOwner ? `
+      <div class="board-post-owner-actions">
+        <button class="board-edit-btn" type="button">${I18N[currentLang].editLabel}</button>
+        <button class="board-delete-btn" type="button">${I18N[currentLang].deleteLabel}</button>
+      </div>` : '';
+    return `
+    <div class="board-post" data-id="${p.id}">
       <span class="board-post-name">${escapeHtml(p.name || I18N[currentLang].boardAnonymous)}</span>
       <p class="board-post-message">${escapeHtml(p.message)}</p>
-    </div>
-  `).join('');
+      ${ownerActions}
+    </div>`;
+  }).join('');
 }
 
 // The bulletin board's posts live in Firestore (see window.firebaseComments,
 // set up by the module <script> right after <body>) rather than in this
 // page's own data, so both the initial list and post-submit refresh are
 // async network calls.
-async function buildBoard() {
+async function refreshBoard() {
   const listEl = document.getElementById('board-list');
   if (!window.firebaseComments) return;
   try {
     const posts = await window.firebaseComments.getBoardPosts();
     boardPostsCache = posts;
-    renderBoardPosts(posts);
+    const user = window.firebaseAuth.getCurrentUser();
+    renderBoardPosts(posts, user && user.uid);
   } catch (e) {
     listEl.innerHTML = `<p class="board-empty">${I18N[currentLang].boardError}</p>`;
   }
 }
 
-const boardForm = document.getElementById('board-form');
-boardForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  if (document.getElementById('board-honeypot').value) return;
-  const messageInput = document.getElementById('board-message-input');
-  const message = messageInput.value.trim();
-  if (!message) return;
-  const name = document.getElementById('board-name-input').value.trim();
-  const status = document.getElementById('board-status');
-  const submitBtn = boardForm.querySelector('button[type="submit"]');
-  submitBtn.disabled = true;
-  status.classList.remove('hidden', 'success', 'error');
-  try {
-    await window.firebaseComments.addBoardPost(name, message);
-    messageInput.value = '';
-    status.textContent = I18N[currentLang].boardPosted;
-    status.classList.add('success');
-    await buildBoard();
-    if (typeof gtag === 'function') {
-      gtag('event', 'post_board_comment');
+// Shows a Google sign-in button when logged out, or the post form (plus a
+// sign-out link) when logged in. Re-rendered after every sign-in/sign-out
+// and on language change.
+function renderBoardPostArea() {
+  if (!window.firebaseAuth) return;
+  const areaEl = document.getElementById('board-post-area');
+  const user = window.firebaseAuth.getCurrentUser();
+  if (!user) {
+    areaEl.innerHTML = `<button class="auth-signin-btn" type="button">${I18N[currentLang].authSignIn}</button>`;
+    areaEl.querySelector('.auth-signin-btn').addEventListener('click', async () => {
+      try {
+        await window.firebaseAuth.signInWithGoogle();
+        renderBoardPostArea();
+        await refreshBoard();
+      } catch (e) {}
+    });
+    return;
+  }
+  areaEl.innerHTML = `
+    <p class="auth-status">${I18N[currentLang].authSignedInAs.replace('{name}', escapeHtml(user.displayName || ''))} · <button class="auth-signout-btn" type="button">${I18N[currentLang].authSignOut}</button></p>
+    <form id="board-form">
+      <label>
+        <span>${I18N[currentLang].boardNameLabel}</span>
+        <input type="text" id="board-name-input" maxlength="30" value="${escapeHtml(user.displayName || '')}">
+      </label>
+      <label>
+        <span>${I18N[currentLang].boardMessageLabel}</span>
+        <textarea id="board-message-input" maxlength="300" required rows="4"></textarea>
+      </label>
+      <input type="text" id="board-honeypot" class="honeypot-field" tabindex="-1" autocomplete="off">
+      <button type="submit" class="cta-button">${I18N[currentLang].boardSubmit}</button>
+      <p id="board-status" class="contact-status hidden"></p>
+    </form>
+  `;
+  areaEl.querySelector('.auth-signout-btn').addEventListener('click', async () => {
+    await window.firebaseAuth.signOutUser();
+    renderBoardPostArea();
+    await refreshBoard();
+  });
+  const boardForm = document.getElementById('board-form');
+  boardForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (document.getElementById('board-honeypot').value) return;
+    const messageInput = document.getElementById('board-message-input');
+    const message = messageInput.value.trim();
+    if (!message) return;
+    const name = document.getElementById('board-name-input').value.trim();
+    const status = document.getElementById('board-status');
+    const submitBtn = boardForm.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    status.classList.remove('hidden', 'success', 'error');
+    try {
+      await window.firebaseComments.addBoardPost(name, message);
+      messageInput.value = '';
+      status.textContent = I18N[currentLang].boardPosted;
+      status.classList.add('success');
+      await refreshBoard();
+      if (typeof gtag === 'function') {
+        gtag('event', 'post_board_comment');
+      }
+    } catch (err) {
+      status.textContent = I18N[currentLang].boardError;
+      status.classList.add('error');
+    } finally {
+      submitBtn.disabled = false;
     }
-  } catch (err) {
-    status.textContent = I18N[currentLang].boardError;
-    status.classList.add('error');
-  } finally {
-    submitBtn.disabled = false;
+  });
+}
+
+document.getElementById('board-list').addEventListener('click', async (e) => {
+  const item = e.target.closest('.board-post');
+  if (!item) return;
+  const postId = item.dataset.id;
+
+  if (e.target.closest('.board-edit-btn')) {
+    const messageEl = item.querySelector('.board-post-message');
+    const currentText = messageEl.textContent;
+    const actionsEl = item.querySelector('.board-post-owner-actions');
+    messageEl.outerHTML = `<textarea class="board-edit-textarea" maxlength="300">${escapeHtml(currentText)}</textarea>`;
+    actionsEl.innerHTML = `
+      <button class="board-save-btn" type="button">${I18N[currentLang].saveLabel}</button>
+      <button class="board-cancel-btn" type="button">${I18N[currentLang].cancelLabel}</button>
+    `;
+    return;
+  }
+  if (e.target.closest('.board-cancel-btn')) {
+    await refreshBoard();
+    return;
+  }
+  if (e.target.closest('.board-save-btn')) {
+    const textarea = item.querySelector('.board-edit-textarea');
+    const newMessage = textarea.value.trim();
+    if (!newMessage) return;
+    try {
+      await window.firebaseComments.updateBoardPost(postId, newMessage);
+      await refreshBoard();
+    } catch (err) {
+      alert(I18N[currentLang].boardError);
+    }
+    return;
+  }
+  if (e.target.closest('.board-delete-btn')) {
+    if (!confirm(I18N[currentLang].deleteConfirm)) return;
+    try {
+      await window.firebaseComments.deleteBoardPost(postId);
+      await refreshBoard();
+    } catch (err) {
+      alert(I18N[currentLang].boardError);
+    }
   }
 });
 
-buildBoard();
+// The Firebase module <script> is deferred, so it hasn't set
+// window.firebaseComments/firebaseAuth yet at this point in the initial
+// parse — wait for its 'firebase-ready' signal before the first render.
+function firebaseReadyPromise() {
+  if (window.__firebaseReady) return Promise.resolve();
+  return new Promise(resolve => window.addEventListener('firebase-ready', resolve, { once: true }));
+}
+firebaseReadyPromise().then(() => {
+  renderBoardPostArea();
+  refreshBoard();
+});
 
 applyLanguage(detectBrowserLang());
 setInterval(advanceHeroSlide, 5000);

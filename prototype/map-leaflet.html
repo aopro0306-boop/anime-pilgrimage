@@ -103,6 +103,14 @@
   .comment-status{font-size:11px;margin:2px 0 0 0;}
   .comment-status.hidden{display:none;}
   .comment-honeypot{position:absolute;left:-9999px;width:1px;height:1px;opacity:0;}
+  .auth-signin-btn{background:#1a5fc4;color:#fff;border:none;border-radius:999px;padding:7px 16px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .auth-signin-btn:hover{background:#144a99;}
+  .auth-status{margin:0 0 8px 0;font-size:11px;color:#666;}
+  .auth-signout-btn{background:none;border:none;color:#1a5fc4;font-size:11px;font-weight:700;cursor:pointer;padding:0;font-family:inherit;text-decoration:underline;}
+  .comment-owner-actions{display:flex;gap:8px;margin-top:4px;}
+  .comment-edit-btn, .comment-delete-btn, .comment-save-btn, .comment-cancel-btn{background:none;border:none;font-size:10px;font-weight:700;cursor:pointer;padding:0;font-family:inherit;color:#1a5fc4;text-decoration:underline;}
+  .comment-delete-btn{color:#e8395a;}
+  .comment-edit-textarea{width:100%;font-family:inherit;font-size:12px;padding:6px 8px;border:1px solid #e2ddd0;border-radius:8px;resize:vertical;min-height:50px;box-sizing:border-box;}
   .spot-popup .photo{width:100%;max-width:240px;height:auto;border-radius:12px;display:block;margin-top:4px;}
   .spot-popup .photo-credit{margin-top:2px;font-size:10px;color:#999;}
   .spot-popup .photo-credit a{margin-top:0;font-size:10px;}
@@ -169,7 +177,8 @@
 <body>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, where, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCOHzUTjYPtL1GOzWIvB0RUIdOL2TWIT_0",
@@ -182,31 +191,68 @@ const firebaseConfig = {
 
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
+const auth = getAuth(firebaseApp);
+const googleProvider = new GoogleAuthProvider();
 
 // Exposed on window so the site's existing classic (non-module) scripts
-// can call these without themselves becoming modules.
+// can call these without themselves becoming modules. Posting requires
+// being signed in (see window.firebaseAuth); edit/delete are further
+// restricted server-side by Firestore security rules to the comment's
+// own ownerId, so the checks here are for UX only, not the real guard.
+window.firebaseAuth = {
+  signInWithGoogle: () => signInWithPopup(auth, googleProvider),
+  signOutUser: () => signOut(auth),
+  getCurrentUser: () => auth.currentUser,
+  onAuthChange: (cb) => onAuthStateChanged(auth, cb)
+};
+
 window.firebaseComments = {
   async addSpotComment(spotId, name, message) {
+    const user = auth.currentUser;
+    if (!user) throw new Error('not-signed-in');
     await addDoc(collection(db, 'spotComments'), {
-      spotId, name: name || '', message, createdAt: serverTimestamp()
+      spotId, name: name || '', message, createdAt: serverTimestamp(), ownerId: user.uid
     });
   },
   async getSpotComments(spotId) {
     const q = query(collection(db, 'spotComments'), where('spotId', '==', spotId));
     const snap = await getDocs(q);
-    return snap.docs.map(d => d.data());
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  },
+  async updateSpotComment(commentId, message) {
+    await updateDoc(doc(db, 'spotComments', commentId), { message });
+  },
+  async deleteSpotComment(commentId) {
+    await deleteDoc(doc(db, 'spotComments', commentId));
   },
   async addBoardPost(name, message) {
+    const user = auth.currentUser;
+    if (!user) throw new Error('not-signed-in');
     await addDoc(collection(db, 'boardPosts'), {
-      name: name || '', message, createdAt: serverTimestamp()
+      name: name || '', message, createdAt: serverTimestamp(), ownerId: user.uid
     });
   },
   async getBoardPosts() {
     const q = query(collection(db, 'boardPosts'), orderBy('createdAt', 'desc'), limit(30));
     const snap = await getDocs(q);
-    return snap.docs.map(d => d.data());
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  },
+  async updateBoardPost(postId, message) {
+    await updateDoc(doc(db, 'boardPosts', postId), { message });
+  },
+  async deleteBoardPost(postId) {
+    await deleteDoc(doc(db, 'boardPosts', postId));
   }
 };
+
+// This module script is deferred (like a script with the `defer`
+// attribute), so it runs *after* the page's own classic inline <script>
+// has already executed during parsing — window.firebaseComments/firebaseAuth
+// are not yet defined at that point. Anything that needs them at page-load
+// time (rather than in response to a later click, well after load) must
+// wait for this event instead of calling them directly.
+window.__firebaseReady = true;
+window.dispatchEvent(new Event('firebase-ready'));
 </script>
 <button id="filter-toggle-btn" class="mobile-toggle-btn" type="button" aria-label="Filters"></button>
 <div id="filter-panel">
@@ -412,7 +458,16 @@ const I18N = {
     commentSubmit: '投稿する',
     commentPosted: '投稿しました！',
     commentError: '投稿に失敗しました。もう一度お試しください。',
-    commentAnonymous: '名無しさん'
+    commentAnonymous: '名無しさん',
+    authSignIn: 'Googleでログイン',
+    authSignedInAs: '{name} としてログイン中',
+    authSignOut: 'ログアウト',
+    authError: 'ログインに失敗しました。もう一度お試しください。',
+    editLabel: '編集',
+    deleteLabel: '削除',
+    saveLabel: '保存',
+    cancelLabel: 'キャンセル',
+    deleteConfirm: 'この投稿を削除しますか？'
   },
   en: {
     title: 'Anime Pilgrimage Map',
@@ -456,7 +511,16 @@ const I18N = {
     commentSubmit: 'Post',
     commentPosted: 'Posted!',
     commentError: 'Failed to post. Please try again.',
-    commentAnonymous: 'Anonymous'
+    commentAnonymous: 'Anonymous',
+    authSignIn: 'Sign in with Google',
+    authSignedInAs: 'Signed in as {name}',
+    authSignOut: 'Sign out',
+    authError: 'Sign-in failed. Please try again.',
+    editLabel: 'Edit',
+    deleteLabel: 'Delete',
+    saveLabel: 'Save',
+    cancelLabel: 'Cancel',
+    deleteConfirm: 'Delete this post?'
   },
   'zh-TW': {
     title: '動畫聖地巡禮地圖',
@@ -500,7 +564,16 @@ const I18N = {
     commentSubmit: '送出留言',
     commentPosted: '已送出！',
     commentError: '送出失敗，請再試一次。',
-    commentAnonymous: '匿名'
+    commentAnonymous: '匿名',
+    authSignIn: '使用Google登入',
+    authSignedInAs: '目前登入為 {name}',
+    authSignOut: '登出',
+    authError: '登入失敗，請再試一次。',
+    editLabel: '編輯',
+    deleteLabel: '刪除',
+    saveLabel: '儲存',
+    cancelLabel: '取消',
+    deleteConfirm: '確定要刪除這則貼文嗎？'
   },
   ko: {
     title: '애니메이션 성지순례 지도',
@@ -544,7 +617,16 @@ const I18N = {
     commentSubmit: '등록',
     commentPosted: '등록되었습니다!',
     commentError: '등록에 실패했습니다. 다시 시도해 주세요.',
-    commentAnonymous: '익명'
+    commentAnonymous: '익명',
+    authSignIn: 'Google로 로그인',
+    authSignedInAs: '{name}(으)로 로그인됨',
+    authSignOut: '로그아웃',
+    authError: '로그인에 실패했습니다. 다시 시도해 주세요.',
+    editLabel: '수정',
+    deleteLabel: '삭제',
+    saveLabel: '저장',
+    cancelLabel: '취소',
+    deleteConfirm: '이 게시글을 삭제하시겠습니까?'
   },
   th: {
     title: 'แผนที่ตามรอยอนิเมะ',
@@ -588,7 +670,16 @@ const I18N = {
     commentSubmit: 'โพสต์',
     commentPosted: 'โพสต์แล้ว!',
     commentError: 'โพสต์ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง',
-    commentAnonymous: 'ไม่ระบุชื่อ'
+    commentAnonymous: 'ไม่ระบุชื่อ',
+    authSignIn: 'เข้าสู่ระบบด้วย Google',
+    authSignedInAs: 'เข้าสู่ระบบในชื่อ {name}',
+    authSignOut: 'ออกจากระบบ',
+    authError: 'เข้าสู่ระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง',
+    editLabel: 'แก้ไข',
+    deleteLabel: 'ลบ',
+    saveLabel: 'บันทึก',
+    cancelLabel: 'ยกเลิก',
+    deleteConfirm: 'ต้องการลบโพสต์นี้หรือไม่?'
   },
   fr: {
     title: 'Carte des lieux de pèlerinage anime',
@@ -632,7 +723,16 @@ const I18N = {
     commentSubmit: 'Publier',
     commentPosted: 'Publié !',
     commentError: "Échec de l'envoi. Veuillez réessayer.",
-    commentAnonymous: 'Anonyme'
+    commentAnonymous: 'Anonyme',
+    authSignIn: 'Se connecter avec Google',
+    authSignedInAs: 'Connecté en tant que {name}',
+    authSignOut: 'Se déconnecter',
+    authError: "Échec de la connexion. Veuillez réessayer.",
+    editLabel: 'Modifier',
+    deleteLabel: 'Supprimer',
+    saveLabel: 'Enregistrer',
+    cancelLabel: 'Annuler',
+    deleteConfirm: 'Supprimer ce message ?'
   }
 };
 
@@ -2017,13 +2117,7 @@ function buildPopupHtml(spot) {
       <div class="popup-comments" data-spot-id="${spot.id}">
         <h4>${I18N[currentLang].commentsHeading}</h4>
         <div class="comments-list comments-loading">${I18N[currentLang].commentsLoading}</div>
-        <form class="comment-form">
-          <input type="text" class="comment-name" placeholder="${I18N[currentLang].commentNamePlaceholder}" maxlength="30">
-          <textarea class="comment-message" placeholder="${I18N[currentLang].commentMessagePlaceholder}" maxlength="300" required></textarea>
-          <input type="text" class="comment-honeypot" tabindex="-1" autocomplete="off">
-          <button type="submit">${I18N[currentLang].commentSubmit}</button>
-          <p class="comment-status hidden"></p>
-        </form>
+        <div class="comment-post-area"></div>
       </div>
     </div>
   `;
@@ -2035,41 +2129,61 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
-function renderComments(listEl, comments) {
+function renderComments(listEl, comments, currentUserId) {
   if (comments.length === 0) {
     listEl.textContent = I18N[currentLang].commentsEmpty;
     listEl.className = 'comments-list comments-empty';
     return;
   }
   listEl.className = 'comments-list';
-  listEl.innerHTML = comments.slice(0, 10).map(c => `
-    <div class="comment-item">
+  listEl.innerHTML = comments.slice(0, 10).map(c => {
+    const isOwner = currentUserId && c.ownerId === currentUserId;
+    const ownerActions = isOwner ? `
+      <div class="comment-owner-actions">
+        <button class="comment-edit-btn" type="button">${I18N[currentLang].editLabel}</button>
+        <button class="comment-delete-btn" type="button">${I18N[currentLang].deleteLabel}</button>
+      </div>` : '';
+    return `
+    <div class="comment-item" data-id="${c.id}">
       <span class="comment-name">${escapeHtml(c.name || I18N[currentLang].commentAnonymous)}</span>
       <p class="comment-message">${escapeHtml(c.message)}</p>
-    </div>
-  `).join('');
+      ${ownerActions}
+    </div>`;
+  }).join('');
 }
 
-// Comments live in Firestore (see window.firebaseComments, set up by the
-// module <script> near the top of <body>), not in this page's own data.
-// Each popup fetches and renders its spot's comments fresh on open, since
-// buildPopupHtml() itself is synchronous and can't wait on the network.
-async function wireCommentsSection(el) {
-  const container = el.querySelector('.popup-comments');
-  if (!container || !window.firebaseComments) return;
-  const spotId = container.dataset.spotId;
-  const listEl = container.querySelector('.comments-list');
-  const form = container.querySelector('.comment-form');
-
-  try {
-    const comments = await window.firebaseComments.getSpotComments(spotId);
-    comments.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
-    renderComments(listEl, comments);
-  } catch (e) {
-    listEl.textContent = I18N[currentLang].commentsError;
-    listEl.className = 'comments-list comments-error';
+// Shows a Google sign-in button when logged out, or the post form (plus a
+// sign-out link) when logged in. Re-rendered after every sign-in/sign-out
+// so the popup reflects the current auth state without needing to reopen.
+function renderCommentPostArea(areaEl, spotId, refreshComments) {
+  const user = window.firebaseAuth.getCurrentUser();
+  if (!user) {
+    areaEl.innerHTML = `<button class="auth-signin-btn" type="button">${I18N[currentLang].authSignIn}</button>`;
+    areaEl.querySelector('.auth-signin-btn').addEventListener('click', async () => {
+      try {
+        await window.firebaseAuth.signInWithGoogle();
+        renderCommentPostArea(areaEl, spotId, refreshComments);
+        refreshComments();
+      } catch (e) {}
+    });
+    return;
   }
-
+  areaEl.innerHTML = `
+    <p class="auth-status">${I18N[currentLang].authSignedInAs.replace('{name}', escapeHtml(user.displayName || ''))} · <button class="auth-signout-btn" type="button">${I18N[currentLang].authSignOut}</button></p>
+    <form class="comment-form">
+      <input type="text" class="comment-name" placeholder="${I18N[currentLang].commentNamePlaceholder}" maxlength="30" value="${escapeHtml(user.displayName || '')}">
+      <textarea class="comment-message" placeholder="${I18N[currentLang].commentMessagePlaceholder}" maxlength="300" required></textarea>
+      <input type="text" class="comment-honeypot" tabindex="-1" autocomplete="off">
+      <button type="submit">${I18N[currentLang].commentSubmit}</button>
+      <p class="comment-status hidden"></p>
+    </form>
+  `;
+  areaEl.querySelector('.auth-signout-btn').addEventListener('click', async () => {
+    await window.firebaseAuth.signOutUser();
+    renderCommentPostArea(areaEl, spotId, refreshComments);
+    refreshComments();
+  });
+  const form = areaEl.querySelector('.comment-form');
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (form.querySelector('.comment-honeypot').value) return;
@@ -2077,16 +2191,14 @@ async function wireCommentsSection(el) {
     if (!message) return;
     const name = form.querySelector('.comment-name').value.trim();
     const statusEl = form.querySelector('.comment-status');
-    const submitBtn = form.querySelector('button');
+    const submitBtn = form.querySelector('button[type="submit"]');
     submitBtn.disabled = true;
     try {
       await window.firebaseComments.addSpotComment(spotId, name, message);
       form.querySelector('.comment-message').value = '';
       statusEl.textContent = I18N[currentLang].commentPosted;
       statusEl.className = 'comment-status';
-      const comments = await window.firebaseComments.getSpotComments(spotId);
-      comments.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
-      renderComments(listEl, comments);
+      await refreshComments();
       if (typeof gtag === 'function') {
         gtag('event', 'post_spot_comment', { spot_id: spotId });
       }
@@ -2095,6 +2207,90 @@ async function wireCommentsSection(el) {
       statusEl.className = 'comment-status';
     }
     submitBtn.disabled = false;
+  });
+}
+
+// Comments live in Firestore (see window.firebaseComments, set up by the
+// module <script> near the top of <body>), not in this page's own data.
+// Each popup fetches and renders its spot's comments fresh on open, since
+// buildPopupHtml() itself is synchronous and can't wait on the network.
+// The Firebase module <script> is deferred, so it may not have set
+// window.firebaseComments/firebaseAuth yet if a popup opens immediately on
+// page load (e.g. the ?spot=<id> deep link used by shared links) — wait for
+// its 'firebase-ready' signal rather than silently no-oping in that case.
+function firebaseReadyPromise() {
+  if (window.__firebaseReady) return Promise.resolve();
+  return new Promise(resolve => window.addEventListener('firebase-ready', resolve, { once: true }));
+}
+
+async function wireCommentsSection(el) {
+  const container = el.querySelector('.popup-comments');
+  if (!container) return;
+  await firebaseReadyPromise();
+  const spotId = container.dataset.spotId;
+  const listEl = container.querySelector('.comments-list');
+  const areaEl = container.querySelector('.comment-post-area');
+
+  async function refreshComments() {
+    try {
+      const comments = await window.firebaseComments.getSpotComments(spotId);
+      comments.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+      const user = window.firebaseAuth.getCurrentUser();
+      renderComments(listEl, comments, user && user.uid);
+    } catch (e) {
+      listEl.textContent = I18N[currentLang].commentsError;
+      listEl.className = 'comments-list comments-error';
+    }
+  }
+
+  // Rendered in parallel, not sequentially: the sign-in button/form is a
+  // synchronous, local render and shouldn't wait on the comments network
+  // fetch, which can be slow (or fail) independently of it.
+  renderCommentPostArea(areaEl, spotId, refreshComments);
+  refreshComments();
+
+  // Delegated so it keeps working after renderComments() re-renders the list.
+  listEl.addEventListener('click', async (e) => {
+    const item = e.target.closest('.comment-item');
+    if (!item) return;
+    const commentId = item.dataset.id;
+
+    if (e.target.closest('.comment-edit-btn')) {
+      const messageEl = item.querySelector('.comment-message');
+      const currentText = messageEl.textContent;
+      const actionsEl = item.querySelector('.comment-owner-actions');
+      messageEl.outerHTML = `<textarea class="comment-edit-textarea" maxlength="300">${escapeHtml(currentText)}</textarea>`;
+      actionsEl.innerHTML = `
+        <button class="comment-save-btn" type="button">${I18N[currentLang].saveLabel}</button>
+        <button class="comment-cancel-btn" type="button">${I18N[currentLang].cancelLabel}</button>
+      `;
+      return;
+    }
+    if (e.target.closest('.comment-cancel-btn')) {
+      await refreshComments();
+      return;
+    }
+    if (e.target.closest('.comment-save-btn')) {
+      const textarea = item.querySelector('.comment-edit-textarea');
+      const newMessage = textarea.value.trim();
+      if (!newMessage) return;
+      try {
+        await window.firebaseComments.updateSpotComment(commentId, newMessage);
+        await refreshComments();
+      } catch (err) {
+        alert(I18N[currentLang].commentError);
+      }
+      return;
+    }
+    if (e.target.closest('.comment-delete-btn')) {
+      if (!confirm(I18N[currentLang].deleteConfirm)) return;
+      try {
+        await window.firebaseComments.deleteSpotComment(commentId);
+        await refreshComments();
+      } catch (err) {
+        alert(I18N[currentLang].commentError);
+      }
+    }
   });
 }
 
