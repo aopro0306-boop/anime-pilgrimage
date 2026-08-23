@@ -1,0 +1,15 @@
+{
+  "name": "Anime Pilgrimage Japan - アニメ聖地巡礼マップ",
+  "short_name": "Anime Pilgrimage",
+  "description": "Discover real-world anime pilgrimage locations across Japan on an interactive map.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F6F0E4",
+  "theme_color": "#1D3550",
+  "lang": "ja",
+  "icons": [
+    { "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

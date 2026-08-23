@@ -6,6 +6,10 @@
 <title>アニメ聖地巡礼マップ（実地図版）</title>
 <meta name="description" content="Search and explore real-world anime pilgrimage locations across Japan on an interactive map, in 6 languages.">
 <link rel="canonical" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/map-leaflet.html">
+<link rel="manifest" href="/anime-pilgrimage/manifest.json">
+<link rel="icon" type="image/png" sizes="32x32" href="/anime-pilgrimage/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="/anime-pilgrimage/icons/apple-touch-icon.png">
+<meta name="theme-color" content="#1D3550">
 <link rel="alternate" hreflang="ja" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/map-leaflet-ja.html">
 <link rel="alternate" hreflang="x-default" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/map-leaflet.html">
 <script type="application/ld+json">
@@ -2339,6 +2343,13 @@ function detectBrowserLang() {
 }
 
 applyLanguage(detectBrowserLang());
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/anime-pilgrimage/sw.js').catch(() => {});
+  });
+}
 </script>
 </body>
 </html>
