@@ -74,6 +74,10 @@
   .spot-popup a{display:inline-block;margin-top:8px;font-size:13px;}
   .spot-popup .gmaps-btn{background:#FF4D6D;color:#fff;text-decoration:none;padding:7px 16px;border-radius:999px;font-weight:700;font-size:12px;}
   .spot-popup .gmaps-btn:hover{background:#e8395a;}
+  .popup-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+  .popup-actions a{margin-top:0;}
+  .popup-actions .popup-secondary-link{background:#f5f2ea;color:#1a5fc4;text-decoration:none;padding:6px 12px;border-radius:999px;font-weight:700;font-size:11px;}
+  .popup-actions .popup-secondary-link:hover{background:#e4efff;}
   .spot-popup .photo{width:100%;max-width:240px;height:auto;border-radius:12px;display:block;margin-top:4px;}
   .spot-popup .photo-credit{margin-top:2px;font-size:10px;color:#999;}
   .spot-popup .photo-credit a{margin-top:0;font-size:10px;}
@@ -327,7 +331,12 @@ const I18N = {
     nearbyPermissionDenied: '位置情報の利用が許可されませんでした。ブラウザの設定をご確認ください。',
     nearbyUnsupported: 'お使いのブラウザは位置情報に対応していません。',
     nearbyDistanceText: '{km} km先',
-    nearbyError: '現在地を取得できませんでした。もう一度お試しください。'
+    nearbyError: '現在地を取得できませんでした。もう一度お試しください。',
+    getDirectionsLabel: '🧭 経路を検索',
+    nearbyHotelsLabel: '🏨 周辺のホテル',
+    nearbyRestaurantsLabel: '🍜 周辺の飲食店',
+    hotelSearchQuery: 'ホテル',
+    restaurantSearchQuery: '飲食店'
   },
   en: {
     title: 'Anime Pilgrimage Map',
@@ -356,7 +365,12 @@ const I18N = {
     nearbyPermissionDenied: 'Location access was denied. Please check your browser settings.',
     nearbyUnsupported: 'Your browser does not support location services.',
     nearbyDistanceText: '{km} km away',
-    nearbyError: 'Could not get your location. Please try again.'
+    nearbyError: 'Could not get your location. Please try again.',
+    getDirectionsLabel: '🧭 Get Directions',
+    nearbyHotelsLabel: '🏨 Hotels Nearby',
+    nearbyRestaurantsLabel: '🍜 Restaurants Nearby',
+    hotelSearchQuery: 'hotels',
+    restaurantSearchQuery: 'restaurants'
   },
   'zh-TW': {
     title: '動畫聖地巡禮地圖',
@@ -385,7 +399,12 @@ const I18N = {
     nearbyPermissionDenied: '位置存取遭拒。請確認瀏覽器設定。',
     nearbyUnsupported: '您的瀏覽器不支援定位功能。',
     nearbyDistanceText: '距離{km}公里',
-    nearbyError: '無法取得您的位置，請再試一次。'
+    nearbyError: '無法取得您的位置，請再試一次。',
+    getDirectionsLabel: '🧭 查詢路線',
+    nearbyHotelsLabel: '🏨 附近的飯店',
+    nearbyRestaurantsLabel: '🍜 附近的餐廳',
+    hotelSearchQuery: '飯店',
+    restaurantSearchQuery: '餐廳'
   },
   ko: {
     title: '애니메이션 성지순례 지도',
@@ -414,7 +433,12 @@ const I18N = {
     nearbyPermissionDenied: '위치 정보 접근이 거부되었습니다. 브라우저 설정을 확인해 주세요.',
     nearbyUnsupported: '사용 중인 브라우저는 위치 정보를 지원하지 않습니다.',
     nearbyDistanceText: '{km} km 거리',
-    nearbyError: '현재 위치를 가져올 수 없습니다. 다시 시도해 주세요.'
+    nearbyError: '현재 위치를 가져올 수 없습니다. 다시 시도해 주세요.',
+    getDirectionsLabel: '🧭 경로 검색',
+    nearbyHotelsLabel: '🏨 주변 호텔',
+    nearbyRestaurantsLabel: '🍜 주변 음식점',
+    hotelSearchQuery: '호텔',
+    restaurantSearchQuery: '음식점'
   },
   th: {
     title: 'แผนที่ตามรอยอนิเมะ',
@@ -443,7 +467,12 @@ const I18N = {
     nearbyPermissionDenied: 'การเข้าถึงตำแหน่งถูกปฏิเสธ กรุณาตรวจสอบการตั้งค่าเบราว์เซอร์',
     nearbyUnsupported: 'เบราว์เซอร์ของคุณไม่รองรับบริการตำแหน่งที่ตั้ง',
     nearbyDistanceText: 'ห่าง {km} กม.',
-    nearbyError: 'ไม่สามารถค้นหาตำแหน่งของคุณได้ กรุณาลองใหม่อีกครั้ง'
+    nearbyError: 'ไม่สามารถค้นหาตำแหน่งของคุณได้ กรุณาลองใหม่อีกครั้ง',
+    getDirectionsLabel: '🧭 ค้นหาเส้นทาง',
+    nearbyHotelsLabel: '🏨 โรงแรมใกล้เคียง',
+    nearbyRestaurantsLabel: '🍜 ร้านอาหารใกล้เคียง',
+    hotelSearchQuery: 'โรงแรม',
+    restaurantSearchQuery: 'ร้านอาหาร'
   },
   fr: {
     title: 'Carte des lieux de pèlerinage anime',
@@ -472,7 +501,12 @@ const I18N = {
     nearbyPermissionDenied: "L'accès à la position a été refusé. Veuillez vérifier les paramètres de votre navigateur.",
     nearbyUnsupported: "Votre navigateur ne prend pas en charge la géolocalisation.",
     nearbyDistanceText: '{km} km',
-    nearbyError: "Impossible d'obtenir votre position. Veuillez réessayer."
+    nearbyError: "Impossible d'obtenir votre position. Veuillez réessayer.",
+    getDirectionsLabel: '🧭 Itinéraire',
+    nearbyHotelsLabel: '🏨 Hôtels à proximité',
+    nearbyRestaurantsLabel: '🍜 Restaurants à proximité',
+    hotelSearchQuery: 'hôtels',
+    restaurantSearchQuery: 'restaurants'
   }
 };
 
@@ -1809,6 +1843,15 @@ const markersById = {};
 // markers automatically show the current language without being rebuilt.
 function buildPopupHtml(spot) {
   const mapsUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(spot.mapsQuery);
+  // Directions/nearby-search links use Google Maps' free URL scheme (no API
+  // key, no billing) rather than the paid Directions/Places APIs: the
+  // destination action opens native turn-by-turn routing in the Google
+  // Maps app/site, and the search action opens a search centered on the
+  // spot's coordinates via the informal but stable "/search/<query>/@lat,lng,zoom"
+  // pattern Google Maps itself generates.
+  const directionsUrl = 'https://www.google.com/maps/dir/?api=1&destination=' + spot.lat + ',' + spot.lng;
+  const hotelsUrl = 'https://www.google.com/maps/search/' + encodeURIComponent(I18N[currentLang].hotelSearchQuery) + '/@' + spot.lat + ',' + spot.lng + ',15z';
+  const restaurantsUrl = 'https://www.google.com/maps/search/' + encodeURIComponent(I18N[currentLang].restaurantSearchQuery) + '/@' + spot.lat + ',' + spot.lng + ',15z';
   const photo = PHOTOS[spot.id];
   const name = translateSpotName(spot);
   const isFavorite = favorites.has(spot.id);
@@ -1828,7 +1871,12 @@ function buildPopupHtml(spot) {
       <p>${translateAnime(spot.anime)}${currentLang === 'en' ? ' | ' : '｜'}${translatePrefecture(spot.prefecture)}</p>
       ${photoHtml}
       <p class="desc">${translateDescription(spot)}</p>
-      <a class="gmaps-btn" href="${mapsUrl}" target="_blank" rel="noopener" data-spot-id="${spot.id}">${I18N[currentLang].openInGoogleMaps}</a>
+      <div class="popup-actions">
+        <a class="gmaps-btn" href="${mapsUrl}" target="_blank" rel="noopener" data-spot-id="${spot.id}">${I18N[currentLang].openInGoogleMaps}</a>
+        <a class="popup-secondary-link" href="${directionsUrl}" target="_blank" rel="noopener" data-spot-id="${spot.id}" data-action="directions">${I18N[currentLang].getDirectionsLabel}</a>
+        <a class="popup-secondary-link" href="${hotelsUrl}" target="_blank" rel="noopener" data-spot-id="${spot.id}" data-action="hotels">${I18N[currentLang].nearbyHotelsLabel}</a>
+        <a class="popup-secondary-link" href="${restaurantsUrl}" target="_blank" rel="noopener" data-spot-id="${spot.id}" data-action="restaurants">${I18N[currentLang].nearbyRestaurantsLabel}</a>
+      </div>
     </div>
   `;
 }
@@ -1877,11 +1925,24 @@ function wireGmapsButton(el) {
   });
 }
 
+// Same GA4-tracking rationale as wireGmapsButton, covering the three
+// free-tier Google Maps URL links (directions/hotels/restaurants).
+function wirePopupActionLinks(el) {
+  el.querySelectorAll('.popup-secondary-link').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (typeof gtag === 'function') {
+        gtag('event', 'open_' + btn.dataset.action, { spot_id: btn.dataset.spotId });
+      }
+    });
+  });
+}
+
 map.on('popupopen', (e) => {
   const el = e.popup.getElement();
   if (!el) return;
   wirePopupHeartButton(el);
   wireGmapsButton(el);
+  wirePopupActionLinks(el);
 });
 
 // A popup left open while the user switches language would otherwise keep
@@ -1893,7 +1954,7 @@ function refreshOpenPopup() {
     if (marker && marker.isPopupOpen()) {
       marker.setPopupContent(buildPopupHtml(spot));
       const el = marker.getPopup().getElement();
-      if (el) { wirePopupHeartButton(el); wireGmapsButton(el); }
+      if (el) { wirePopupHeartButton(el); wireGmapsButton(el); wirePopupActionLinks(el); }
       break;
     }
   }
