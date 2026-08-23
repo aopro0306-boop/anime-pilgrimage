@@ -41,6 +41,20 @@
     <priority>0.3</priority>
   </url>
   <url>
+    <loc>https://aopro0306-boop.github.io/anime-pilgrimage/prototype/board.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/board-ja.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/board.html"/>
+  </url>
+  <url>
+    <loc>https://aopro0306-boop.github.io/anime-pilgrimage/prototype/board-ja.html</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/board-ja.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/board.html"/>
+  </url>
+  <url>
     <loc>https://aopro0306-boop.github.io/anime-pilgrimage/prototype/guides/chihiro.html</loc>
     <lastmod>2026-08-10</lastmod>
     <changefreq>monthly</changefreq>

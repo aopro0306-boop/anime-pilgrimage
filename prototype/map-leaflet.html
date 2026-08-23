@@ -178,7 +178,7 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
 import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, where, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCOHzUTjYPtL1GOzWIvB0RUIdOL2TWIT_0",
@@ -200,11 +200,31 @@ const googleProvider = new GoogleAuthProvider();
 // restricted server-side by Firestore security rules to the comment's
 // own ownerId, so the checks here are for UX only, not the real guard.
 window.firebaseAuth = {
-  signInWithGoogle: () => signInWithPopup(auth, googleProvider),
+  // Tries the popup flow first (no page reload); if the browser silently
+  // blocked the popup rather than showing it, falls back to a full-page
+  // redirect instead, which popup blockers can't stop. getRedirectResult()
+  // below completes that flow when the page reloads afterward.
+  signInWithGoogle: async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+    } catch (err) {
+      if (err.code === 'auth/popup-blocked') {
+        await signInWithRedirect(auth, googleProvider);
+        return;
+      }
+      throw err;
+    }
+  },
   signOutUser: () => signOut(auth),
   getCurrentUser: () => auth.currentUser,
   onAuthChange: (cb) => onAuthStateChanged(auth, cb)
 };
+
+// Completes the signInWithRedirect() fallback above when the page reloads
+// after coming back from Google's login page. onAuthStateChanged also
+// fires on its own once this resolves, so nothing extra is needed here
+// beyond surfacing errors to the console for debugging.
+getRedirectResult(auth).catch((err) => console.error('Google redirect sign-in failed:', err));
 
 window.firebaseComments = {
   async addSpotComment(spotId, name, message) {
@@ -2164,7 +2184,12 @@ function renderCommentPostArea(areaEl, spotId, refreshComments) {
         await window.firebaseAuth.signInWithGoogle();
         renderCommentPostArea(areaEl, spotId, refreshComments);
         refreshComments();
-      } catch (e) {}
+      } catch (e) {
+        if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') {
+          console.error('Google sign-in failed:', e);
+          alert(I18N[currentLang].authError);
+        }
+      }
     });
     return;
   }

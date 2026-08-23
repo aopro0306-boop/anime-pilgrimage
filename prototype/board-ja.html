@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>みんなの掲示板 | Anime Pilgrimage Japan</title>
+<meta name="description" content="Share your anime pilgrimage memories and tips with other travelers.">
+<link rel="canonical" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/board-ja.html">
+<link rel="manifest" href="/anime-pilgrimage/manifest.json">
+<link rel="icon" type="image/png" sizes="32x32" href="/anime-pilgrimage/icons/favicon-32.png">
+<link rel="apple-touch-icon" href="/anime-pilgrimage/icons/apple-touch-icon.png">
+<meta name="theme-color" content="#1D3550">
+<link rel="alternate" hreflang="ja" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/board-ja.html">
+<link rel="alternate" hreflang="x-default" href="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/board.html">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","name":"みんなの掲示板","url":"https://aopro0306-boop.github.io/anime-pilgrimage/prototype/board-ja.html","description":"Share your anime pilgrimage memories and tips with other travelers.","isPartOf":{"@type":"WebSite","name":"Anime Pilgrimage Japan","url":"https://aopro0306-boop.github.io/anime-pilgrimage/prototype/homepage.html"}}
+</script>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Anime Pilgrimage Japan">
+<meta property="og:url" content="https://aopro0306-boop.github.io/anime-pilgrimage/prototype/board-ja.html">
+<meta property="og:title" content="みんなの掲示板 | Anime Pilgrimage Japan">
+<meta property="og:description" content="Share your anime pilgrimage memories and tips with other travelers.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="みんなの掲示板 | Anime Pilgrimage Japan">
+<meta name="twitter:description" content="Share your anime pilgrimage memories and tips with other travelers.">
+<!-- Google AdSense site-verification code -->
+<meta name="google-adsense-account" content="ca-pub-8374504931423627">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8374504931423627" crossorigin="anonymous"></script>
+<!-- Google Analytics (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HQJNYMSM07"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-HQJNYMSM07');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --color-bg: #F6F0E4;
+    --color-navy: #1D3550;
+    --color-terracotta: #B5673A;
+    --color-text: #2B2621;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{font-family:'Zen Kaku Gothic New', sans-serif; background:var(--color-bg); color:var(--color-text); line-height:1.8;}
+  .heading{font-weight:600; text-wrap:balance;}
+  html[lang="ja"] .heading{font-family:'Shippori Mincho', serif;}
+  html[lang="en"] .heading{font-family:'Fraunces', serif;}
+  a{color:var(--color-navy);}
+
+  #site-header{position:sticky; top:0; z-index:50; background:rgba(246,240,228,0.92); -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); border-bottom:1px solid rgba(29,53,80,0.12);}
+  .header-inner{max-width:760px; margin:0 auto; padding:14px 24px; display:flex; align-items:center; justify-content:space-between;}
+  .logo{font-weight:700; color:var(--color-navy); letter-spacing:0.02em; text-decoration:none;}
+  .header-actions{display:flex; align-items:center; gap:16px;}
+  .map-link{font-size:13px; color:var(--color-navy); text-decoration:none; font-weight:600;}
+  #lang-select{background:transparent; border:1px solid var(--color-navy); color:var(--color-navy); border-radius:999px; padding:6px 14px; font-size:13px; font-family:inherit; cursor:pointer;}
+
+  main{max-width:640px; margin:0 auto; padding:48px 24px 88px; text-align:center;}
+  h1.heading{font-size:clamp(26px,4vw,36px); margin:0 0 12px 0; color:var(--color-navy);}
+  main > p{margin:0 0 32px 0; font-size:15px; opacity:0.85;}
+
+  #board-post-area{margin-bottom:40px;}
+  #board-form{display:flex; flex-direction:column; gap:18px; text-align:left;}
+  #board-form label{display:flex; flex-direction:column; gap:6px; font-size:13px; color:var(--color-navy); font-weight:700;}
+  #board-form input[type="text"], #board-form textarea{font-family:inherit; font-size:14px; padding:10px 14px; border:1px solid rgba(29,53,80,0.22); border-radius:10px; background:#fff; color:var(--color-text); resize:vertical;}
+  #board-form input:focus, #board-form textarea:focus{outline:none; border-color:var(--color-terracotta);}
+  #board-form button{align-self:center; border:none; cursor:pointer; font-family:inherit;}
+  #board-form button:disabled{opacity:0.6; cursor:default;}
+  .honeypot-field{position:absolute; left:-9999px; width:1px; height:1px; opacity:0;}
+  .cta-button{display:inline-block; background:var(--color-terracotta); color:#F6F0E4; text-decoration:none; padding:14px 36px; border-radius:999px; font-weight:700; font-size:15px; border:none; cursor:pointer; font-family:inherit;}
+  .cta-button:hover{transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,0.2);}
+  .contact-status{margin:0; font-size:13px; text-align:center;}
+  .contact-status.hidden{display:none;}
+  .contact-status.success{color:#5C7A5E;}
+  .contact-status.error{color:var(--color-terracotta);}
+
+  #board-list{text-align:left; display:flex; flex-direction:column; gap:14px;}
+  .board-post{background:#fff; border-radius:14px; padding:16px 18px; box-shadow:0 4px 16px rgba(29,53,80,0.06);}
+  .board-post .board-post-name{font-weight:700; color:var(--color-terracotta); font-size:13px; display:block; margin-bottom:4px;}
+  .board-post .board-post-message{margin:0; font-size:14px; color:var(--color-text); line-height:1.7; word-break:break-word;}
+  .board-empty{font-size:14px; opacity:0.7;}
+  .auth-signin-btn{background:var(--color-navy); color:#fff; border:none; border-radius:999px; padding:10px 24px; font-size:14px; font-weight:700; cursor:pointer; font-family:inherit;}
+  .auth-signin-btn:hover{background:#132741;}
+  .auth-status{margin:0 0 12px 0; font-size:13px; color:var(--color-text); opacity:0.75;}
+  .auth-signout-btn{background:none; border:none; color:var(--color-terracotta); font-size:13px; font-weight:700; cursor:pointer; padding:0; font-family:inherit; text-decoration:underline;}
+  .board-post-owner-actions{display:flex; gap:12px; margin-top:8px;}
+  .board-edit-btn, .board-delete-btn, .board-save-btn, .board-cancel-btn{background:none; border:none; font-size:12px; font-weight:700; cursor:pointer; padding:0; font-family:inherit; color:var(--color-navy); text-decoration:underline;}
+  .board-delete-btn{color:var(--color-terracotta);}
+  .board-edit-textarea{width:100%; font-family:inherit; font-size:14px; padding:8px 10px; border:1px solid rgba(29,53,80,0.22); border-radius:10px; resize:vertical; min-height:60px; box-sizing:border-box;}
+
+  .back-link{display:block; margin-top:48px; font-size:14px; text-align:center;}
+</style>
+</head>
+<body>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCOHzUTjYPtL1GOzWIvB0RUIdOL2TWIT_0",
+  authDomain: "anime-pilgrimage-729da.firebaseapp.com",
+  projectId: "anime-pilgrimage-729da",
+  storageBucket: "anime-pilgrimage-729da.firebasestorage.app",
+  messagingSenderId: "725181284483",
+  appId: "1:725181284483:web:be4acc204f92e991779bb6"
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
+const auth = getAuth(firebaseApp);
+const googleProvider = new GoogleAuthProvider();
+
+// Exposed on window so the site's existing classic (non-module) script
+// below can call these without itself becoming a module. Posting requires
+// being signed in (see window.firebaseAuth); edit/delete are further
+// restricted server-side by Firestore security rules to the post's own
+// ownerId, so the checks here are for UX only, not the real guard.
+window.firebaseAuth = {
+  // Tries the popup flow first (no page reload); if the browser silently
+  // blocked the popup rather than showing it, falls back to a full-page
+  // redirect instead, which popup blockers can't stop. getRedirectResult()
+  // below completes that flow when the page reloads afterward.
+  signInWithGoogle: async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+    } catch (err) {
+      if (err.code === 'auth/popup-blocked') {
+        await signInWithRedirect(auth, googleProvider);
+        return;
+      }
+      throw err;
+    }
+  },
+  signOutUser: () => signOut(auth),
+  getCurrentUser: () => auth.currentUser,
+  onAuthChange: (cb) => onAuthStateChanged(auth, cb)
+};
+
+getRedirectResult(auth).catch((err) => console.error('Google redirect sign-in failed:', err));
+
+window.firebaseComments = {
+  async addBoardPost(name, message) {
+    const user = auth.currentUser;
+    if (!user) throw new Error('not-signed-in');
+    await addDoc(collection(db, 'boardPosts'), {
+      name: name || '', message, createdAt: serverTimestamp(), ownerId: user.uid
+    });
+  },
+  async getBoardPosts() {
+    const q = query(collection(db, 'boardPosts'), orderBy('createdAt', 'desc'), limit(30));
+    const snap = await getDocs(q);
+    return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  },
+  async updateBoardPost(postId, message) {
+    await updateDoc(doc(db, 'boardPosts', postId), { message });
+  },
+  async deleteBoardPost(postId) {
+    await deleteDoc(doc(db, 'boardPosts', postId));
+  }
+};
+
+// This module script is deferred, so it runs *after* the page's own
+// classic inline <script> has already executed during parsing — wait for
+// this event rather than assuming window.firebaseComments/firebaseAuth
+// already exist.
+window.__firebaseReady = true;
+window.dispatchEvent(new Event('firebase-ready'));
+</script>
+<header id="site-header">
+  <div class="header-inner">
+    <a class="logo" href="homepage-ja.html">Anime Pilgrimage Japan</a>
+    <div class="header-actions">
+      <a class="map-link" href="map-leaflet-ja.html">マップ</a>
+      <select id="lang-select" aria-label="Language">
+        <option value="ja">日本語</option>
+        <option value="en">English</option>
+        <option value="zh-TW">繁體中文</option>
+        <option value="ko">한국어</option>
+        <option value="th">ไทย</option>
+        <option value="fr">Français</option>
+      </select>
+    </div>
+  </div>
+</header>
+
+<main>
+  <h1 class="heading" id="board-page-heading">みんなの掲示板</h1>
+  <p id="board-page-intro">巡礼の思い出や旅のヒントなど、自由に投稿してください。</p>
+  <div id="board-post-area"></div>
+  <div id="board-list"><p class="board-empty" id="board-loading-text">読み込み中...</p></div>
+  <a class="back-link" href="homepage-ja.html" id="back-link-text">← ホームに戻る</a>
+</main>
+
+<script>
+const I18N = {
+  ja: {
+    pageTitle: 'みんなの掲示板 | Anime Pilgrimage Japan',
+    mapNav: 'マップ',
+    backLink: '← ホームに戻る',
+    boardHeading: 'みんなの掲示板',
+    boardIntro: '巡礼の思い出や旅のヒントなど、自由に投稿してください。',
+    boardNameLabel: 'ニックネーム（任意）',
+    boardMessageLabel: 'メッセージ',
+    boardSubmit: '投稿する',
+    boardLoading: '読み込み中...',
+    boardEmpty: 'まだ投稿がありません。最初の投稿をしてみませんか？',
+    boardAnonymous: '名無しさん',
+    boardPosted: '投稿しました！ご参加ありがとうございます。',
+    boardError: '投稿に失敗しました。時間をおいて再度お試しください。',
+    authSignIn: 'Googleでログイン',
+    authSignedInAs: '{name} としてログイン中',
+    authSignOut: 'ログアウト',
+    authError: 'ログインに失敗しました。もう一度お試しください。',
+    editLabel: '編集',
+    deleteLabel: '削除',
+    saveLabel: '保存',
+    cancelLabel: 'キャンセル',
+    deleteConfirm: 'この投稿を削除しますか？'
+  },
+  en: {
+    pageTitle: 'Community Board | Anime Pilgrimage Japan',
+    mapNav: 'Map',
+    backLink: '← Back to Home',
+    boardHeading: 'Community Board',
+    boardIntro: 'Share your pilgrimage memories, tips, or anything else — everyone is welcome to post.',
+    boardNameLabel: 'Nickname (optional)',
+    boardMessageLabel: 'Message',
+    boardSubmit: 'Post',
+    boardLoading: 'Loading...',
+    boardEmpty: 'No posts yet. Be the first to share!',
+    boardAnonymous: 'Anonymous',
+    boardPosted: 'Posted! Thanks for joining in.',
+    boardError: 'Something went wrong. Please try again in a moment.',
+    authSignIn: 'Sign in with Google',
+    authSignedInAs: 'Signed in as {name}',
+    authSignOut: 'Sign out',
+    authError: 'Sign-in failed. Please try again.',
+    editLabel: 'Edit',
+    deleteLabel: 'Delete',
+    saveLabel: 'Save',
+    cancelLabel: 'Cancel',
+    deleteConfirm: 'Delete this post?'
+  },
+  'zh-TW': {
+    pageTitle: '大家的留言板 | Anime Pilgrimage Japan',
+    mapNav: '地圖',
+    backLink: '← 返回首頁',
+    boardHeading: '大家的留言板',
+    boardIntro: '歡迎自由分享您的巡禮回憶、旅遊小技巧等等。',
+    boardNameLabel: '暱稱（選填）',
+    boardMessageLabel: '訊息',
+    boardSubmit: '送出留言',
+    boardLoading: '載入中...',
+    boardEmpty: '目前還沒有留言，來搶頭香吧！',
+    boardAnonymous: '匿名',
+    boardPosted: '已送出！感謝您的參與。',
+    boardError: '送出失敗，請稍後再試一次。',
+    authSignIn: '使用Google登入',
+    authSignedInAs: '目前登入為 {name}',
+    authSignOut: '登出',
+    authError: '登入失敗，請再試一次。',
+    editLabel: '編輯',
+    deleteLabel: '刪除',
+    saveLabel: '儲存',
+    cancelLabel: '取消',
+    deleteConfirm: '確定要刪除這則貼文嗎？'
+  },
+  ko: {
+    pageTitle: '모두의 게시판 | Anime Pilgrimage Japan',
+    mapNav: '지도',
+    backLink: '← 홈으로 돌아가기',
+    boardHeading: '모두의 게시판',
+    boardIntro: '순례 추억이나 여행 팁 등, 자유롭게 남겨주세요.',
+    boardNameLabel: '닉네임（선택）',
+    boardMessageLabel: '메시지',
+    boardSubmit: '등록',
+    boardLoading: '불러오는 중...',
+    boardEmpty: '아직 게시글이 없습니다. 첫 게시글을 남겨보세요!',
+    boardAnonymous: '익명',
+    boardPosted: '등록되었습니다! 참여해 주셔서 감사합니다.',
+    boardError: '오류가 발생했습니다. 잠시 후 다시 시도해 주세요.',
+    authSignIn: 'Google로 로그인',
+    authSignedInAs: '{name}(으)로 로그인됨',
+    authSignOut: '로그아웃',
+    authError: '로그인에 실패했습니다. 다시 시도해 주세요.',
+    editLabel: '수정',
+    deleteLabel: '삭제',
+    saveLabel: '저장',
+    cancelLabel: '취소',
+    deleteConfirm: '이 게시글을 삭제하시겠습니까?'
+  },
+  th: {
+    pageTitle: 'กระดานพูดคุย | Anime Pilgrimage Japan',
+    mapNav: 'แผนที่',
+    backLink: '← กลับหน้าแรก',
+    boardHeading: 'กระดานพูดคุย',
+    boardIntro: 'แบ่งปันความทรงจำการตามรอย เคล็ดลับการเดินทาง หรืออะไรก็ได้ ทุกคนยินดีต้อนรับ',
+    boardNameLabel: 'ชื่อเล่น (ไม่บังคับ)',
+    boardMessageLabel: 'ข้อความ',
+    boardSubmit: 'โพสต์',
+    boardLoading: 'กำลังโหลด...',
+    boardEmpty: 'ยังไม่มีโพสต์ มาเป็นคนแรกกันเถอะ!',
+    boardAnonymous: 'ไม่ระบุชื่อ',
+    boardPosted: 'โพสต์แล้ว! ขอบคุณที่เข้าร่วม',
+    boardError: 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้งในภายหลัง',
+    authSignIn: 'เข้าสู่ระบบด้วย Google',
+    authSignedInAs: 'เข้าสู่ระบบในชื่อ {name}',
+    authSignOut: 'ออกจากระบบ',
+    authError: 'เข้าสู่ระบบไม่สำเร็จ กรุณาลองใหม่อีกครั้ง',
+    editLabel: 'แก้ไข',
+    deleteLabel: 'ลบ',
+    saveLabel: 'บันทึก',
+    cancelLabel: 'ยกเลิก',
+    deleteConfirm: 'ต้องการลบโพสต์นี้หรือไม่?'
+  },
+  fr: {
+    pageTitle: 'Espace communautaire | Anime Pilgrimage Japan',
+    mapNav: 'Carte',
+    backLink: "← Retour à l'accueil",
+    boardHeading: 'Espace communautaire',
+    boardIntro: 'Partagez vos souvenirs de pèlerinage, vos conseils, ou autre chose — tout le monde est bienvenu.',
+    boardNameLabel: 'Pseudo (facultatif)',
+    boardMessageLabel: 'Message',
+    boardSubmit: 'Publier',
+    boardLoading: 'Chargement...',
+    boardEmpty: 'Aucun message pour le moment. Soyez le premier !',
+    boardAnonymous: 'Anonyme',
+    boardPosted: 'Publié ! Merci de votre participation.',
+    boardError: "Une erreur s'est produite. Veuillez réessayer dans un instant.",
+    authSignIn: 'Se connecter avec Google',
+    authSignedInAs: 'Connecté en tant que {name}',
+    authSignOut: 'Se déconnecter',
+    authError: "Échec de la connexion. Veuillez réessayer.",
+    editLabel: 'Modifier',
+    deleteLabel: 'Supprimer',
+    saveLabel: 'Enregistrer',
+    cancelLabel: 'Annuler',
+    deleteConfirm: 'Supprimer ce message ?'
+  }
+};
+
+let currentLang = 'ja';
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+let boardPostsCache = [];
+
+function renderBoardPosts(posts, currentUserId) {
+  const listEl = document.getElementById('board-list');
+  if (posts.length === 0) {
+    listEl.innerHTML = `<p class="board-empty">${I18N[currentLang].boardEmpty}</p>`;
+    return;
+  }
+  listEl.innerHTML = posts.map(p => {
+    const isOwner = currentUserId && p.ownerId === currentUserId;
+    const ownerActions = isOwner ? `
+      <div class="board-post-owner-actions">
+        <button class="board-edit-btn" type="button">${I18N[currentLang].editLabel}</button>
+        <button class="board-delete-btn" type="button">${I18N[currentLang].deleteLabel}</button>
+      </div>` : '';
+    return `
+    <div class="board-post" data-id="${p.id}">
+      <span class="board-post-name">${escapeHtml(p.name || I18N[currentLang].boardAnonymous)}</span>
+      <p class="board-post-message">${escapeHtml(p.message)}</p>
+      ${ownerActions}
+    </div>`;
+  }).join('');
+}
+
+// The bulletin board's posts live in Firestore (see window.firebaseComments,
+// set up by the module <script> above), so both the initial list and
+// post-submit refresh are async network calls.
+async function refreshBoard() {
+  const listEl = document.getElementById('board-list');
+  if (!window.firebaseComments) return;
+  try {
+    const posts = await window.firebaseComments.getBoardPosts();
+    boardPostsCache = posts;
+    const user = window.firebaseAuth.getCurrentUser();
+    renderBoardPosts(posts, user && user.uid);
+  } catch (e) {
+    listEl.innerHTML = `<p class="board-empty">${I18N[currentLang].boardError}</p>`;
+  }
+}
+
+// Shows a Google sign-in button when logged out, or the post form (plus a
+// sign-out link) when logged in. Re-rendered after every sign-in/sign-out
+// and on language change.
+function renderBoardPostArea() {
+  if (!window.firebaseAuth) return;
+  const areaEl = document.getElementById('board-post-area');
+  const user = window.firebaseAuth.getCurrentUser();
+  if (!user) {
+    areaEl.innerHTML = `<button class="auth-signin-btn" type="button">${I18N[currentLang].authSignIn}</button>`;
+    areaEl.querySelector('.auth-signin-btn').addEventListener('click', async () => {
+      try {
+        await window.firebaseAuth.signInWithGoogle();
+        renderBoardPostArea();
+        await refreshBoard();
+      } catch (e) {
+        if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') {
+          console.error('Google sign-in failed:', e);
+          alert(I18N[currentLang].authError);
+        }
+      }
+    });
+    return;
+  }
+  areaEl.innerHTML = `
+    <p class="auth-status">${I18N[currentLang].authSignedInAs.replace('{name}', escapeHtml(user.displayName || ''))} · <button class="auth-signout-btn" type="button">${I18N[currentLang].authSignOut}</button></p>
+    <form id="board-form">
+      <label>
+        <span>${I18N[currentLang].boardNameLabel}</span>
+        <input type="text" id="board-name-input" maxlength="30" value="${escapeHtml(user.displayName || '')}">
+      </label>
+      <label>
+        <span>${I18N[currentLang].boardMessageLabel}</span>
+        <textarea id="board-message-input" maxlength="300" required rows="4"></textarea>
+      </label>
+      <input type="text" id="board-honeypot" class="honeypot-field" tabindex="-1" autocomplete="off">
+      <button type="submit" class="cta-button">${I18N[currentLang].boardSubmit}</button>
+      <p id="board-status" class="contact-status hidden"></p>
+    </form>
+  `;
+  areaEl.querySelector('.auth-signout-btn').addEventListener('click', async () => {
+    await window.firebaseAuth.signOutUser();
+    renderBoardPostArea();
+    await refreshBoard();
+  });
+  const boardForm = document.getElementById('board-form');
+  boardForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (document.getElementById('board-honeypot').value) return;
+    const messageInput = document.getElementById('board-message-input');
+    const message = messageInput.value.trim();
+    if (!message) return;
+    const name = document.getElementById('board-name-input').value.trim();
+    const status = document.getElementById('board-status');
+    const submitBtn = boardForm.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    status.classList.remove('hidden', 'success', 'error');
+    try {
+      await window.firebaseComments.addBoardPost(name, message);
+      messageInput.value = '';
+      status.textContent = I18N[currentLang].boardPosted;
+      status.classList.add('success');
+      await refreshBoard();
+      if (typeof gtag === 'function') {
+        gtag('event', 'post_board_comment');
+      }
+    } catch (err) {
+      status.textContent = I18N[currentLang].boardError;
+      status.classList.add('error');
+    } finally {
+      submitBtn.disabled = false;
+    }
+  });
+}
+
+document.getElementById('board-list').addEventListener('click', async (e) => {
+  const item = e.target.closest('.board-post');
+  if (!item) return;
+  const postId = item.dataset.id;
+
+  if (e.target.closest('.board-edit-btn')) {
+    const messageEl = item.querySelector('.board-post-message');
+    const currentText = messageEl.textContent;
+    const actionsEl = item.querySelector('.board-post-owner-actions');
+    messageEl.outerHTML = `<textarea class="board-edit-textarea" maxlength="300">${escapeHtml(currentText)}</textarea>`;
+    actionsEl.innerHTML = `
+      <button class="board-save-btn" type="button">${I18N[currentLang].saveLabel}</button>
+      <button class="board-cancel-btn" type="button">${I18N[currentLang].cancelLabel}</button>
+    `;
+    return;
+  }
+  if (e.target.closest('.board-cancel-btn')) {
+    await refreshBoard();
+    return;
+  }
+  if (e.target.closest('.board-save-btn')) {
+    const textarea = item.querySelector('.board-edit-textarea');
+    const newMessage = textarea.value.trim();
+    if (!newMessage) return;
+    try {
+      await window.firebaseComments.updateBoardPost(postId, newMessage);
+      await refreshBoard();
+    } catch (err) {
+      alert(I18N[currentLang].boardError);
+    }
+    return;
+  }
+  if (e.target.closest('.board-delete-btn')) {
+    if (!confirm(I18N[currentLang].deleteConfirm)) return;
+    try {
+      await window.firebaseComments.deleteBoardPost(postId);
+      await refreshBoard();
+    } catch (err) {
+      alert(I18N[currentLang].boardError);
+    }
+  }
+});
+
+function applyLang(lang) {
+  currentLang = lang;
+  document.documentElement.lang = lang;
+  document.title = I18N[lang].pageTitle;
+  document.querySelector('.map-link').textContent = I18N[lang].mapNav;
+  document.getElementById('board-page-heading').textContent = I18N[lang].boardHeading;
+  document.getElementById('board-page-intro').textContent = I18N[lang].boardIntro;
+  document.getElementById('back-link-text').textContent = I18N[lang].backLink;
+  document.getElementById('lang-select').value = lang;
+  renderBoardPosts(boardPostsCache, window.firebaseAuth?.getCurrentUser()?.uid);
+  if (window.firebaseAuth) renderBoardPostArea();
+}
+
+document.getElementById('lang-select').addEventListener('change', (e) => {
+  applyLang(e.target.value);
+});
+
+// The Firebase module <script> above is deferred, so it hasn't set
+// window.firebaseComments/firebaseAuth yet at this point in the initial
+// parse — wait for its 'firebase-ready' signal before the first render.
+function firebaseReadyPromise() {
+  if (window.__firebaseReady) return Promise.resolve();
+  return new Promise(resolve => window.addEventListener('firebase-ready', resolve, { once: true }));
+}
+firebaseReadyPromise().then(() => {
+  renderBoardPostArea();
+  refreshBoard();
+});
+
+applyLang('ja'); // this URL is the dedicated Japanese entry point (see hreflang tags) — always render Japanese regardless of browser language, unlike board.html's auto-detection
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/anime-pilgrimage/sw.js').catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
