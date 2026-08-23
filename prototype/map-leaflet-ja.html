@@ -82,6 +82,11 @@
   .popup-actions a{margin-top:0;}
   .popup-actions .popup-secondary-link{background:#f5f2ea;color:#1a5fc4;text-decoration:none;padding:6px 12px;border-radius:999px;font-weight:700;font-size:11px;}
   .popup-actions .popup-secondary-link:hover{background:#e4efff;}
+  .popup-share{display:flex;gap:6px;margin-top:6px;}
+  .popup-share a{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;flex-shrink:0;margin-top:0;}
+  .popup-share .share-x{background:#000;}
+  .popup-share .share-line{background:#06C755;}
+  .popup-share svg{width:14px;height:14px;fill:#fff;}
   .spot-popup .photo{width:100%;max-width:240px;height:auto;border-radius:12px;display:block;margin-top:4px;}
   .spot-popup .photo-credit{margin-top:2px;font-size:10px;color:#999;}
   .spot-popup .photo-credit a{margin-top:0;font-size:10px;}
@@ -1856,6 +1861,13 @@ function buildPopupHtml(spot) {
   const directionsUrl = 'https://www.google.com/maps/dir/?api=1&destination=' + spot.lat + ',' + spot.lng;
   const hotelsUrl = 'https://www.google.com/maps/search/' + encodeURIComponent(I18N[currentLang].hotelSearchQuery) + '/@' + spot.lat + ',' + spot.lng + ',15z';
   const restaurantsUrl = 'https://www.google.com/maps/search/' + encodeURIComponent(I18N[currentLang].restaurantSearchQuery) + '/@' + spot.lat + ',' + spot.lng + ',15z';
+  // Always shares the canonical (auto-detecting) map URL, even from the
+  // forced-Japanese -ja page, so whoever opens the shared link gets it in
+  // their own browser language rather than being locked into Japanese.
+  const shareUrl = 'https://aopro0306-boop.github.io/anime-pilgrimage/prototype/map-leaflet.html?spot=' + spot.id;
+  const shareText = translateSpotName(spot) + ' | ' + I18N[currentLang].title;
+  const twitterShareUrl = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText) + '&url=' + encodeURIComponent(shareUrl);
+  const lineShareUrl = 'https://social-plugins.line.me/lineit/share?url=' + encodeURIComponent(shareUrl) + '&text=' + encodeURIComponent(shareText);
   const photo = PHOTOS[spot.id];
   const name = translateSpotName(spot);
   const isFavorite = favorites.has(spot.id);
@@ -1880,6 +1892,10 @@ function buildPopupHtml(spot) {
         <a class="popup-secondary-link" href="${directionsUrl}" target="_blank" rel="noopener" data-spot-id="${spot.id}" data-action="directions">${I18N[currentLang].getDirectionsLabel}</a>
         <a class="popup-secondary-link" href="${hotelsUrl}" target="_blank" rel="noopener" data-spot-id="${spot.id}" data-action="hotels">${I18N[currentLang].nearbyHotelsLabel}</a>
         <a class="popup-secondary-link" href="${restaurantsUrl}" target="_blank" rel="noopener" data-spot-id="${spot.id}" data-action="restaurants">${I18N[currentLang].nearbyRestaurantsLabel}</a>
+      </div>
+      <div class="popup-share">
+        <a class="share-x" href="${twitterShareUrl}" target="_blank" rel="noopener" aria-label="X" data-spot-id="${spot.id}" data-action="share_x"><svg viewBox="0 0 24 24"><path d="M4 4l16 16M20 4L4 20" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg></a>
+        <a class="share-line" href="${lineShareUrl}" target="_blank" rel="noopener" aria-label="LINE" data-spot-id="${spot.id}" data-action="share_line"><svg viewBox="0 0 24 24"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.4 2.5 6.3 6.1 7.5-.3.9-1 3-1.1 3.4 0 0-.1.4.2.5s.6-.1.6-.1c.8-.5 3.4-2.3 4.1-2.7.7.1 1.4.1 2.1.1 5.5 0 10-3.6 10-8s-4.5-8-10-8z"/></svg></a>
       </div>
     </div>
   `;
@@ -1932,7 +1948,7 @@ function wireGmapsButton(el) {
 // Same GA4-tracking rationale as wireGmapsButton, covering the three
 // free-tier Google Maps URL links (directions/hotels/restaurants).
 function wirePopupActionLinks(el) {
-  el.querySelectorAll('.popup-secondary-link').forEach(btn => {
+  el.querySelectorAll('[data-action]').forEach(btn => {
     btn.addEventListener('click', () => {
       if (typeof gtag === 'function') {
         gtag('event', 'open_' + btn.dataset.action, { spot_id: btn.dataset.spotId });

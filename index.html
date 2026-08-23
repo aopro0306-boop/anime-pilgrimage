@@ -142,6 +142,11 @@
   .gallery-caption .spot-name a{color:var(--color-terracotta); text-decoration:underline; text-underline-offset:2px;}
   .official-badge{display:inline-block; margin-top:6px; padding:2px 10px; border-radius:999px; background:#FFF4E0; color:#8A5A00; font-size:11px; font-weight:700; text-decoration:none; border:1px solid #F0D9A0;}
   .official-badge:hover{background:#FFEBC2;}
+  .card-share{display:flex; gap:6px; margin-top:8px;}
+  .card-share a{width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; text-decoration:none; flex-shrink:0;}
+  .card-share .share-x{background:#000;}
+  .card-share .share-line{background:#06C755;}
+  .card-share svg{width:13px; height:13px; fill:#fff;}
   .gallery-caption .spot-desc{margin:6px 0 0 0; font-size:13px; color:var(--color-text); opacity:0.85; line-height:1.6;}
   .gallery-caption .photo-credit{margin-top:8px; font-size:11px; color:var(--color-text); opacity:0.75;}
   .gallery-caption .photo-credit a{color:inherit;}
@@ -464,6 +469,10 @@ function renderSpotGrid(containerId, spots) {
     const officialBadgeHtml = OFFICIAL_SELECTION_IDS.has(spot.id)
       ? `<a class="official-badge" href="https://animetourism88.com/" target="_blank" rel="noopener" title="${I18N[currentLang].officialBadgeTitle}">${I18N[currentLang].officialBadgeLabel}</a>`
       : '';
+    const shareUrl = 'https://aopro0306-boop.github.io/anime-pilgrimage/prototype/map-leaflet.html?spot=' + spot.id;
+    const shareText = name + ' | ' + I18N[currentLang].pageTitle;
+    const twitterShareUrl = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText) + '&url=' + encodeURIComponent(shareUrl);
+    const lineShareUrl = 'https://social-plugins.line.me/lineit/share?url=' + encodeURIComponent(shareUrl) + '&text=' + encodeURIComponent(shareText);
     return `
     <div class="gallery-item">
       <a href="prototype/map-leaflet.html?spot=${spot.id}" aria-label="${name}">
@@ -474,6 +483,10 @@ function renderSpotGrid(containerId, spots) {
         ${officialBadgeHtml}
         <p class="spot-desc">${description}</p>
         <p class="photo-credit">Photo: <a href="${spot.photo.sourceUrl}" target="_blank" rel="noopener">${spot.photo.author}</a> / ${spot.photo.license} (Wikimedia Commons)</p>
+        <div class="card-share">
+          <a class="share-x" href="${twitterShareUrl}" target="_blank" rel="noopener" aria-label="X"><svg viewBox="0 0 24 24"><path d="M4 4l16 16M20 4L4 20" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg></a>
+          <a class="share-line" href="${lineShareUrl}" target="_blank" rel="noopener" aria-label="LINE"><svg viewBox="0 0 24 24"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.4 2.5 6.3 6.1 7.5-.3.9-1 3-1.1 3.4 0 0-.1.4.2.5s.6-.1.6-.1c.8-.5 3.4-2.3 4.1-2.7.7.1 1.4.1 2.1.1 5.5 0 10-3.6 10-8s-4.5-8-10-8z"/></svg></a>
+        </div>
       </div>
     </div>
   `;
