@@ -88,6 +88,8 @@
   .popup-share .share-x{background:#000;}
   .popup-share .share-line{background:#06C755;}
   .popup-share svg{width:14px;height:14px;fill:#fff;}
+  .popup-share button.share-instagram{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:0;border:none;cursor:pointer;font-size:14px;padding:0;font-family:inherit;background:linear-gradient(45deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);}
+  .popup-share button.share-instagram:disabled{opacity:0.5;cursor:wait;}
   .popup-comments{margin-top:10px;padding-top:10px;border-top:1px solid #eee;}
   .popup-comments h4{margin:0 0 6px 0;font-size:12px;font-weight:800;color:#333;}
   .comments-list{max-height:120px;overflow-y:auto;margin-bottom:8px;}
@@ -578,6 +580,8 @@ const I18N = {
     nearbyRestaurantsLabel: '🍜 周辺の飲食店',
     voiceGuideBtn: '🔊 音声で聞く',
     voiceGuideStop: '⏹ 停止',
+    instagramSaveMessage: '画像を保存しました。Instagramアプリから投稿してください。',
+    instagramShareError: '画像の作成に失敗しました。もう一度お試しください。',
     hotelSearchQuery: 'ホテル',
     restaurantSearchQuery: '飲食店',
     commentsHeading: '口コミ',
@@ -640,6 +644,8 @@ const I18N = {
     nearbyRestaurantsLabel: '🍜 Restaurants Nearby',
     voiceGuideBtn: '🔊 Listen',
     voiceGuideStop: '⏹ Stop',
+    instagramSaveMessage: 'Image saved — open Instagram to post it.',
+    instagramShareError: 'Could not create the image. Please try again.',
     hotelSearchQuery: 'hotels',
     restaurantSearchQuery: 'restaurants',
     commentsHeading: 'Comments',
@@ -702,6 +708,8 @@ const I18N = {
     nearbyRestaurantsLabel: '🍜 附近的餐廳',
     voiceGuideBtn: '🔊 語音導覽',
     voiceGuideStop: '⏹ 停止',
+    instagramSaveMessage: '圖片已儲存，請開啟Instagram發佈。',
+    instagramShareError: '圖片建立失敗，請再試一次。',
     hotelSearchQuery: '飯店',
     restaurantSearchQuery: '餐廳',
     commentsHeading: '留言',
@@ -764,6 +772,8 @@ const I18N = {
     nearbyRestaurantsLabel: '🍜 주변 음식점',
     voiceGuideBtn: '🔊 음성으로 듣기',
     voiceGuideStop: '⏹ 정지',
+    instagramSaveMessage: '이미지를 저장했습니다. Instagram 앱에서 게시해 주세요.',
+    instagramShareError: '이미지 생성에 실패했습니다. 다시 시도해 주세요.',
     hotelSearchQuery: '호텔',
     restaurantSearchQuery: '음식점',
     commentsHeading: '댓글',
@@ -826,6 +836,8 @@ const I18N = {
     nearbyRestaurantsLabel: '🍜 ร้านอาหารใกล้เคียง',
     voiceGuideBtn: '🔊 ฟังเสียง',
     voiceGuideStop: '⏹ หยุด',
+    instagramSaveMessage: 'บันทึกรูปภาพแล้ว กรุณาเปิด Instagram เพื่อโพสต์',
+    instagramShareError: 'สร้างรูปภาพไม่สำเร็จ กรุณาลองใหม่อีกครั้ง',
     hotelSearchQuery: 'โรงแรม',
     restaurantSearchQuery: 'ร้านอาหาร',
     commentsHeading: 'ความคิดเห็น',
@@ -888,6 +900,8 @@ const I18N = {
     nearbyRestaurantsLabel: '🍜 Restaurants à proximité',
     voiceGuideBtn: '🔊 Écouter',
     voiceGuideStop: '⏹ Arrêter',
+    instagramSaveMessage: "Image enregistrée — ouvrez Instagram pour la publier.",
+    instagramShareError: "Impossible de créer l'image. Veuillez réessayer.",
     hotelSearchQuery: 'hôtels',
     restaurantSearchQuery: 'restaurants',
     commentsHeading: 'Commentaires',
@@ -2295,6 +2309,7 @@ function buildPopupHtml(spot) {
       <div class="popup-share">
         <a class="share-x" href="${twitterShareUrl}" target="_blank" rel="noopener" aria-label="X" data-spot-id="${spot.id}" data-action="share_x"><svg viewBox="0 0 24 24"><path d="M4 4l16 16M20 4L4 20" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg></a>
         <a class="share-line" href="${lineShareUrl}" target="_blank" rel="noopener" aria-label="LINE" data-spot-id="${spot.id}" data-action="share_line"><svg viewBox="0 0 24 24"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.4 2.5 6.3 6.1 7.5-.3.9-1 3-1.1 3.4 0 0-.1.4.2.5s.6-.1.6-.1c.8-.5 3.4-2.3 4.1-2.7.7.1 1.4.1 2.1.1 5.5 0 10-3.6 10-8s-4.5-8-10-8z"/></svg></a>
+        <button class="share-instagram" type="button" aria-label="Instagram" data-spot-id="${spot.id}" data-action="share_instagram">📷</button>
       </div>
       <div class="popup-comments" data-spot-id="${spot.id}">
         <h4>${I18N[currentLang].commentsHeading}</h4>
@@ -2525,6 +2540,119 @@ function wireGmapsButton(el) {
   });
 }
 
+function loadImageCrossOrigin(url) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = url;
+  });
+}
+
+// Simple word/character wrapper for the canvas share-image title. CJK spot
+// names have no spaces, so it falls back to per-character wrapping when the
+// text contains none — a naive space-based wrap would just draw the whole
+// string as one unbreakable "word" for those languages.
+function wrapCanvasText(ctx, text, x, bottomY, maxWidth, lineHeight, maxLines) {
+  const hasSpaces = /\s/.test(text);
+  const units = hasSpaces ? text.split(' ') : text.split('');
+  const sep = hasSpaces ? ' ' : '';
+  let line = '';
+  const lines = [];
+  for (const unit of units) {
+    const testLine = line ? line + sep + unit : unit;
+    if (ctx.measureText(testLine).width > maxWidth && line) {
+      lines.push(line);
+      line = unit;
+    } else {
+      line = testLine;
+    }
+  }
+  if (line) lines.push(line);
+  const shown = lines.slice(0, maxLines);
+  if (lines.length > maxLines) {
+    shown[shown.length - 1] = shown[shown.length - 1].replace(/.$/, '…');
+  }
+  const startY = bottomY - (shown.length - 1) * lineHeight;
+  shown.forEach((l, i) => ctx.fillText(l, x, startY + i * lineHeight));
+}
+
+// Builds a 1080x1350 branded share image (spot photo + name + anime title +
+// site credit) as a JPEG blob. Used for Instagram sharing since Instagram
+// has no web share-URL intent like X/LINE — it only accepts image files,
+// so a link-only share is meaningless there.
+async function buildInstagramShareBlob(spot) {
+  const W = 1080, H = 1350;
+  const canvas = document.createElement('canvas');
+  canvas.width = W;
+  canvas.height = H;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#1D3550';
+  ctx.fillRect(0, 0, W, H);
+  const photo = PHOTOS[spot.id];
+  if (photo) {
+    const img = await loadImageCrossOrigin(photo.url);
+    const scale = Math.max(W / img.width, H / img.height);
+    const dw = img.width * scale, dh = img.height * scale;
+    ctx.drawImage(img, (W - dw) / 2, (H - dh) / 2, dw, dh);
+  }
+  const grad = ctx.createLinearGradient(0, H * 0.5, 0, H);
+  grad.addColorStop(0, 'rgba(10,20,35,0)');
+  grad.addColorStop(1, 'rgba(10,20,35,0.92)');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, H * 0.5, W, H * 0.5);
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
+  ctx.font = '700 30px sans-serif';
+  ctx.fillText(translateAnime(spot.anime).toUpperCase(), 60, H - 210);
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '800 56px sans-serif';
+  wrapCanvasText(ctx, translateSpotName(spot), 60, H - 150, W - 120, 64, 2);
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
+  ctx.font = '600 26px sans-serif';
+  ctx.fillText('🗾 Anime Pilgrimage Japan', 60, H - 50);
+  return new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.92));
+}
+
+function wireInstagramButton(el) {
+  const btn = el.querySelector('.share-instagram');
+  if (!btn) return;
+  btn.addEventListener('click', async () => {
+    const spot = SPOTS.find(s => s.id === btn.dataset.spotId);
+    if (!spot) return;
+    btn.disabled = true;
+    try {
+      const blob = await buildInstagramShareBlob(spot);
+      if (!blob) throw new Error('blob generation failed');
+      const file = new File([blob], 'anime-pilgrimage.jpg', { type: 'image/jpeg' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: translateSpotName(spot) });
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'anime-pilgrimage.jpg';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 10000);
+        alert(I18N[currentLang].instagramSaveMessage);
+      }
+      if (typeof gtag === 'function') {
+        gtag('event', 'share_instagram', { spot_id: spot.id });
+      }
+    } catch (e) {
+      if (e.name !== 'AbortError') {
+        console.error(e);
+        alert(I18N[currentLang].instagramShareError);
+      }
+    } finally {
+      btn.disabled = false;
+    }
+  });
+}
+
 const VOICE_LANG_MAP = { ja: 'ja-JP', en: 'en-US', 'zh-TW': 'zh-TW', ko: 'ko-KR', th: 'th-TH', fr: 'fr-FR' };
 
 // Reads the spot's name + description aloud via the browser's built-in
@@ -2572,6 +2700,7 @@ map.on('popupopen', (e) => {
   wireGmapsButton(el);
   wirePopupActionLinks(el);
   wireVoiceButton(el);
+  wireInstagramButton(el);
   wireCommentsSection(el);
 });
 
