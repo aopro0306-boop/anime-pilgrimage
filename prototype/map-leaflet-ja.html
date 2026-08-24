@@ -82,6 +82,7 @@
   .popup-actions a{margin-top:0;}
   .popup-actions .popup-secondary-link{background:#f5f2ea;color:#1a5fc4;text-decoration:none;padding:6px 12px;border-radius:999px;font-weight:700;font-size:11px;}
   .popup-actions .popup-secondary-link:hover{background:#e4efff;}
+  .popup-voice-btn{border:none;font-family:inherit;cursor:pointer;}
   .popup-share{display:flex;gap:6px;margin-top:6px;}
   .popup-share a{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;flex-shrink:0;margin-top:0;}
   .popup-share .share-x{background:#000;}
@@ -159,6 +160,14 @@
   #optimize-route-btn{background:#fff;color:#FF4D6D;}
   #optimize-route-btn:hover{background:#ffe3ea;}
   #optimize-route-btn.hidden{display:none;}
+  #share-route-btn{background:#fff;color:#FF4D6D;}
+  #share-route-btn:hover{background:#ffe3ea;}
+  #shared-route-banner{position:fixed;top:0;left:0;right:0;z-index:2000;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;padding:12px 20px;background:#1D3550;color:#fff;font-size:13px;box-shadow:0 2px 12px rgba(0,0,0,0.2);}
+  #shared-route-banner button{border-radius:999px;padding:6px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;border:none;}
+  #shared-route-accept-btn{background:#FF4D6D;color:#fff;}
+  #shared-route-accept-btn:hover{background:#e8395a;}
+  #shared-route-dismiss-btn{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.4) !important;}
+  #shared-route-dismiss-btn:hover{background:rgba(255,255,255,0.15);}
   .panel-header{display:none;}
   .panel-close-btn{background:none;border:none;font-size:20px;line-height:1;cursor:pointer;color:#999;padding:0;}
   .panel-close-btn:hover{color:#e8395a;}
@@ -322,6 +331,7 @@ window.dispatchEvent(new Event('firebase-ready'));
       <button id="optimize-route-btn" type="button">🔀 最適ルートに並べ替え</button>
       <button id="view-route-btn" type="button">ルートを地図で見る</button>
       <button id="open-route-gmaps-btn" type="button">Googleマップでルートを開く</button>
+      <button id="share-route-btn" type="button">🔗 ルートを共有</button>
     </div>
   </div>
   <div id="nearby-tab-content" class="hidden">
@@ -546,6 +556,11 @@ const I18N = {
     openRouteInGoogleMaps: 'Googleマップでルートを開く',
     optimizeRouteBtn: '🔀 最適ルートに並べ替え',
     routeTotalDistance: '合計距離: 約{km}km',
+    shareRouteBtn: '🔗 ルートを共有',
+    shareRouteCopied: '✓ リンクをコピーしました',
+    sharedRouteMessage: '{count}件のスポットを含むルートが共有されました',
+    sharedRouteAccept: 'このルートを読み込む',
+    sharedRouteDismiss: '閉じる',
     filterToggle: '🔍 絞り込み',
     prefToggle: '📍 都道府県',
     officialBadgeLabel: '🏆「アニメ聖地88」選出作品',
@@ -561,6 +576,8 @@ const I18N = {
     getDirectionsLabel: '🧭 経路を検索',
     nearbyHotelsLabel: '🏨 周辺のホテル',
     nearbyRestaurantsLabel: '🍜 周辺の飲食店',
+    voiceGuideBtn: '🔊 音声で聞く',
+    voiceGuideStop: '⏹ 停止',
     hotelSearchQuery: 'ホテル',
     restaurantSearchQuery: '飲食店',
     commentsHeading: '口コミ',
@@ -601,6 +618,11 @@ const I18N = {
     openRouteInGoogleMaps: 'Open route in Google Maps',
     optimizeRouteBtn: '🔀 Optimize route order',
     routeTotalDistance: 'Total distance: ~{km}km',
+    shareRouteBtn: '🔗 Share route',
+    shareRouteCopied: '✓ Link copied',
+    sharedRouteMessage: 'A route with {count} spots was shared with you',
+    sharedRouteAccept: 'Load this route',
+    sharedRouteDismiss: 'Dismiss',
     filterToggle: '🔍 Filters',
     prefToggle: '📍 Prefectures',
     officialBadgeLabel: '🏆 Anime Pilgrimage 88',
@@ -616,6 +638,8 @@ const I18N = {
     getDirectionsLabel: '🧭 Get Directions',
     nearbyHotelsLabel: '🏨 Hotels Nearby',
     nearbyRestaurantsLabel: '🍜 Restaurants Nearby',
+    voiceGuideBtn: '🔊 Listen',
+    voiceGuideStop: '⏹ Stop',
     hotelSearchQuery: 'hotels',
     restaurantSearchQuery: 'restaurants',
     commentsHeading: 'Comments',
@@ -656,6 +680,11 @@ const I18N = {
     openRouteInGoogleMaps: '在Google地圖開啟路線',
     optimizeRouteBtn: '🔀 排序為最佳路線',
     routeTotalDistance: '總距離：約{km}公里',
+    shareRouteBtn: '🔗 分享路線',
+    shareRouteCopied: '✓ 已複製連結',
+    sharedRouteMessage: '有人與您分享了包含{count}個景點的路線',
+    sharedRouteAccept: '載入此路線',
+    sharedRouteDismiss: '關閉',
     filterToggle: '🔍 篩選',
     prefToggle: '📍 都道府縣',
     officialBadgeLabel: '🏆「動畫聖地88」入選作品',
@@ -671,6 +700,8 @@ const I18N = {
     getDirectionsLabel: '🧭 查詢路線',
     nearbyHotelsLabel: '🏨 附近的飯店',
     nearbyRestaurantsLabel: '🍜 附近的餐廳',
+    voiceGuideBtn: '🔊 語音導覽',
+    voiceGuideStop: '⏹ 停止',
     hotelSearchQuery: '飯店',
     restaurantSearchQuery: '餐廳',
     commentsHeading: '留言',
@@ -711,6 +742,11 @@ const I18N = {
     openRouteInGoogleMaps: 'Google 지도에서 경로 열기',
     optimizeRouteBtn: '🔀 최적 경로로 정렬',
     routeTotalDistance: '총 거리: 약 {km}km',
+    shareRouteBtn: '🔗 경로 공유',
+    shareRouteCopied: '✓ 링크가 복사되었습니다',
+    sharedRouteMessage: '{count}개의 스팟이 포함된 경로가 공유되었습니다',
+    sharedRouteAccept: '이 경로 불러오기',
+    sharedRouteDismiss: '닫기',
     filterToggle: '🔍 필터',
     prefToggle: '📍 지역',
     officialBadgeLabel: '🏆 애니메 성지88 선정작',
@@ -726,6 +762,8 @@ const I18N = {
     getDirectionsLabel: '🧭 경로 검색',
     nearbyHotelsLabel: '🏨 주변 호텔',
     nearbyRestaurantsLabel: '🍜 주변 음식점',
+    voiceGuideBtn: '🔊 음성으로 듣기',
+    voiceGuideStop: '⏹ 정지',
     hotelSearchQuery: '호텔',
     restaurantSearchQuery: '음식점',
     commentsHeading: '댓글',
@@ -766,6 +804,11 @@ const I18N = {
     openRouteInGoogleMaps: 'เปิดเส้นทางใน Google Maps',
     optimizeRouteBtn: '🔀 จัดเรียงเส้นทางที่ดีที่สุด',
     routeTotalDistance: 'ระยะทางรวม: ประมาณ {km} กม.',
+    shareRouteBtn: '🔗 แชร์เส้นทาง',
+    shareRouteCopied: '✓ คัดลอกลิงก์แล้ว',
+    sharedRouteMessage: 'มีคนแชร์เส้นทางที่มี {count} จุดให้คุณ',
+    sharedRouteAccept: 'โหลดเส้นทางนี้',
+    sharedRouteDismiss: 'ปิด',
     filterToggle: '🔍 ตัวกรอง',
     prefToggle: '📍 จังหวัด',
     officialBadgeLabel: '🏆 ติดอันดับ "อนิเมะ88"',
@@ -781,6 +824,8 @@ const I18N = {
     getDirectionsLabel: '🧭 ค้นหาเส้นทาง',
     nearbyHotelsLabel: '🏨 โรงแรมใกล้เคียง',
     nearbyRestaurantsLabel: '🍜 ร้านอาหารใกล้เคียง',
+    voiceGuideBtn: '🔊 ฟังเสียง',
+    voiceGuideStop: '⏹ หยุด',
     hotelSearchQuery: 'โรงแรม',
     restaurantSearchQuery: 'ร้านอาหาร',
     commentsHeading: 'ความคิดเห็น',
@@ -821,6 +866,11 @@ const I18N = {
     openRouteInGoogleMaps: "Ouvrir l'itinéraire dans Google Maps",
     optimizeRouteBtn: "🔀 Optimiser l'ordre de l'itinéraire",
     routeTotalDistance: 'Distance totale : environ {km} km',
+    shareRouteBtn: "🔗 Partager l'itinéraire",
+    shareRouteCopied: '✓ Lien copié',
+    sharedRouteMessage: 'Un itinéraire de {count} lieux a été partagé avec vous',
+    sharedRouteAccept: 'Charger cet itinéraire',
+    sharedRouteDismiss: 'Fermer',
     filterToggle: '🔍 Filtres',
     prefToggle: '📍 Préfectures',
     officialBadgeLabel: '🏆 Sélection "Anime 88"',
@@ -836,6 +886,8 @@ const I18N = {
     getDirectionsLabel: '🧭 Itinéraire',
     nearbyHotelsLabel: '🏨 Hôtels à proximité',
     nearbyRestaurantsLabel: '🍜 Restaurants à proximité',
+    voiceGuideBtn: '🔊 Écouter',
+    voiceGuideStop: '⏹ Arrêter',
     hotelSearchQuery: 'hôtels',
     restaurantSearchQuery: 'restaurants',
     commentsHeading: 'Commentaires',
@@ -2238,6 +2290,7 @@ function buildPopupHtml(spot) {
         <a class="popup-secondary-link" href="${directionsUrl}" target="_blank" rel="noopener" data-spot-id="${spot.id}" data-action="directions">${I18N[currentLang].getDirectionsLabel}</a>
         <a class="popup-secondary-link" href="${hotelsUrl}" target="_blank" rel="noopener" data-spot-id="${spot.id}" data-action="hotels">${I18N[currentLang].nearbyHotelsLabel}</a>
         <a class="popup-secondary-link" href="${restaurantsUrl}" target="_blank" rel="noopener" data-spot-id="${spot.id}" data-action="restaurants">${I18N[currentLang].nearbyRestaurantsLabel}</a>
+        <button class="popup-secondary-link popup-voice-btn" type="button" data-spot-id="${spot.id}" data-action="voice">${I18N[currentLang].voiceGuideBtn}</button>
       </div>
       <div class="popup-share">
         <a class="share-x" href="${twitterShareUrl}" target="_blank" rel="noopener" aria-label="X" data-spot-id="${spot.id}" data-action="share_x"><svg viewBox="0 0 24 24"><path d="M4 4l16 16M20 4L4 20" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg></a>
@@ -2472,6 +2525,34 @@ function wireGmapsButton(el) {
   });
 }
 
+const VOICE_LANG_MAP = { ja: 'ja-JP', en: 'en-US', 'zh-TW': 'zh-TW', ko: 'ko-KR', th: 'th-TH', fr: 'fr-FR' };
+
+// Reads the spot's name + description aloud via the browser's built-in
+// SpeechSynthesis API (free, no external service/API key). Voice
+// availability for a given language depends on the visitor's OS/browser,
+// not on anything this site controls — button just gets hidden if the API
+// itself is unsupported, rather than trying to detect per-language voice
+// availability up front.
+function wireVoiceButton(el) {
+  const btn = el.querySelector('.popup-voice-btn');
+  if (!btn) return;
+  if (!('speechSynthesis' in window)) { btn.style.display = 'none'; return; }
+  btn.addEventListener('click', () => {
+    if (window.speechSynthesis.speaking) {
+      window.speechSynthesis.cancel();
+      return;
+    }
+    const spot = SPOTS.find(s => s.id === btn.dataset.spotId);
+    if (!spot) return;
+    const utterance = new SpeechSynthesisUtterance(translateSpotName(spot) + '. ' + translateDescription(spot));
+    utterance.lang = VOICE_LANG_MAP[currentLang] || 'en-US';
+    utterance.onend = () => { btn.textContent = I18N[currentLang].voiceGuideBtn; };
+    utterance.onerror = () => { btn.textContent = I18N[currentLang].voiceGuideBtn; };
+    btn.textContent = I18N[currentLang].voiceGuideStop;
+    window.speechSynthesis.speak(utterance);
+  });
+}
+
 // Same GA4-tracking rationale as wireGmapsButton, covering the three
 // free-tier Google Maps URL links (directions/hotels/restaurants).
 function wirePopupActionLinks(el) {
@@ -2490,7 +2571,17 @@ map.on('popupopen', (e) => {
   wirePopupHeartButton(el);
   wireGmapsButton(el);
   wirePopupActionLinks(el);
+  wireVoiceButton(el);
   wireCommentsSection(el);
+});
+
+// Stop any in-progress narration when its popup closes — the stop button
+// disappears with the popup, so without this the speech would otherwise
+// keep playing with no way to cancel it.
+map.on('popupclose', () => {
+  if ('speechSynthesis' in window && window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+  }
 });
 
 // A popup left open while the user switches language would otherwise keep
@@ -2753,6 +2844,25 @@ function viewRouteOnMap() {
   map.fitBounds(routeLine.getBounds(), { padding: [40, 40] });
 }
 
+function shareRoute() {
+  syncFavoritesOrder();
+  const url = 'https://aopro0306-boop.github.io/anime-pilgrimage/prototype/map-leaflet.html?route=' + favoritesOrder.join(',');
+  const btn = document.getElementById('share-route-btn');
+  const originalText = I18N[currentLang].shareRouteBtn;
+  const showCopied = () => {
+    btn.textContent = I18N[currentLang].shareRouteCopied;
+    setTimeout(() => { btn.textContent = originalText; }, 2000);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(showCopied).catch(() => window.prompt(originalText, url));
+  } else {
+    window.prompt(originalText, url);
+  }
+  if (typeof gtag === 'function') {
+    gtag('event', 'share_route', { spot_count: favoritesOrder.length });
+  }
+}
+
 function openRouteInGoogleMaps() {
   syncFavoritesOrder();
   const spots = favoritesOrder.map(id => SPOTS.find(s => s.id === id));
@@ -2770,6 +2880,34 @@ function openRouteInGoogleMaps() {
 document.getElementById('view-route-btn').addEventListener('click', viewRouteOnMap);
 document.getElementById('open-route-gmaps-btn').addEventListener('click', openRouteInGoogleMaps);
 document.getElementById('optimize-route-btn').addEventListener('click', optimizeRoute);
+document.getElementById('share-route-btn').addEventListener('click', shareRoute);
+
+// Incoming shared-route link support: ?route=<id1>,<id2>,... (generated by
+// shareRoute() above). Shown as a dismissible banner rather than silently
+// overwriting the visitor's own favorites — accepting merges the shared
+// spots in front of (not over) whatever they already had favorited.
+function showSharedRouteBanner(ids) {
+  const banner = document.createElement('div');
+  banner.id = 'shared-route-banner';
+  banner.innerHTML = `
+    <span>${I18N[currentLang].sharedRouteMessage.replace('{count}', ids.length)}</span>
+    <button id="shared-route-accept-btn" type="button">${I18N[currentLang].sharedRouteAccept}</button>
+    <button id="shared-route-dismiss-btn" type="button" aria-label="${I18N[currentLang].sharedRouteDismiss}">×</button>
+  `;
+  document.body.appendChild(banner);
+  document.getElementById('shared-route-accept-btn').addEventListener('click', () => {
+    ids.forEach(id => favorites.add(id));
+    saveFavorites();
+    const rest = favoritesOrder.filter(id => !ids.includes(id));
+    favoritesOrder = ids.concat(rest);
+    saveFavoritesOrder();
+    buildFavoritesTab();
+    document.querySelector('.panel-tab[data-tab="favorites"]').click();
+    viewRouteOnMap();
+    banner.remove();
+  });
+  document.getElementById('shared-route-dismiss-btn').addEventListener('click', () => banner.remove());
+}
 
 // Nearby-spots tab: ranks every spot by straight-line distance from the
 // visitor's current position via the browser Geolocation API. Results are
@@ -2865,6 +3003,7 @@ function applyLanguage(lang) {
   document.getElementById('view-route-btn').textContent = I18N[lang].viewRouteOnMap;
   document.getElementById('open-route-gmaps-btn').textContent = I18N[lang].openRouteInGoogleMaps;
   document.getElementById('optimize-route-btn').textContent = I18N[lang].optimizeRouteBtn;
+  document.getElementById('share-route-btn').textContent = I18N[lang].shareRouteBtn;
   document.getElementById('filter-toggle-btn').textContent = I18N[lang].filterToggle;
   document.getElementById('nearby-intro').textContent = I18N[lang].nearbyIntro;
   document.getElementById('nearby-locate-btn').textContent = I18N[lang].nearbyLocateBtn;
@@ -2934,6 +3073,12 @@ function detectBrowserLang() {
 }
 
 applyLanguage('ja'); // this URL is the dedicated Japanese entry point (see hreflang tags) — always render Japanese regardless of browser language, unlike map-leaflet.html's auto-detection
+
+const sharedRouteParam = new URLSearchParams(location.search).get('route');
+if (sharedRouteParam) {
+  const sharedIds = sharedRouteParam.split(',').filter(id => SPOTS.some(s => s.id === id));
+  if (sharedIds.length >= 2) showSharedRouteBanner(sharedIds);
+}
 </script>
 <script>
 if ('serviceWorker' in navigator) {
