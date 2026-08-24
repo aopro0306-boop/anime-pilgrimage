@@ -150,11 +150,15 @@
   .favorite-move-btn:disabled{opacity:0.25;cursor:default;}
   #route-actions{display:flex;flex-direction:column;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid #f0ede4;}
   #route-actions.hidden{display:none;}
+  #route-distance-summary{margin:0 0 2px 0;font-size:11px;color:#6b6459;text-align:center;}
   #route-actions button{border-radius:999px;padding:8px 0;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;border:2px solid #FF4D6D;}
   #view-route-btn{background:#FF4D6D;color:#fff;}
   #view-route-btn:hover{background:#e8395a;border-color:#e8395a;}
   #open-route-gmaps-btn{background:#fff;color:#FF4D6D;}
   #open-route-gmaps-btn:hover{background:#ffe3ea;}
+  #optimize-route-btn{background:#fff;color:#FF4D6D;}
+  #optimize-route-btn:hover{background:#ffe3ea;}
+  #optimize-route-btn.hidden{display:none;}
   .panel-header{display:none;}
   .panel-close-btn{background:none;border:none;font-size:20px;line-height:1;cursor:pointer;color:#999;padding:0;}
   .panel-close-btn:hover{color:#e8395a;}
@@ -314,6 +318,8 @@ window.dispatchEvent(new Event('firebase-ready'));
   <div id="favorites-tab-content" class="hidden">
     <div id="favorites-list"></div>
     <div id="route-actions" class="hidden">
+      <p id="route-distance-summary"></p>
+      <button id="optimize-route-btn" type="button">🔀 最適ルートに並べ替え</button>
       <button id="view-route-btn" type="button">ルートを地図で見る</button>
       <button id="open-route-gmaps-btn" type="button">Googleマップでルートを開く</button>
     </div>
@@ -538,6 +544,8 @@ const I18N = {
     moveDown: '下へ移動',
     viewRouteOnMap: 'ルートを地図で見る',
     openRouteInGoogleMaps: 'Googleマップでルートを開く',
+    optimizeRouteBtn: '🔀 最適ルートに並べ替え',
+    routeTotalDistance: '合計距離: 約{km}km',
     filterToggle: '🔍 絞り込み',
     prefToggle: '📍 都道府県',
     officialBadgeLabel: '🏆「アニメ聖地88」選出作品',
@@ -591,6 +599,8 @@ const I18N = {
     moveDown: 'Move down',
     viewRouteOnMap: 'View route on map',
     openRouteInGoogleMaps: 'Open route in Google Maps',
+    optimizeRouteBtn: '🔀 Optimize route order',
+    routeTotalDistance: 'Total distance: ~{km}km',
     filterToggle: '🔍 Filters',
     prefToggle: '📍 Prefectures',
     officialBadgeLabel: '🏆 Anime Pilgrimage 88',
@@ -644,6 +654,8 @@ const I18N = {
     moveDown: '下移',
     viewRouteOnMap: '在地圖上查看路線',
     openRouteInGoogleMaps: '在Google地圖開啟路線',
+    optimizeRouteBtn: '🔀 排序為最佳路線',
+    routeTotalDistance: '總距離：約{km}公里',
     filterToggle: '🔍 篩選',
     prefToggle: '📍 都道府縣',
     officialBadgeLabel: '🏆「動畫聖地88」入選作品',
@@ -697,6 +709,8 @@ const I18N = {
     moveDown: '아래로 이동',
     viewRouteOnMap: '지도에서 경로 보기',
     openRouteInGoogleMaps: 'Google 지도에서 경로 열기',
+    optimizeRouteBtn: '🔀 최적 경로로 정렬',
+    routeTotalDistance: '총 거리: 약 {km}km',
     filterToggle: '🔍 필터',
     prefToggle: '📍 지역',
     officialBadgeLabel: '🏆 애니메 성지88 선정작',
@@ -750,6 +764,8 @@ const I18N = {
     moveDown: 'เลื่อนลง',
     viewRouteOnMap: 'ดูเส้นทางบนแผนที่',
     openRouteInGoogleMaps: 'เปิดเส้นทางใน Google Maps',
+    optimizeRouteBtn: '🔀 จัดเรียงเส้นทางที่ดีที่สุด',
+    routeTotalDistance: 'ระยะทางรวม: ประมาณ {km} กม.',
     filterToggle: '🔍 ตัวกรอง',
     prefToggle: '📍 จังหวัด',
     officialBadgeLabel: '🏆 ติดอันดับ "อนิเมะ88"',
@@ -803,6 +819,8 @@ const I18N = {
     moveDown: 'Descendre',
     viewRouteOnMap: "Voir l'itinéraire sur la carte",
     openRouteInGoogleMaps: "Ouvrir l'itinéraire dans Google Maps",
+    optimizeRouteBtn: "🔀 Optimiser l'ordre de l'itinéraire",
+    routeTotalDistance: 'Distance totale : environ {km} km',
     filterToggle: '🔍 Filtres',
     prefToggle: '📍 Préfectures',
     officialBadgeLabel: '🏆 Sélection "Anime 88"',
@@ -2648,6 +2666,11 @@ function buildFavoritesTab() {
     </div>
   `).join('');
   document.getElementById('route-actions')?.classList.toggle('hidden', favSpots.length < 2);
+  const summaryEl = document.getElementById('route-distance-summary');
+  if (summaryEl && favSpots.length >= 2) {
+    summaryEl.textContent = I18N[currentLang].routeTotalDistance.replace('{km}', computeRouteDistance(favSpots).toFixed(1));
+  }
+  document.getElementById('optimize-route-btn')?.classList.toggle('hidden', favSpots.length < 3);
 }
 
 function wireFavoritesTab() {
@@ -2679,6 +2702,46 @@ wireFavoritesTab();
 
 let routeLine = null;
 
+function computeRouteDistance(spots) {
+  let total = 0;
+  for (let i = 0; i < spots.length - 1; i++) {
+    total += haversineKm(spots[i].lat, spots[i].lng, spots[i + 1].lat, spots[i + 1].lng);
+  }
+  return total;
+}
+
+// Greedy nearest-neighbor reordering: keeps the visitor's first-added
+// favorite as the route's starting point (least surprising — they picked
+// it first, often because it's near where they're staying), then always
+// steps to whichever remaining favorite is closest. This is a heuristic,
+// not a true shortest-path solver (that's NP-hard), but for the small
+// favorite-list sizes this feature deals with it produces a materially
+// shorter route than an unordered list, which is the actual goal: letting
+// a route span multiple anime titles' spots without backtracking across
+// the map.
+function optimizeRoute() {
+  syncFavoritesOrder();
+  const spots = favoritesOrder.map(id => SPOTS.find(s => s.id === id));
+  if (spots.length < 3) return;
+  const remaining = spots.slice(1);
+  const ordered = [spots[0]];
+  while (remaining.length > 0) {
+    const last = ordered[ordered.length - 1];
+    let nearestIndex = 0;
+    let nearestDist = Infinity;
+    remaining.forEach((s, i) => {
+      const d = haversineKm(last.lat, last.lng, s.lat, s.lng);
+      if (d < nearestDist) { nearestDist = d; nearestIndex = i; }
+    });
+    ordered.push(remaining[nearestIndex]);
+    remaining.splice(nearestIndex, 1);
+  }
+  favoritesOrder = ordered.map(s => s.id);
+  saveFavoritesOrder();
+  buildFavoritesTab();
+  viewRouteOnMap();
+}
+
 function viewRouteOnMap() {
   syncFavoritesOrder();
   const latlngs = favoritesOrder.map(id => {
@@ -2706,6 +2769,7 @@ function openRouteInGoogleMaps() {
 
 document.getElementById('view-route-btn').addEventListener('click', viewRouteOnMap);
 document.getElementById('open-route-gmaps-btn').addEventListener('click', openRouteInGoogleMaps);
+document.getElementById('optimize-route-btn').addEventListener('click', optimizeRoute);
 
 // Nearby-spots tab: ranks every spot by straight-line distance from the
 // visitor's current position via the browser Geolocation API. Results are
@@ -2800,6 +2864,7 @@ function applyLanguage(lang) {
   document.querySelector('.panel-tab[data-tab="nearby"]').textContent = I18N[lang].nearbyTab;
   document.getElementById('view-route-btn').textContent = I18N[lang].viewRouteOnMap;
   document.getElementById('open-route-gmaps-btn').textContent = I18N[lang].openRouteInGoogleMaps;
+  document.getElementById('optimize-route-btn').textContent = I18N[lang].optimizeRouteBtn;
   document.getElementById('filter-toggle-btn').textContent = I18N[lang].filterToggle;
   document.getElementById('nearby-intro').textContent = I18N[lang].nearbyIntro;
   document.getElementById('nearby-locate-btn').textContent = I18N[lang].nearbyLocateBtn;
